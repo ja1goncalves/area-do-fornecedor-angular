@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
@@ -31,6 +32,8 @@ import {TokenInterceptor} from './services/token/token.interceptor';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     routing,
     HttpClientModule,
     NotifierModule.withConfig(notifierOptions),

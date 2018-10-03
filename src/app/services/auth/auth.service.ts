@@ -27,8 +27,8 @@ export class AuthService {
    */
   private createUserData(user: string): void {
 
-    eraseCookie('auth_user_data');
-    document.cookie = `auth_user_data=${user};Max-Age=21600`;
+    eraseCookie('user_data');
+    document.cookie = `user_data=${user};Max-Age=21600`;
 
   }
 
@@ -39,13 +39,11 @@ export class AuthService {
    */
   private createTokenData(token: string): void {
 
-    eraseCookie('auth_token');
-
+    eraseCookie('token');
     const objToken: any = JSON.parse(token);
-    const expires: number = (_.isObject(objToken)) ? objToken.token.expiresIn : 21600;
+    const expires: number = (_.isObject(objToken)) ? objToken.token.ExpiresIn : 21600;
 
-    document.cookie = `auth_token=${token};Max-Age=${expires}`;
-
+    document.cookie = `token=${token};Max-Age=${expires}`;
   }
 
 
@@ -55,15 +53,14 @@ export class AuthService {
    */
   public getToken(): any {
 
-    const jsonData: any = getObjectCookie('auth_token');
+    const jsonData: any = getObjectCookie('token');
 
     if (_.isEmpty(jsonData) && !_.isObject(jsonData)) {
 
-      eraseCookie('auth_token');
+      eraseCookie('token');
       this.router.navigate(['']);
 
     } else {
-
       return jsonData.token.AccessToken;
 
     }
@@ -77,7 +74,7 @@ export class AuthService {
    */
   public getDataUser(): any {
 
-    const jsonData: any = getObjectCookie('auth_user_data');
+    const jsonData: any = getObjectCookie('user_data');
 
     if (_.isEmpty(jsonData) && !_.isObject(jsonData)) {
       this.logout();
@@ -96,8 +93,8 @@ export class AuthService {
 
     moment.locale('pt-br');
 
-    const tokenString: string = getCookie('auth_token') || '{}';
-    const userString: string = getCookie('auth_user_data') || '{}';
+    const tokenString: string = getCookie('token') || '{}';
+    const userString: string = getCookie('user_data') || '{}';
 
     const token: any = JSON.parse(tokenString);
     const user: any = JSON.parse(userString);
@@ -126,8 +123,8 @@ export class AuthService {
    */
   public logout(): void {
 
-    eraseCookie('auth_token');
-    eraseCookie('auth_user_data');
+    eraseCookie('token');
+    eraseCookie('user_data');
     this.router.navigate(['login']);
     window.stop();
 
@@ -158,12 +155,14 @@ export class AuthService {
       this.http.post(`${environment.API_URL}/api/authenticate`, {username, password})
         .subscribe(
           (res) => {
+            console.log(res);
             const token: string = JSON.stringify({ token: res, timeLogin: new Date().getTime() });
             this.createTokenData(token);
 
             this.getUserAuthenticated(username)
               .subscribe(
                 (data) => {
+                  console.log(data);
                   const user = JSON.stringify(data.data);
                   this.createUserData(user);
                   observer.next();

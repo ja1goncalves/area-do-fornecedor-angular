@@ -3,28 +3,28 @@
 <div id="containerFornecedorLogin">
   <div class="row">
     <div class="col-xs-12 col-md-12">
+      <form (submit)="login()" (keyup.enter)="login()" [formGroup]="loginForm">
+        <fieldset class="form-group">
+          <h2 class="fieldset-title"> <i class="fa fa-user" aria-hidden="true"></i> Área do Fornecedor </h2>
+          <label for="email">Email</label>
+          <input type="email" [(ngModel)]="username" class="form-control" name="username" formControlName="username" placeholder="Email" required>
+        </fieldset>
 
-      <fieldset class="form-group">
-        <h2 class="fieldset-title"> <i class="fa fa-user" aria-hidden="true"></i> Área do Fornecedor </h2>
-        <label for="email">Email</label>
-        <input type="email" class="form-control" id="email" placeholder="Email">
-      </fieldset>
+        <fieldset class="form-group">
+          <label for="password">Senha</label>
+          <input type="password" [(ngModel)]="password" class="form-control" name="password" formControlName="password" placeholder="Senha" required>
+        </fieldset>
 
-      <fieldset class="form-group">
-        <label for="password">Senha</label>
-        <input type="password" class="form-control" id="password" placeholder="Senha">
-      </fieldset>
+        <div class="clearfix"></div>
 
-      <div class="clearfix"></div>
+        <div class="button-area cf" id="cadastroBotaoControle">
+          <span>
+            <a class="password" href="#">Esqueci minha senha</a>
+          </span>
 
-      <div class="button-area cf" id="cadastroBotaoControle">
-        <span>
-          <a class="password" href="#">Esqueci minha senha</a>
-        </span>
-
-        <button id="login-button" class="btn btn-primary float-right" (click)="login()">Entrar</button>
-      </div>
-
+          <button id="login-button" class="btn btn-primary float-right">Entrar</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
