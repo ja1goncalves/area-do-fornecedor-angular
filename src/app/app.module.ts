@@ -20,6 +20,7 @@ import {AuthGuardService} from './services/auth/auth-guard.service';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TokenInterceptor} from './services/token/token.interceptor';
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password';
+import { ConfirmResetPasswordComponent } from './components/pages/confirm-reset-password/confirm-reset-password.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { ResetPasswordComponent } from './components/pages/reset-password/reset-
     FooterComponent,
     ProfileComponent,
     QuotationsComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ConfirmResetPasswordComponent
   ],
   imports: [
     BrowserModule,

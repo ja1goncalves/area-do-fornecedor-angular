@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { NotifyService } from '../../../services/notify/notify.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ export class LoginComponent implements OnInit {
   password: string;
   loginForm: FormGroup;
 
-  constructor(private authService: AuthService,  private fb: FormBuilder, private router: Router) { }
+  constructor(private authService: AuthService,  private fb: FormBuilder, private router: Router, private notify: NotifyService) { }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -27,11 +28,12 @@ export class LoginComponent implements OnInit {
     this.authService.loginUser(this.username, this.password)
       .subscribe(
         (res) => {
-          console.log(res);
+          this.notify.show('success', 'Bem vindo');
           this.router.navigate(['']);
         },
         (err) => {
-          console.log(err);
+          console.log(JSON.stringify(err.message));
+          this.notify.show('warning', JSON.stringify(err.message));
         });
   }
 

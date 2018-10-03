@@ -95,7 +95,7 @@ export class AuthService {
 
     const tokenString: string = getCookie('token') || '{}';
     const userString: string = getCookie('user_data') || '{}';
-
+    console.log('r', userString);
     const token: any = JSON.parse(tokenString);
     const user: any = JSON.parse(userString);
 
@@ -155,14 +155,12 @@ export class AuthService {
       this.http.post(`${environment.API_URL}/api/authenticate`, {username, password})
         .subscribe(
           (res) => {
-            console.log(res);
             const token: string = JSON.stringify({ token: res, timeLogin: new Date().getTime() });
             this.createTokenData(token);
 
             this.getUserAuthenticated(username)
               .subscribe(
                 (data) => {
-                  console.log(data);
                   const user = JSON.stringify(data.data);
                   this.createUserData(user);
                   observer.next();

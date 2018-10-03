@@ -4,10 +4,12 @@ import { LoginComponent } from './components/pages/login/login.component';
 import { ProfileComponent } from './components/pages/profile/profile.component';
 import { QuotationsComponent } from './components/pages/quotations/quotations.component';
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password';
+import { ConfirmResetPasswordComponent } from './components/pages/confirm-reset-password/confirm-reset-password.component'
 
 const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'esqueci-minha-senha', component: ResetPasswordComponent},
+    {path: 'recuperar-senha/:token', component: ConfirmResetPasswordComponent},
     {path: '', component: QuotationsComponent, canActivate: [AuthGuardService]},
     {path: 'editar', component: ProfileComponent, canActivate: [AuthGuardService]},
 ];

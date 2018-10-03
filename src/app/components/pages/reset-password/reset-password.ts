@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { PasswordService } from '../../../services/password/password.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -13,7 +14,12 @@ export class ResetPasswordComponent implements OnInit {
   username: string;
   resetForm: FormGroup;
 
-  constructor(private authService: AuthService,  private fb: FormBuilder, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private router: Router,
+    private passwordService: PasswordService
+  ) { }
 
   ngOnInit() {
     this.resetForm = this.fb.group({
@@ -23,6 +29,11 @@ export class ResetPasswordComponent implements OnInit {
 
   reset() {
     console.log(this.username);
+    this.passwordService.reset(this.username)
+      .subscribe((res) => {
+        console.log(res);
+      });
+    // console.log(this.username);
     // this.authService.loginUser(this.username, this.password)
     //   .subscribe(
     //     (res) => {
