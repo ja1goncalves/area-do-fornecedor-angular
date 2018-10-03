@@ -19,6 +19,7 @@ import {notifierOptions} from './config/consts';
 import {AuthGuardService} from './services/auth/auth-guard.service';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TokenInterceptor} from './services/token/token.interceptor';
+import { ResetPasswordComponent } from './components/pages/reset-password/reset-password';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import {TokenInterceptor} from './services/token/token.interceptor';
     NavbarComponent,
     FooterComponent,
     ProfileComponent,
-    QuotationsComponent
+    QuotationsComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
