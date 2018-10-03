@@ -42,7 +42,7 @@ export class AuthService {
     eraseCookie('auth_token');
 
     const objToken: any = JSON.parse(token);
-    // const expires: number = (_.isObject(objToken)) ? objToken.token.expiresIn : 21600;
+    const expires: number = (_.isObject(objToken)) ? objToken.token.expiresIn : 21600;
 
     document.cookie = `auth_token=${token};Max-Age=${21600}`;
 
@@ -105,13 +105,10 @@ export class AuthService {
     let result: boolean;
 
     try {
-      if ((token && token.token && token.token.AccessToken)
-      //  && (user && user.id)
-      ) {
+      if ((token && token.token && token.token.AccessToken) && user) {
 
-        const timeExpire = moment(parseInt(token.timeLogin, 10)).add(parseInt(token.token.expiresIn, 10), 'seconds');
+        const timeExpire = moment(parseInt(token.timeLogin, 10)).add(parseInt(token.token.ExpiresIn, 10), 'seconds');
         const isTokenExpired = timeExpire.isBefore(moment());
-        console.log('isNotNull',  !isTokenExpired);
         result = token.token.AccessToken != null && !isTokenExpired;
       }
 
@@ -131,11 +128,8 @@ export class AuthService {
 
     eraseCookie('auth_token');
     eraseCookie('auth_user_data');
-    // cleanCookie();
-    // this.share.clearAll();
-    this.router.navigate(['']);
+    this.router.navigate(['login']);
     window.stop();
-    // location.reload();
 
   }
 
@@ -161,34 +155,25 @@ export class AuthService {
 
     return new Observable((observer) => {
 
-      this.http.post(`${environment.API_URL}/api/authenticate`, {
-        username, password
-      }).subscribe(
-        (res) => {
-          const token: string = JSON.stringify({ token: res, timeLogin: new Date().getTime() });
-          this.createTokenData(token);
+      this.http.post(`${environment.API_URL}/api/authenticate`, {username, password})
+        .subscribe(
+          (res) => {
+            const token: string = JSON.stringify({ token: res, timeLogin: new Date().getTime() });
+            this.createTokenData(token);
 
-          this.getUserAuthenticated(username).subscribe(
-            (data) => {
-              console.log('response', data);
-              const user = JSON.stringify(data.data);
-              this.createUserData(user);
+            this.getUserAuthenticated(username)
+              .subscribe(
+                (data) => {
+                  const user = JSON.stringify(data.data);
+                  this.createUserData(user);
+                  observer.next();
+                },
+                (error: any) => {
+                  this.logout();
+                  observer.error(error.error);
+                });
 
-              observer.next();
-
-            },
-            (error: any) => {
-              this.logout();
-              observer.error(error.error);
-
-            });
-
-        },
-        (error) => {
-
-          observer.error(error.error);
-
-        });
+          }, (error) => observer.error(error.error));
 
    });
 
