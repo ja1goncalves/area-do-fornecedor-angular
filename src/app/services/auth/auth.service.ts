@@ -44,7 +44,7 @@ export class AuthService {
     const objToken: any = JSON.parse(token);
     const expires: number = (_.isObject(objToken)) ? objToken.token.expiresIn : 21600;
 
-    document.cookie = `auth_token=${token};Max-Age=${21600}`;
+    document.cookie = `auth_token=${token};Max-Age=${expires}`;
 
   }
 
