@@ -90,18 +90,19 @@ export class AuthService {
    * @returns {boolean}
    */
   public isLoggedIn(): boolean {
-
-    moment.locale('pt-br');
-
-    const tokenString: string = getCookie('token') || '{}';
-    const userString: string = getCookie('user_data') || '{}';
-    console.log('r', userString);
-    const token: any = JSON.parse(tokenString);
-    const user: any = JSON.parse(userString);
-
+    
     let result: boolean;
 
     try {
+      moment.locale('pt-br');
+
+      const tokenString: string = getCookie('token') || '{}';
+      const userString: string = getCookie('user_data') || '{}';
+      
+      const token: any = JSON.parse(tokenString);
+      const user: any = JSON.parse(userString);
+
+    
       if ((token && token.token && token.token.AccessToken) && user) {
 
         const timeExpire = moment(parseInt(token.timeLogin, 10)).add(parseInt(token.token.ExpiresIn, 10), 'seconds');
@@ -135,9 +136,9 @@ export class AuthService {
    *
    * @returns {Observable<any>}
    */
-  public getUserAuthenticated(username): Observable<any> {
+  public getUserAuthenticated(): Observable<any> {
 
-    return this.http.post(`${environment.API_URL}/api/user-authenticated`, {username});
+    return this.http.get(`${environment.API_URL}/api/user-authenticated`);
 
   }
 
@@ -158,10 +159,10 @@ export class AuthService {
             const token: string = JSON.stringify({ token: res, timeLogin: new Date().getTime() });
             this.createTokenData(token);
 
-            this.getUserAuthenticated(username)
+            this.getUserAuthenticated()
               .subscribe(
                 (data) => {
-                  const user = JSON.stringify(data.data);
+                  const user = JSON.stringify(data);
                   this.createUserData(user);
                   observer.next();
                 },

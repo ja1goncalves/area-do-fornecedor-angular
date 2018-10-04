@@ -35,7 +35,7 @@ export class TokenInterceptor implements HttpInterceptor {
         }
     });
 
-    return next.handle(request).pipe(retry(1), tap(
+    return next.handle(request).pipe(tap(
         (event: HttpEvent<any>) => {
           if (event instanceof HttpResponse) {
 

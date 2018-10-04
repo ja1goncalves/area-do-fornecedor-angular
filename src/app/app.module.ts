@@ -21,6 +21,8 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TokenInterceptor} from './services/token/token.interceptor';
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password';
 import { ConfirmResetPasswordComponent } from './components/pages/confirm-reset-password/confirm-reset-password.component';
+import { RegisterComponent } from './components/pages/register/register.component';
+import { ConfirmRegisterComponent } from './components/pages/confirm-register/confirm-register.component';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import { ConfirmResetPasswordComponent } from './components/pages/confirm-reset-
     ProfileComponent,
     QuotationsComponent,
     ResetPasswordComponent,
-    ConfirmResetPasswordComponent
+    ConfirmResetPasswordComponent,
+    RegisterComponent,
+    ConfirmRegisterComponent,
   ],
   imports: [
     BrowserModule,

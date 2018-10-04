@@ -32,8 +32,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['']);
         },
         (err) => {
-          console.log(JSON.stringify(err.message));
-          this.notify.show('warning', JSON.stringify(err.message));
+          this.notify.show('warning', 'Verifique o login e senha');
         });
   }
 

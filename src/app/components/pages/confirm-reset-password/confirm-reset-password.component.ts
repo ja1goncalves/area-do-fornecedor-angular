@@ -14,7 +14,8 @@ export class ConfirmResetPasswordComponent implements OnInit {
   resetForm: FormGroup;
   password: string;
   password_confirmation: string;
-  token: string;
+  code: string;
+  username: string;
 
   constructor(
     private fb: FormBuilder,
@@ -27,14 +28,20 @@ export class ConfirmResetPasswordComponent implements OnInit {
     const requestData = {
       password: this.password,
       password_confirmation: this.password_confirmation,
-      token: this.token
+      code: this.code,
+      username: this.username
     }
 
-    this.validateData() && this.passwordService.confirm(requestData);
+    this.validateData() && this.passwordService.confirm(requestData)
+    .subscribe((res) => {
+      console.log(res);
+    },(err) => {
+      console.log(err);
+    });
   }
 
   validateData(): boolean {
-    return (this.validatePassword() && !!this.token);
+    return (this.validatePassword() && !!this.code);
   }
 
   validatePassword(): boolean {
@@ -61,8 +68,10 @@ export class ConfirmResetPasswordComponent implements OnInit {
       password: ['', Validators.required],
       password_confirmation: ['', Validators.required],
     });
-
-    this.token = this.route.params.value.token;
+    this.route.params.subscribe(res => {
+     this.code = res.code;
+     this.username = res.username;
+    })
     
   }
 

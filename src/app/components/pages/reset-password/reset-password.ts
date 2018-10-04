@@ -15,7 +15,6 @@ export class ResetPasswordComponent implements OnInit {
   resetForm: FormGroup;
 
   constructor(
-    private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
     private passwordService: PasswordService
@@ -28,11 +27,16 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   reset() {
-    console.log(this.username);
-    this.passwordService.reset(this.username)
-      .subscribe((res) => {
-        console.log(res);
-      });
+    // console.log(this.username);
+    this.passwordService.reset(this.username);
+    // .subscribe(
+    //   (res) => {
+    //     console.log(res);
+    //     this.router.navigate(['']);
+    //   },
+    //   (err) => {
+    //     console.log(err);
+    //   });
     // console.log(this.username);
     // this.authService.loginUser(this.username, this.password)
     //   .subscribe(

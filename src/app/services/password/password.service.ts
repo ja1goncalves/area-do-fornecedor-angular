@@ -23,7 +23,7 @@ export class PasswordService {
       email: username
     };
 
-    return this.http.post(`${environment.API_URL}/api/password/email`, resetRequestData)
+    return this.http.post(`${environment.API_URL}/api/password/email`, {username})
       .subscribe((res) => {
         const message: string = 'O link para redefinir a senha foi enviado para o seu e-mail.';
         this.notify.show('success', message);
@@ -41,21 +41,24 @@ export class PasswordService {
    */
   public confirm(requestData: any): any {
     
-      const resetRequestData = {
-        password: requestData.password,
-        password_confirmation: requestData.password_confirmation,
-        token: requestData.token
-      };
+      // const resetRequestData = {
+      //   password: requestData.password,
+      //   password_confirmation: requestData.password_confirmation,
+      //   token: requestData.token
+      // };
 
-      return this.http.post(`${environment.API_URL}/api/password/reset`, resetRequestData)
+    return new Observable((observer) => {
+      this.http.post(`${environment.API_URL}/api/password/reset`, requestData)
         .subscribe((res) => {
           const message: string = 'A senha foi alterada com sucesso.';
           this.notify.show('success', message);
         },
         (err) => {
+          console.log(err);
           const message: string = 'A sessão expirou. Tente novamente.';
           this.notify.show('warning', message);
         });
+    }) 
   }
 
 }

@@ -5,12 +5,18 @@ import { ProfileComponent } from './components/pages/profile/profile.component';
 import { QuotationsComponent } from './components/pages/quotations/quotations.component';
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password';
 import { ConfirmResetPasswordComponent } from './components/pages/confirm-reset-password/confirm-reset-password.component'
+import { RegisterComponent } from './components/pages/register/register.component';
+import { ConfirmRegisterComponent } from './components/pages/confirm-register/confirm-register.component';
 
 const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'esqueci-minha-senha', component: ResetPasswordComponent},
-    {path: 'recuperar-senha/:token', component: ConfirmResetPasswordComponent},
-    {path: '', component: QuotationsComponent, canActivate: [AuthGuardService]},
+    {path: 'recuperar-senha/:code/:username', component: ConfirmResetPasswordComponent},
+    {path: 'confirmar/:code/:email', component: ConfirmRegisterComponent},
+    {path: 'cadastro/:token', component: RegisterComponent},
+    {path: 'minhas-cotacoes', component: QuotationsComponent, canActivate: [AuthGuardService]},
+    {path: '', redirectTo: 'minhas-cotacoes', pathMatch: 'full'},
+    {path: '**', component: LoginComponent},
     {path: 'editar', component: ProfileComponent, canActivate: [AuthGuardService]},
 ];
 

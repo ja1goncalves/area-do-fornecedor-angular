@@ -40,8 +40,8 @@ export function cleanCookie(): void {
   localStorage.clear();
   window.localStorage.clear();
 
-  document.cookie = 'auth_token';
-  document.cookie = 'auth_user_data';
+  document.cookie = 'token';
+  document.cookie = 'user_data';
 
   alert('Os cookies foram limpos com sucesso. Tente entrar no sistema novamente!');
 
