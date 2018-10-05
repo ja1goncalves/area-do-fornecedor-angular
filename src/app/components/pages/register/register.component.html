@@ -1,60 +1,102 @@
 <app-navbar></app-navbar>
 
-<div class="row">
-  <ul class="cotation-list-table">
-    <li class="head clearfix">
+  <div class="container">    
+    
+    <mat-vertical-stepper linear=false #stepper>
 
-      <table class="cotation-table">
-        <thead>
-          <tr>
-            <th class="width85"></th>
-            <th class="width85">Milhas</th>
-            <th>Programa de Fidelidade</th>
-            <th class="t-valor">Valor</th>
-          </tr>
-        </thead>
-      </table>
+      <mat-step [stepControl]="accessDataForm">  
+        <form [formGroup]="accessDataForm">
+          <ng-template matStepLabel>Dados de Acesso</ng-template>
+          <div class="row">
+              <div class="col-12">
+                  <label>email:</label><br>
+                  <input type="email" [(ngModel)]="accessData.email"
+                         class="form-control" name="email"
+                         placeholder="email"
+                         formControlName="email" required disabled>
+              </div>
+              <div class="col-6">
+                  <label>Nome</label><br>
+                  <input type="text" [(ngModel)]="accessData.name"
+                         class="form-control" name="name"
+                         placeholder="Nome Completo*"
+                         formControlName="name" required>
+              </div>
+              <div class="col-6">
+                  <label>CPF</label><br>
+                  <input type="text" [(ngModel)]="accessData.cpf"
+                         class="form-control" name="cpf"
+                         placeholder="CPF*"
+                         formControlName="cpf" required>
+              </div>
+              <div class="col-12"><p><strong>Para continuar, crie uma senha de acesso:</strong></p></div>
+              <div class="col-6">
+                  <input type="password" [(ngModel)]="accessData.password"
+                         class="form-control" name="password"
+                         placeholder="Senha (min. 8 digitos)"
+                         formControlName="password" required>
+              </div>
+              <div class="col-6">
+                <input type="password" [(ngModel)]="accessData.passwordConfirmation"
+                       class="form-control" name="passwordConfirmation"
+                       placeholder="Confirmação Senha"
+                       formControlName="passwordConfirmation" required>
+              </div>
+          </div>
+          <div>
+            <button mat-raised-button color="primary" (click)="createRegister(stepper)">Continuar</button>
+          </div>
+        </form>
+      </mat-step>
 
-    </li>
-
-    <li class="body clearfix">
-
-      <div class="col col-1">
-        <div class="cotation-box-title">
-          <span class="id">
-            <small>Cotação</small>
-            138066
-          </span>
-
-          <span class="date">
-            04/09/2018
-          </span>
+      <mat-step>
+        <ng-template matStepLabel> Confirmar Cadastro</ng-template>
+        <p>Verifique seu e-mail e confirme o cadastro.</p>
+        <div>
+          <button mat-raised-button color="primary" (click)="checkConfirm(stepper)">Continuar</button>
         </div>
-      </div>
+      </mat-step>
 
+      <mat-step>  
+          <form>
+            <ng-template matStepLabel>Dados Cadastrais</ng-template>
+            <div class="row">
+                <div class="col-12">
+                    <label>Nome</label><br>
+                    <input type="text" [ngModel]="registrationData.personalData.name" name='r1' class="form-control" required disabled>
+                </div>
+                <div class="col-4">
+                    <label>CPF</label><br>
+                    <input type="text" [ngModel]="registrationData.personalData.cpf" name='r2' class="form-control" required disabled>
+                </div>
+                <!-- <div class="col-4">
+                    <label>Nome</label><br>
+                    <input type="text" [(ngModel)]="registrationData.personalData.cpf"
+                           class="form-control" formControlName="name">
+                </div>
+                <div class="col-4">
+                    <label>Nome</label><br>
+                    <input type="text" [(ngModel)]="registrationData.personalData.email"
+                           class="form-control" name="name"
+                           placeholder="Nome Completo*"
+                           formControlName="name" required>
+                </div>
+                <div class="col-4">
+                    <label>Nome</label><br>
+                    <input type="text" [(ngModel)]="registrationData.personalData.email"
+                           class="form-control" name="name"
+                           placeholder="Nome Completo*"
+                           formControlName="name" required>
+                </div> -->
+            </div>
+            <div>
+              <button mat-raised-button color="primary" (click)="createRegister(stepper)">Continuar</button>
+            </div>
+          </form>
+        </mat-step>
       
-      <div class="col col-6">
-        <div class="col-row col-row-valor clearfix">
-            <div class="col col-valor-total">
-              <span class="title">Valor Total:</span>
-            </div>
+    </mat-vertical-stepper>
 
-            <div class="col col-valor-total-total">
-              <span class="title">R$ 0,00</span>
-            </div>
-        </div>
-      </div>
-
-      <div class="col col-1">
-        <a href="" class="button button-select select-cotation">Vender</a>
-        <a href="" onclick="return false;" class="button button-select modal-open sell">Confirmar</a>
-    
-        <span class="button button-select"></span>
-    
-      </div>
-    
-    </li>
-  </ul>
-</div>
+  </div>
 
 <app-footer></app-footer>

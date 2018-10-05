@@ -18,15 +18,19 @@ export class RegisterService {
    */
   public checkToken(token: string): any {
 
-    return this.http.post(`${environment.API_URL}/api/check-token`, {token})
+    return new Observable((observer) => {
+
+      this.http.post(`${environment.API_URL}/api/check-token`, {token})
       .subscribe((res) => {
-        const message: string = 'token validado com sucesso';
-        this.notify.show('success', message);
+        console.log('ct',res)
+        observer.next(res);
       },
       (err) => {
-        const message: string = 'token inválido';
-        this.notify.show('warning', message);
+        console.log('ct err', err)
+        observer.error(err.error);
       });
+
+    })
   }
 
   /**
@@ -40,16 +44,28 @@ export class RegisterService {
 
         this.http.post(`${environment.API_URL}/api/confirm-register`, {code, username})
         .subscribe((res) => {
-            const message: string = 'cadastro confirmado com sucesso';
-            this.notify.show('success', message);
-            observer.next();
+            // const message: string = 'cadastro confirmado com sucesso';
+            // this.notify.show('success', message);
+            observer.next(res);
         },
         (err) => {
-            const message: string = 'verifique os dados e tente novamente!';
-            this.notify.show('warning', message);
+            // const message: string = 'verifique os dados e tente novamente!';
+            // this.notify.show('warning', message);
             observer.error(err.error);
         });
 
+    });
+  }
+
+  public createRegister(requestData: any): any {
+    return new Observable((observer) => {
+      this.http.post(`${environment.API_URL}/api/provider-register`, requestData)
+       .subscribe((res) => {
+         console.log('create', res);
+         observer.next(res);
+       }, (err) => {
+         console.log('create err', err);
+       })
     });
   }
   

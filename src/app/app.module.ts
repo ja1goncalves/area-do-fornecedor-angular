@@ -24,6 +24,13 @@ import { ConfirmResetPasswordComponent } from './components/pages/confirm-reset-
 import { RegisterComponent } from './components/pages/register/register.component';
 import { ConfirmRegisterComponent } from './components/pages/confirm-register/confirm-register.component';
 
+// COMPONENTS
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {
+  MatStepperModule,
+  MatInputModule,
+  MatFormFieldModule,
+  MatButtonModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -45,6 +52,11 @@ import { ConfirmRegisterComponent } from './components/pages/confirm-register/co
     routing,
     HttpClientModule,
     NotifierModule.withConfig(notifierOptions),
+    BrowserAnimationsModule,
+    MatStepperModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule
   ],
   providers: [
     AuthGuardService,

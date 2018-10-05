@@ -12,12 +12,14 @@ const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'esqueci-minha-senha', component: ResetPasswordComponent},
     {path: 'recuperar-senha/:code/:username', component: ConfirmResetPasswordComponent},
-    {path: 'confirmar/:code/:email', component: ConfirmRegisterComponent},
-    {path: 'cadastro/:token', component: RegisterComponent},
-    {path: 'minhas-cotacoes', component: QuotationsComponent, canActivate: [AuthGuardService]},
+    {path: 'confirmar-cadastro/:code/:username', component: ConfirmRegisterComponent},
+    {path: 'cadastro/:code', component: RegisterComponent},
+
     {path: '', redirectTo: 'minhas-cotacoes', pathMatch: 'full'},
-    {path: '**', component: LoginComponent},
+    {path: 'minhas-cotacoes', component: QuotationsComponent, canActivate: [AuthGuardService]}, 
     {path: 'editar', component: ProfileComponent, canActivate: [AuthGuardService]},
+
+    {path: '**', component: LoginComponent},
 ];
 
 export const routing = RouterModule.forRoot(routes, {useHash: true});
