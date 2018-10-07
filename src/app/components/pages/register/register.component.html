@@ -11,36 +11,36 @@
               <div class="col-12">
                   <label>email:</label><br>
                   <input type="email" [(ngModel)]="accessData.email"
-                         class="form-control" name="email"
+                         class="form-control" name="accessData_email"
                          placeholder="email"
-                         formControlName="email" required disabled>
+                         formControlName="accessData_email" required disabled>
               </div>
               <div class="col-6">
                   <label>Nome</label><br>
                   <input type="text" [(ngModel)]="accessData.name"
-                         class="form-control" name="name"
+                         class="form-control" name="accessData_name"
                          placeholder="Nome Completo*"
-                         formControlName="name" required>
+                         formControlName="accessData_name" required>
               </div>
               <div class="col-6">
                   <label>CPF</label><br>
                   <input type="text" [(ngModel)]="accessData.cpf"
-                         class="form-control" name="cpf"
+                         class="form-control" name="accessData_cpf"
                          placeholder="CPF*"
-                         formControlName="cpf" required>
+                         formControlName="accessData_cpf" required>
               </div>
               <div class="col-12"><p><strong>Para continuar, crie uma senha de acesso:</strong></p></div>
               <div class="col-6">
                   <input type="password" [(ngModel)]="accessData.password"
-                         class="form-control" name="password"
+                         class="form-control" name="accessData_password"
                          placeholder="Senha (min. 8 digitos)"
-                         formControlName="password" required>
+                         formControlName="accessData_password" required>
               </div>
               <div class="col-6">
                 <input type="password" [(ngModel)]="accessData.passwordConfirmation"
-                       class="form-control" name="passwordConfirmation"
+                       class="form-control" name="accessData_passwordConfirmation"
                        placeholder="Confirmação Senha"
-                       formControlName="passwordConfirmation" required>
+                       formControlName="accessData_passwordConfirmation" required>
               </div>
           </div>
           <div>
@@ -53,48 +53,371 @@
         <ng-template matStepLabel> Confirmar Cadastro</ng-template>
         <p>Verifique seu e-mail e confirme o cadastro.</p>
         <div>
-          <button mat-raised-button color="primary" (click)="checkConfirm(stepper)">Continuar</button>
+          <button mat-raised-button color="primary" (click)="checkConfirm(stepper)">Próximo</button>
         </div>
       </mat-step>
 
       <mat-step>  
           <form>
             <ng-template matStepLabel>Dados Cadastrais</ng-template>
-            <div class="row">
-                <div class="col-12">
-                    <label>Nome</label><br>
-                    <input type="text" [ngModel]="registrationData.personalData.name" name='r1' class="form-control" required disabled>
-                </div>
-                <div class="col-4">
-                    <label>CPF</label><br>
-                    <input type="text" [ngModel]="registrationData.personalData.cpf" name='r2' class="form-control" required disabled>
-                </div>
-                <!-- <div class="col-4">
-                    <label>Nome</label><br>
-                    <input type="text" [(ngModel)]="registrationData.personalData.cpf"
-                           class="form-control" formControlName="name">
-                </div>
-                <div class="col-4">
-                    <label>Nome</label><br>
-                    <input type="text" [(ngModel)]="registrationData.personalData.email"
-                           class="form-control" name="name"
-                           placeholder="Nome Completo*"
-                           formControlName="name" required>
-                </div>
-                <div class="col-4">
-                    <label>Nome</label><br>
-                    <input type="text" [(ngModel)]="registrationData.personalData.email"
-                           class="form-control" name="name"
-                           placeholder="Nome Completo*"
-                           formControlName="name" required>
-                </div> -->
+            <div class="row personal-form">
+              <div class="col-12">
+                <h3>Dados Pessoais</h3>
+              </div>
+              <div class="col-12">
+                  <label>Nome</label><br>
+                  <input type="text" [ngModel]="registrationData.personalData.name"
+                          name='personal_name' class="form-control" required disabled>
+              </div>
+              <div class="col-4">
+                  <label>CPF</label><br>
+                  <input type="text" [ngModel]="registrationData.personalData.cpf"
+                          name='personal_cpf' class="form-control" required disabled>
+              </div>
+              <div class="col-4">
+                <label>Data de Nascimento</label>
+                <input type="date" [(ngModel)]="registrationData.personalData.birthday"
+                        name="personal_birthday" class="form-control">
+              </div>
+              <div class="col-4">
+                <label>Sexo</label>
+                <select [(ngModel)]="registrationData.personalData.gender"
+                        name="personal_gender" class="form-control">
+                  <option value>Selecione</option>
+                  <option value="M">Masculino</option>
+                  <option value="F">Feminino</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <input type="text" [(ngModel)]="registrationData.personalData.phone"
+                      name="personal_phone" class="form-control" placeholder="Telefone Fixo">
+              </div>
+              <div class="col-6">
+                <input type="text" [(ngModel)]="registrationData.personalData.mobile"
+                      name="personal_phone" class="form-control" placeholder="Celular">
+              </div>
+            </div>
+            <div class="row residential-form">
+              <div class="col-12">
+                <h3>Dados Residenciais</h3>
+              </div>
+              <div class="col-4">
+                <label>CEP</label>
+                <input type="text" [(ngModel)]="registrationData.residentialData.zip_code"
+                        name="residential_zip_code" class="form-control" placeholder="CEP">
+              </div>
+              <div class="col-6">
+                <label>Rua</label>
+                <input type="text" [(ngModel)]="registrationData.residentialData.street"
+                        name="residential_street" class="form-control" placeholder="Rua">
+              </div>
+              <div class="col-2">
+                <label>Número</label>
+                <input type="number" [(ngModel)]="registrationData.residentialData.number"
+                        name="residential_number" class="form-control" placeholder="N°"
+                        min="0">
+              </div>
+              <div class="col-6">
+                <label>Complemento</label>
+                <input type="text" [(ngModel)]="registrationData.residentialData.complement"
+                        name="residential_complement" class="form-control" placeholder="Comp.">
+              </div>
+              <div class="col-6">
+                <label>Bairro</label>
+                <input type="text" [(ngModel)]="registrationData.residentialData.district"
+                        name="residential_district" class="form-control" placeholder="Bairro">
+              </div>
+              <div class="col-6">
+                <label>Cidade</label>
+                <input type="text" [(ngModel)]="registrationData.residentialData.city"
+                        name="residential_city" class="form-control" placeholder="Cidade">
+              </div>
+              <div class="col-6">
+                <label>Estado</label>
+                <select [(ngModel)]="registrationData.residentialData.state"
+                        name="residential_state" class="form-control">
+                  <option value="AC">Acre</option>
+                  <option value="AL">Alagoas</option>
+                  <option value="AM">Amazonas</option>
+                  <option value="AP">Amapá</option>
+                  <option value="BA">Bahia</option>
+                  <option value="CE">Ceará</option>
+                  <option value="DF">Distrito Federal</option>
+                  <option value="ES">Espírito Santo</option>
+                  <option value="GO">Goiás</option>
+                  <option value="MA">Maranhão</option>
+                  <option value="MT">Mato Grosso</option>
+                  <option value="MS">Mato Grosso do Sul</option>
+                  <option value="MG">Minas Gerais</option>
+                  <option value="PA">Pará</option>
+                  <option value="PB">Paraíba</option>
+                  <option value="PR">Paraná</option>
+                  <option value="PE">Pernambuco</option>
+                  <option value="PI">Piauí</option>
+                  <option value="RJ">Rio de Janeiro</option>
+                  <option value="RN">Rio Grande do Norte</option>
+                  <option value="RO">Rondônia</option>
+                  <option value="RS">Rio Grande do Sul</option>
+                  <option value="RR">Roraima</option>
+                  <option value="SC">Santa Catarina</option>
+                  <option value="SE">Sergipe</option>
+                  <option value="SP">São Paulo</option>
+                  <option value="TO">Tocantins</option>
+                </select>
+              </div>
+            </div>
+            <div class="row commercial-form">
+              <div class="col-12">
+                <h3>Dados Comerciais</h3>
+              </div>
+              <div class="col-6">
+                <label>Ocupação</label>
+                <select [(ngModel)]="registrationData.commercialData.role"
+                        name="commercial_role" class="form-control">
+                  <option value>Ocupação</option>
+                  <option value="1">Empregado</option>
+                  <option value="2">Empresário</option>
+                  <option value="3">Servidor Público</option>
+                  <option value="4">Aposentado</option>
+                  <option value="5">Autônomo</option>
+                  <option value="6">Desempregado</option>
+                  <option value="7">Estudante</option>
+                  <option value="8">Não Cadastrado</option>
+                  <option value="9">Profissional liberal</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label>Profissão</label>
+                <input type="text" [(ngModel)]="registrationData.commercialData.profesion"
+                        name="commercial_profesion" class="form-control" placeholder="Profissão">
+              </div>
+              <div class="col-6">
+                <label>Nome da Empresa</label>
+                <input type="text" [(ngModel)]="registrationData.commercialData.company"
+                        name="commercial_company" class="form-control" placeholder="Nome da Empresa">
+              </div>
+              <div class="col-6">
+                <label>Telefone</label>
+                <input type="text" [(ngModel)]="registrationData.commercialData.phone"
+                        name="commercial_phone" class="form-control" placeholder="Telefone da Empresa">
+              </div>
             </div>
             <div>
-              <button mat-raised-button color="primary" (click)="createRegister(stepper)">Continuar</button>
+              <button mat-raised-button color="primary" (click)="nextStep(stepper)">Próximo</button>
             </div>
           </form>
         </mat-step>
-      
+        <mat-step>
+          <form>
+            <ng-template matStepLabel>Programas de Fidelidade</ng-template>
+            <div class="row fidelity-form">
+              <div class="col-12">
+                <h3>Programas de Fidelidade</h3>
+              </div>
+              <div class="col-6">
+                <label>TAM</label>
+                <input type="text" [(ngModel)]="fidelityProgramsData.jj_number"
+                        name="fidelity_jj_number" class="form-control" placeholder="N° TAM Fidelidade">
+              </div>
+              <div class="col-6">
+                <label>GOL</label>
+                <input type="text" [(ngModel)]="fidelityProgramsData.g3_number"
+                        name="fidelity_g3_number" class="form-control" placeholder="N° Smiles">
+              </div>
+              <div class="col-6">
+                <label>AZUL</label>
+                <input type="text" [(ngModel)]="fidelityProgramsData.ad_number"
+                        name="fidelity_ad_number" class="form-control" placeholder="N° Tudo Azul">
+              </div>
+              <div class="col-6">
+                <label>AVIANCA</label>
+                <input type="text" [(ngModel)]="fidelityProgramsData.av_number"
+                        name="fidelity_av_number" class="form-control" placeholder="N° Amigo Avianca">
+              </div>
+              <div class="col-12">
+                <label>Senha Multiplus</label>
+                <input type="text" [(ngModel)]="fidelityProgramsData.jj_password"
+                        name="fidelity_jj_password" class="form-control" placeholder="Senha Multiplus">
+              </div>
+            </div>
+            <div>
+              <button mat-raised-button color="primary" (click)="nextStep(stepper)">Próximo</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <form>
+            <ng-template matStepLabel>Dados Bancários</ng-template>
+            <div class="row bank-form">
+              <div class="col-12">
+                <h3>Dados Bancários</h3>
+              </div>
+              <div class="col-5">
+                <label>Nome do Banco</label>
+                <select type="text" [(ngModel)]="bankAccountData.bank_name"
+                        name="bank_bank_name" class="form-control" placeholder="Nome do Banco">
+                  <option value>Nome do Banco</option>
+                  <option value="1">ABC Brasil S.A.</option>
+                  <option value="2">ABN AMRO Real S.A.</option>
+                  <option value="3">Alfa S.A.</option>
+                  <option value="4">Alvorada S.A.</option>
+                  <option value="5">Banerj S.A.</option>
+                  <option value="6">Banestado S.A.</option>
+                  <option value="7">Barclays S.A.</option>
+                  <option value="8">BBM S.A.</option>
+                  <option value="9">Beg S.A.</option>
+                  <option value="10">Bem S.A.</option>
+                  <option value="11">BM&amp;F de Serviços de Liquidação e Custódia S.A</option>
+                  <option value="12">BMC S.A.</option>
+                  <option value="13">BMG S.A.</option>
+                  <option value="14">BNP Paribas Brasil S.A.</option>
+                  <option value="15">Boavista Interatlântico S.A.</option>
+                  <option value="16">Bradesco S.A.</option>
+                  <option value="17">Brascan S.A.</option>
+                  <option value="18">Cacique S.A.</option>
+                  <option value="19">Calyon Brasil S.A.</option>
+                  <option value="20">Cargill S.A.</option>
+                  <option value="21">Citibank S.A.</option>
+                  <option value="22">Comercial e de Investimento Sudameris S.A.</option>
+                  <option value="23">Cooperativo do Brasil S.A. – BANCOOB</option>
+                  <option value="24">Cooperativo Sicredi S.A. – BANSICREDI</option>
+                  <option value="25">Credit Suisse (Brasil) S.A.</option>
+                  <option value="26">Cruzeiro do Sul S.A.</option>
+                  <option value="27">Banco da Amazônia S.A.</option>
+                  <option value="28">Daycoval S.A.</option>
+                  <option value="29">Banco de Pernambuco S.A. – BANDEPE</option>
+                  <option value="30">Banco de Tokyo-Mitsubishi UFJ Brasil S.A.</option>
+                  <option value="31">Dibens S.A.</option>
+                  <option value="32">Banco do Brasil S.A.</option>
+                  <option value="33">Banco do Estado de Santa Catarina S.A.</option>
+                  <option value="34">Banco do Estado de Sergipe S.A.</option>
+                  <option value="35">Banco do Estado do Pará S.A.</option>
+                  <option value="36">Banco do Estado do Rio Grande do Sul S.A.</option>
+                  <option value="37">Banco do Nordeste do Brasil S.A.</option>
+                  <option value="38">Fator S.A.</option>
+                  <option value="39">Fibra S.A.</option>
+                  <option value="40">Finasa S.A.</option>
+                  <option value="41">Fininvest S.A.</option>
+                  <option value="42">GE Capital S.A.</option>
+                  <option value="43">Gerdau S.A.</option>
+                  <option value="44">Guanabara S.A.</option>
+                  <option value="45">Ibi S.A. Banco Múltiplo</option>
+                  <option value="46">Industrial do Brasil S.A.</option>
+                  <option value="47">Industrial e Comercial S.A.</option>
+                  <option value="48">Indusval S.A.</option>
+                  <option value="49">Intercap S.A.</option>
+                  <option value="50">Investcred Unibanco S.A.</option>
+                  <option value="51">Itaú S.A.</option>
+                  <option value="52">J. P. Morgan S.A.</option>
+                  <option value="53">J. Safra S.A.</option>
+                  <option value="54">Luso Brasileiro S.A.</option>
+                  <option value="55">Mercantil de São Paulo S.A.</option>
+                  <option value="56">Mercantil do Brasil S.A.</option>
+                  <option value="57">Merrill Lynch de Investimentos S.A.</option>
+                  <option value="58">Nossa Caixa S.A.</option>
+                  <option value="59">Opportunity S.A.</option>
+                  <option value="60">Panamericano S.A.</option>
+                  <option value="61">Paulista S.A.</option>
+                  <option value="62">Pine S.A.</option>
+                  <option value="63">Prosper S.A.</option>
+                  <option value="64">Rabobank International Brasil S.A.</option>
+                  <option value="65">Rendimento S.A.</option>
+                  <option value="66">Rural Mais S.A.</option>
+                  <option value="67">Rural S.A.</option>
+                  <option value="68">Safra S.A.</option>
+                  <option value="69">Santander</option>
+                  <option value="70">Schahin S.A.</option>
+                  <option value="71">Simples S.A.</option>
+                  <option value="72">Société Générale Brasil S.A.</option>
+                  <option value="73">Sofisa S.A.</option>
+                  <option value="74">Sudameris Brasil S.A.</option>
+                  <option value="75">Sumitomo Mitsui Brasileiro S.A.</option>
+                  <option value="76">Triângulo S.A.</option>
+                  <option value="77">UBS Pactual S.A.</option>
+                  <option value="78">UBS S.A.</option>
+                  <option value="79">Único S.A.</option>
+                  <option value="80">Votorantim S.A.</option>
+                  <option value="81">VR S.A.</option>
+                  <option value="82">WestLB do Brasil S.A.</option>
+                  <option value="83">BANESTES S.A. Banco do Estado do Espírito Santo</option>
+                  <option value="84">Banif-Banco Internacional do Funchal (Brasil)S.A.</option>
+                  <option value="85">Bankpar Banco Multiplo S.A.</option>
+                  <option value="86">BRB – Banco de Brasília S.A.</option>
+                  <option value="87">CEF</option>
+                  <option value="88">Citibank N.A.</option>
+                  <option value="89">Deutsche Bank S.A. – Banco Alemão</option>
+                  <option value="90">Dresdner Bank Brasil S.A. – Banco Múltiplo</option>
+                  <option value="91">Dresdner Bank Lateinamerika Aktiengesellschaft</option>
+                  <option value="92">Hipercard Banco Múltiplo S.A.</option>
+                  <option value="93">HSBC</option>
+                  <option value="94">ING Bank N.V.</option>
+                  <option value="95">JPMorgan Chase Bank</option>
+                  <option value="96">Lemon Bank Banco Múltiplo S.A.</option>
+                  <option value="97">UNIBANCO – União de bancos Brasileiros S.A.</option>
+                  <option value="98">Unicard Banco Múltiplo S.A.</option>
+                  <option value="99">CECRED</option>
+                  <option value="100">UNICRED</option>
+                  <option value="101">BB Banco Popular do Brasil S.A.</option>
+                  <option value="102">BPN Brasil Banco Mútiplo S.A.</option>
+                  <option value="103">Caixa Econômica Federal S.A.</option>
+                  <option value="104">Sicoob</option>
+                  <option value="105">Banco Original S.A.</option>
+                  <option value="106">Banco Intermedium S.A.</option>
+                  <option value="107">Nu Pagamentos S.A.</option>
+                  <option value="108">Cresol</option>
+                  <option value="109">Banco do Estado do Pará S. A.</option>
+                </select>
+              </div>
+              <div class="col-3">
+                <label>Tipo de conta</label>
+                <select type="text" [(ngModel)]="bankAccountData.type_account"
+                        name="bank_type_account" class="form-control" placeholder="Tipo">
+                  <option value>Tipo</option>
+                  <option value="CC">Corrente</option>
+                  <option value="PP">Poupança</option>
+                </select>
+              </div>
+              <div class="col-3">
+                <label>Segmento</label>
+                <select type="text" [(ngModel)]="bankAccountData.segment"
+                        name="bank_segment" class="form-control" placeholder="Segmento">
+                  <option value>Segmento</option>
+                  <option value="1">Personnalité</option>
+                  <option value="2">Private Bank</option>
+                  <option value="3">Private Bank</option>
+                  <option value="4">Prime</option>
+                  <option value="5">Estilo</option>
+                  <option value="6">Private</option>
+                  <option value="7">Private Banking</option>
+                  <option value="10">VAN GOGH</option>
+                </select>
+              </div>
+              <div class="col-3">
+                <label>N° Agência</label>
+                <input type="text" [(ngModel)]="bankAccountData.agency_number"
+                        name="bank_agency_number" class="form-control" placeholder="Agência">
+              </div>
+              <div class="col-2">
+                <label>DV</label>
+                <input type="text" [(ngModel)]="bankAccountData.agency_expire_date"
+                        name="bank_agency_expire_date" class="form-control">
+              </div>
+              <div class="col-4">
+                <label>N° Conta</label>
+                <input type="text" [(ngModel)]="bankAccountData.account_number"
+                        name="bank_account_number" class="form-control" placeholder="Conta">
+              </div>
+              <div class="col-2">
+                <label>DV</label>
+                <input type="text" [(ngModel)]="bankAccountData.account_expire_date"
+                        name="bank_account_expire_date" class="form-control">
+              </div>
+            </div>
+            <div>
+              <button mat-raised-button color="primary" (click)="concludeRegister()">Tudo Pronto!</button>
+            </div>
+          </form>
+        </mat-step>
     </mat-vertical-stepper>
 
   </div>
