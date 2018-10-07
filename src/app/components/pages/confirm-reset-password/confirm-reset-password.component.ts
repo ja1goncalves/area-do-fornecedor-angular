@@ -51,7 +51,7 @@ export class ConfirmResetPasswordComponent implements OnInit {
     } else if(this.password !== this.password_confirmation) {
       this.handlerNotify('warning','as senhas devem ser iguais');
       return false;
-    } else if(this.password.length < 6) {
+    } else if(this.password.length < 8) {
       this.handlerNotify('warning','a senha não pode ter menos de 6 caracteres');
       return false;
     } else {
