@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RegisterService } from '../../../services/register/register.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { ufs, banks } from '../../../config/consts';
 
 @Component({
   selector: 'app-register',
@@ -11,10 +12,11 @@ import { AuthService } from '../../../services/auth/auth.service';
 })
 export class RegisterComponent implements OnInit {
 
-  isLinear = true;
   accessDataForm: FormGroup;
   personalDataForm: FormGroup;
   isValidToken: boolean;
+  UFS: any = ufs;
+  BANKS: any = banks;
 
   accessData = {
     email: '',
@@ -40,12 +42,12 @@ export class RegisterComponent implements OnInit {
       complement: '',
       district: '',
       city: '',
-      state: ''
+      state: 'AC'
     },
     commercialData: {
       role: '',
-      profession: '',
-      company_name: '',
+      profesion: '',
+      company: '',
       phone: ''
     }
   }
@@ -110,18 +112,22 @@ export class RegisterComponent implements OnInit {
     this.registrationData.personalData.cpf = request['cpf'];
   }
 
+  nextStep(stepper: any): any {
+    console.log(this.bankAccountData, this.registrationData)
+    stepper.next();
+  }
+  
+  concludeRegister(): any {
+    
+  }
 
   ngOnInit() {
     this.accessDataForm = this._formBuilder.group({
-      email: ['', Validators.required],
-      name: ['', Validators.required],
-      cpf: ['', Validators.required],
-      password: ['', Validators.required],
-      passwordConfirmation: ['', Validators.required]
-    });
-
-    this.personalDataForm = this._formBuilder.group({
-      personal_name: ['', Validators.required]
+      accessData_email: ['', Validators.required],
+      accessData_name: ['', Validators.required],
+      accessData_cpf: ['', Validators.required],
+      accessData_password: ['', Validators.required],
+      accessData_passwordConfirmation: ['', Validators.required]
     });
 
     this.route.params
@@ -133,8 +139,8 @@ export class RegisterComponent implements OnInit {
          console.log(err)
        })
      }, (err) => {
-
+      console.log(err)
      })
   }
-
+  
 }

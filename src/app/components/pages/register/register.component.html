@@ -11,36 +11,36 @@
               <div class="col-12">
                   <label>email:</label><br>
                   <input type="email" [(ngModel)]="accessData.email"
-                         class="form-control" name="email"
+                         class="form-control" name="accessData_email"
                          placeholder="email"
-                         formControlName="email" required disabled>
+                         formControlName="accessData_email" required disabled>
               </div>
               <div class="col-6">
                   <label>Nome</label><br>
                   <input type="text" [(ngModel)]="accessData.name"
-                         class="form-control" name="name"
+                         class="form-control" name="accessData_name"
                          placeholder="Nome Completo*"
-                         formControlName="name" required>
+                         formControlName="accessData_name" required pattern="[a-zA-Z ]*" ngModel>
               </div>
               <div class="col-6">
                   <label>CPF</label><br>
                   <input type="text" [(ngModel)]="accessData.cpf"
-                         class="form-control" name="cpf"
+                         class="form-control" name="accessData_cpf"
                          placeholder="CPF*"
-                         formControlName="cpf" required>
+                         formControlName="accessData_cpf" required>
               </div>
               <div class="col-12"><p><strong>Para continuar, crie uma senha de acesso:</strong></p></div>
               <div class="col-6">
                   <input type="password" [(ngModel)]="accessData.password"
-                         class="form-control" name="password"
+                         class="form-control" name="accessData_password"
                          placeholder="Senha (min. 8 digitos)"
-                         formControlName="password" required>
+                         formControlName="accessData_password" required>
               </div>
               <div class="col-6">
                 <input type="password" [(ngModel)]="accessData.passwordConfirmation"
-                       class="form-control" name="passwordConfirmation"
+                       class="form-control" name="accessData_passwordConfirmation"
                        placeholder="Confirmação Senha"
-                       formControlName="passwordConfirmation" required>
+                       formControlName="accessData_passwordConfirmation" required>
               </div>
           </div>
           <div>
@@ -53,48 +53,236 @@
         <ng-template matStepLabel> Confirmar Cadastro</ng-template>
         <p>Verifique seu e-mail e confirme o cadastro.</p>
         <div>
-          <button mat-raised-button color="primary" (click)="checkConfirm(stepper)">Continuar</button>
+          <button mat-raised-button color="primary" (click)="checkConfirm(stepper)">Próximo</button>
         </div>
       </mat-step>
 
       <mat-step>  
           <form>
             <ng-template matStepLabel>Dados Cadastrais</ng-template>
-            <div class="row">
-                <div class="col-12">
-                    <label>Nome</label><br>
-                    <input type="text" [ngModel]="registrationData.personalData.name" name='r1' class="form-control" required disabled>
-                </div>
-                <div class="col-4">
-                    <label>CPF</label><br>
-                    <input type="text" [ngModel]="registrationData.personalData.cpf" name='r2' class="form-control" required disabled>
-                </div>
-                <!-- <div class="col-4">
-                    <label>Nome</label><br>
-                    <input type="text" [(ngModel)]="registrationData.personalData.cpf"
-                           class="form-control" formControlName="name">
-                </div>
-                <div class="col-4">
-                    <label>Nome</label><br>
-                    <input type="text" [(ngModel)]="registrationData.personalData.email"
-                           class="form-control" name="name"
-                           placeholder="Nome Completo*"
-                           formControlName="name" required>
-                </div>
-                <div class="col-4">
-                    <label>Nome</label><br>
-                    <input type="text" [(ngModel)]="registrationData.personalData.email"
-                           class="form-control" name="name"
-                           placeholder="Nome Completo*"
-                           formControlName="name" required>
-                </div> -->
+            <div class="row personal-form">
+              <div class="col-12">
+                <h3>Dados Pessoais</h3>
+              </div>
+              <div class="col-12">
+                  <label>Nome</label><br>
+                  <input type="text" [ngModel]="registrationData.personalData.name"
+                          name='personal_name' class="form-control" required disabled>
+              </div>
+              <div class="col-4">
+                  <label>CPF</label><br>
+                  <input type="text" [ngModel]="registrationData.personalData.cpf"
+                          name='personal_cpf' class="form-control" required disabled>
+              </div>
+              <div class="col-4">
+                <label>Data de Nascimento</label>
+                <input type="date" [(ngModel)]="registrationData.personalData.birthday"
+                        name="personal_birthday" class="form-control">
+              </div>
+              <div class="col-4">
+                <label>Sexo</label>
+                <select [(ngModel)]="registrationData.personalData.gender"
+                        name="personal_gender" class="form-control">
+                  <option value>Selecione</option>
+                  <option value="M">Masculino</option>
+                  <option value="F">Feminino</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <input type="text" [(ngModel)]="registrationData.personalData.phone"
+                      name="personal_phone" class="form-control" placeholder="Telefone Fixo">
+              </div>
+              <div class="col-6">
+                <input type="text" [(ngModel)]="registrationData.personalData.mobile"
+                      name="personal_phone" class="form-control" placeholder="Celular">
+              </div>
+            </div>
+            <div class="row residential-form">
+              <div class="col-12">
+                <h3>Dados Residenciais</h3>
+              </div>
+              <div class="col-4">
+                <label>CEP</label>
+                <input type="text" [(ngModel)]="registrationData.residentialData.zip_code"
+                        name="residential_zip_code" class="form-control" placeholder="CEP">
+              </div>
+              <div class="col-6">
+                <label>Rua</label>
+                <input type="text" [(ngModel)]="registrationData.residentialData.street"
+                        name="residential_street" class="form-control" placeholder="Rua">
+              </div>
+              <div class="col-2">
+                <label>Número</label>
+                <input type="number" [(ngModel)]="registrationData.residentialData.number"
+                        name="residential_number" class="form-control" placeholder="N°"
+                        min="0">
+              </div>
+              <div class="col-6">
+                <label>Complemento</label>
+                <input type="text" [(ngModel)]="registrationData.residentialData.complement"
+                        name="residential_complement" class="form-control" placeholder="Comp.">
+              </div>
+              <div class="col-6">
+                <label>Bairro</label>
+                <input type="text" [(ngModel)]="registrationData.residentialData.district"
+                        name="residential_district" class="form-control" placeholder="Bairro">
+              </div>
+              <div class="col-6">
+                <label>Cidade</label>
+                <input type="text" [(ngModel)]="registrationData.residentialData.city"
+                        name="residential_city" class="form-control" placeholder="Cidade">
+              </div>
+              <div class="col-6">
+                <label>Estado</label>
+                <select [(ngModel)]="registrationData.residentialData.state"
+                        name="residential_state" class="form-control">
+                  <option *ngFor="let uf of UFS" [value]="uf.value">{{uf.label}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="row commercial-form">
+              <div class="col-12">
+                <h3>Dados Comerciais</h3>
+              </div>
+              <div class="col-6">
+                <label>Ocupação</label>
+                <select [(ngModel)]="registrationData.commercialData.role"
+                        name="commercial_role" class="form-control">
+                  <option value>Ocupação</option>
+                  <option value="1">Empregado</option>
+                  <option value="2">Empresário</option>
+                  <option value="3">Servidor Público</option>
+                  <option value="4">Aposentado</option>
+                  <option value="5">Autônomo</option>
+                  <option value="6">Desempregado</option>
+                  <option value="7">Estudante</option>
+                  <option value="8">Não Cadastrado</option>
+                  <option value="9">Profissional liberal</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label>Profissão</label>
+                <input type="text" [(ngModel)]="registrationData.commercialData.profesion"
+                        name="commercial_profesion" class="form-control" placeholder="Profissão">
+              </div>
+              <div class="col-6">
+                <label>Nome da Empresa</label>
+                <input type="text" [(ngModel)]="registrationData.commercialData.company"
+                        name="commercial_company" class="form-control" placeholder="Nome da Empresa">
+              </div>
+              <div class="col-6">
+                <label>Telefone</label>
+                <input type="text" [(ngModel)]="registrationData.commercialData.phone"
+                        name="commercial_phone" class="form-control" placeholder="Telefone da Empresa">
+              </div>
             </div>
             <div>
-              <button mat-raised-button color="primary" (click)="createRegister(stepper)">Continuar</button>
+              <button mat-raised-button color="primary" (click)="nextStep(stepper)">Próximo</button>
             </div>
           </form>
         </mat-step>
-      
+        <mat-step>
+          <form>
+            <ng-template matStepLabel>Programas de Fidelidade</ng-template>
+            <div class="row fidelity-form">
+              <div class="col-12">
+                <h3>Programas de Fidelidade</h3>
+              </div>
+              <div class="col-6">
+                <label>TAM</label>
+                <input type="text" [(ngModel)]="fidelityProgramsData.jj_number"
+                        name="fidelity_jj_number" class="form-control" placeholder="N° TAM Fidelidade">
+              </div>
+              <div class="col-6">
+                <label>GOL</label>
+                <input type="text" [(ngModel)]="fidelityProgramsData.g3_number"
+                        name="fidelity_g3_number" class="form-control" placeholder="N° Smiles">
+              </div>
+              <div class="col-6">
+                <label>AZUL</label>
+                <input type="text" [(ngModel)]="fidelityProgramsData.ad_number"
+                        name="fidelity_ad_number" class="form-control" placeholder="N° Tudo Azul">
+              </div>
+              <div class="col-6">
+                <label>AVIANCA</label>
+                <input type="text" [(ngModel)]="fidelityProgramsData.av_number"
+                        name="fidelity_av_number" class="form-control" placeholder="N° Amigo Avianca">
+              </div>
+              <div class="col-12">
+                <label>Senha Multiplus</label>
+                <input type="text" [(ngModel)]="fidelityProgramsData.jj_password"
+                        name="fidelity_jj_password" class="form-control" placeholder="Senha Multiplus">
+              </div>
+            </div>
+            <div>
+              <button mat-raised-button color="primary" (click)="nextStep(stepper)">Próximo</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <form>
+            <ng-template matStepLabel>Dados Bancários</ng-template>
+            <div class="row bank-form">
+              <div class="col-12">
+                <h3>Dados Bancários</h3>
+              </div>
+              <div class="col-5">
+                <label>Nome do Banco</label>
+                <select type="text" [(ngModel)]="bankAccountData.bank_name"
+                        name="bank_bank_name" class="form-control" placeholder="Nome do Banco">
+                  <option *ngFor="let bank of BANKS" [value]="bank.value">{{bank.label}}</option>
+                </select>
+              </div>
+              <div class="col-3">
+                <label>Tipo de conta</label>
+                <select type="text" [(ngModel)]="bankAccountData.type_account"
+                        name="bank_type_account" class="form-control" placeholder="Tipo">
+                  <option value>Tipo</option>
+                  <option value="CC">Corrente</option>
+                  <option value="PP">Poupança</option>
+                </select>
+              </div>
+              <div class="col-3">
+                <label>Segmento</label>
+                <select type="text" [(ngModel)]="bankAccountData.segment"
+                        name="bank_segment" class="form-control" placeholder="Segmento">
+                  <option value>Segmento</option>
+                  <option value="1">Personnalité</option>
+                  <option value="2">Private Bank</option>
+                  <option value="3">Private Bank</option>
+                  <option value="4">Prime</option>
+                  <option value="5">Estilo</option>
+                  <option value="6">Private</option>
+                  <option value="7">Private Banking</option>
+                  <option value="10">VAN GOGH</option>
+                </select>
+              </div>
+              <div class="col-3">
+                <label>N° Agência</label>
+                <input type="text" [(ngModel)]="bankAccountData.agency_number"
+                        name="bank_agency_number" class="form-control" placeholder="Agência">
+              </div>
+              <div class="col-2">
+                <label>DV</label>
+                <input type="text" [(ngModel)]="bankAccountData.agency_expire_date"
+                        name="bank_agency_expire_date" class="form-control">
+              </div>
+              <div class="col-4">
+                <label>N° Conta</label>
+                <input type="text" [(ngModel)]="bankAccountData.account_number"
+                        name="bank_account_number" class="form-control" placeholder="Conta">
+              </div>
+              <div class="col-2">
+                <label>DV</label>
+                <input type="text" [(ngModel)]="bankAccountData.account_expire_date"
+                        name="bank_account_expire_date" class="form-control">
+              </div>
+            </div>
+            <div>
+              <button mat-raised-button color="primary" (click)="concludeRegister()">Tudo Pronto!</button>
+            </div>
+          </form>
+        </mat-step>
     </mat-vertical-stepper>
 
   </div>
