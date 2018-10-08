@@ -4,43 +4,43 @@
     
     <mat-vertical-stepper linear=false #stepper>
 
-      <mat-step [stepControl]="accessDataForm">  
-        <form [formGroup]="accessDataForm">
+      <mat-step [stepControl]="accessForm">  
+        <form [formGroup]="accessForm">
           <ng-template matStepLabel>Dados de Acesso</ng-template>
           <div class="row">
               <div class="col-12">
                   <label>email:</label><br>
-                  <input type="email" [(ngModel)]="accessData.email"
-                         class="form-control" name="accessData_email"
+                  <input type="email" [(ngModel)]="access.email"
+                         class="form-control" name="access_email"
                          placeholder="email"
-                         formControlName="accessData_email" required disabled>
+                         formControlName="access_email" required disabled>
               </div>
               <div class="col-6">
                   <label>Nome</label><br>
-                  <input type="text" [(ngModel)]="accessData.name"
-                         class="form-control" name="accessData_name"
+                  <input type="text" [(ngModel)]="access.name"
+                         class="form-control" name="access_name"
                          placeholder="Nome Completo*"
-                         formControlName="accessData_name" required pattern="[a-zA-Z ]*" ngModel>
+                         formControlName="access_name" required pattern="[a-zA-Z ]*" ngModel>
               </div>
               <div class="col-6">
                   <label>CPF</label><br>
-                  <input type="text" [(ngModel)]="accessData.cpf"
-                         class="form-control" name="accessData_cpf"
+                  <input type="text" [(ngModel)]="access.cpf"
+                         class="form-control" name="access_cpf"
                          placeholder="CPF*"
-                         formControlName="accessData_cpf" required>
+                         formControlName="access_cpf" required>
               </div>
               <div class="col-12"><p><strong>Para continuar, crie uma senha de acesso:</strong></p></div>
               <div class="col-6">
-                  <input type="password" [(ngModel)]="accessData.password"
-                         class="form-control" name="accessData_password"
+                  <input type="password" [(ngModel)]="access.password"
+                         class="form-control" name="access_password"
                          placeholder="Senha (min. 8 digitos)"
-                         formControlName="accessData_password" required>
+                         formControlName="access_password" required>
               </div>
               <div class="col-6">
-                <input type="password" [(ngModel)]="accessData.passwordConfirmation"
-                       class="form-control" name="accessData_passwordConfirmation"
+                <input type="password" [(ngModel)]="access.passwordConfirmation"
+                       class="form-control" name="access_passwordConfirmation"
                        placeholder="Confirmação Senha"
-                       formControlName="accessData_passwordConfirmation" required>
+                       formControlName="access_passwordConfirmation" required>
               </div>
           </div>
           <div>
@@ -66,22 +66,22 @@
               </div>
               <div class="col-12">
                   <label>Nome</label><br>
-                  <input type="text" [ngModel]="registrationData.personalData.name"
+                  <input type="text" [ngModel]="requestData.personal.name"
                           name='personal_name' class="form-control" required disabled>
               </div>
               <div class="col-4">
                   <label>CPF</label><br>
-                  <input type="text" [ngModel]="registrationData.personalData.cpf"
+                  <input type="text" [ngModel]="userCpf"
                           name='personal_cpf' class="form-control" required disabled>
               </div>
               <div class="col-4">
                 <label>Data de Nascimento</label>
-                <input type="date" [(ngModel)]="registrationData.personalData.birthday"
+                <input type="date" [(ngModel)]="requestData.personal.birthday"
                         name="personal_birthday" class="form-control">
               </div>
               <div class="col-4">
                 <label>Sexo</label>
-                <select [(ngModel)]="registrationData.personalData.gender"
+                <select [(ngModel)]="requestData.personal.gender"
                         name="personal_gender" class="form-control">
                   <option value>Selecione</option>
                   <option value="M">Masculino</option>
@@ -89,11 +89,11 @@
                 </select>
               </div>
               <div class="col-6">
-                <input type="text" [(ngModel)]="registrationData.personalData.phone"
+                <input type="text" [(ngModel)]="requestData.personal.phone"
                       name="personal_phone" class="form-control" placeholder="Telefone Fixo">
               </div>
               <div class="col-6">
-                <input type="text" [(ngModel)]="registrationData.personalData.mobile"
+                <input type="text" [(ngModel)]="requestData.personal.cellphone"
                       name="personal_phone" class="form-control" placeholder="Celular">
               </div>
             </div>
@@ -103,38 +103,38 @@
               </div>
               <div class="col-4">
                 <label>CEP</label>
-                <input type="text" [(ngModel)]="registrationData.residentialData.zip_code"
+                <input type="text" [(ngModel)]="requestData.address.zip_code"
                         name="residential_zip_code" class="form-control" placeholder="CEP">
               </div>
               <div class="col-6">
                 <label>Rua</label>
-                <input type="text" [(ngModel)]="registrationData.residentialData.street"
+                <input type="text" [(ngModel)]="requestData.address.street"
                         name="residential_street" class="form-control" placeholder="Rua">
               </div>
               <div class="col-2">
                 <label>Número</label>
-                <input type="number" [(ngModel)]="registrationData.residentialData.number"
+                <input type="number" [(ngModel)]="requestData.address.number"
                         name="residential_number" class="form-control" placeholder="N°"
                         min="0">
               </div>
               <div class="col-6">
                 <label>Complemento</label>
-                <input type="text" [(ngModel)]="registrationData.residentialData.complement"
+                <input type="text" [(ngModel)]="requestData.address.complement"
                         name="residential_complement" class="form-control" placeholder="Comp.">
               </div>
               <div class="col-6">
                 <label>Bairro</label>
-                <input type="text" [(ngModel)]="registrationData.residentialData.district"
+                <input type="text" [(ngModel)]="requestData.address.neighborhood"
                         name="residential_district" class="form-control" placeholder="Bairro">
               </div>
               <div class="col-6">
                 <label>Cidade</label>
-                <input type="text" [(ngModel)]="registrationData.residentialData.city"
+                <input type="text" [(ngModel)]="requestData.address.city"
                         name="residential_city" class="form-control" placeholder="Cidade">
               </div>
               <div class="col-6">
                 <label>Estado</label>
-                <select [(ngModel)]="registrationData.residentialData.state"
+                <select [(ngModel)]="requestData.address.state"
                         name="residential_state" class="form-control">
                   <option *ngFor="let uf of UFS" [value]="uf.value">{{uf.label}}</option>
                 </select>
