@@ -20,7 +20,7 @@
                   <input type="text" [(ngModel)]="accessData.name"
                          class="form-control" name="accessData_name"
                          placeholder="Nome Completo*"
-                         formControlName="accessData_name" required>
+                         formControlName="accessData_name" required pattern="[a-zA-Z ]*" ngModel>
               </div>
               <div class="col-6">
                   <label>CPF</label><br>
@@ -136,33 +136,7 @@
                 <label>Estado</label>
                 <select [(ngModel)]="registrationData.residentialData.state"
                         name="residential_state" class="form-control">
-                  <option value="AC">Acre</option>
-                  <option value="AL">Alagoas</option>
-                  <option value="AM">Amazonas</option>
-                  <option value="AP">Amapá</option>
-                  <option value="BA">Bahia</option>
-                  <option value="CE">Ceará</option>
-                  <option value="DF">Distrito Federal</option>
-                  <option value="ES">Espírito Santo</option>
-                  <option value="GO">Goiás</option>
-                  <option value="MA">Maranhão</option>
-                  <option value="MT">Mato Grosso</option>
-                  <option value="MS">Mato Grosso do Sul</option>
-                  <option value="MG">Minas Gerais</option>
-                  <option value="PA">Pará</option>
-                  <option value="PB">Paraíba</option>
-                  <option value="PR">Paraná</option>
-                  <option value="PE">Pernambuco</option>
-                  <option value="PI">Piauí</option>
-                  <option value="RJ">Rio de Janeiro</option>
-                  <option value="RN">Rio Grande do Norte</option>
-                  <option value="RO">Rondônia</option>
-                  <option value="RS">Rio Grande do Sul</option>
-                  <option value="RR">Roraima</option>
-                  <option value="SC">Santa Catarina</option>
-                  <option value="SE">Sergipe</option>
-                  <option value="SP">São Paulo</option>
-                  <option value="TO">Tocantins</option>
+                  <option *ngFor="let uf of UFS" [value]="uf.value">{{uf.label}}</option>
                 </select>
               </div>
             </div>
@@ -256,116 +230,7 @@
                 <label>Nome do Banco</label>
                 <select type="text" [(ngModel)]="bankAccountData.bank_name"
                         name="bank_bank_name" class="form-control" placeholder="Nome do Banco">
-                  <option value>Nome do Banco</option>
-                  <option value="1">ABC Brasil S.A.</option>
-                  <option value="2">ABN AMRO Real S.A.</option>
-                  <option value="3">Alfa S.A.</option>
-                  <option value="4">Alvorada S.A.</option>
-                  <option value="5">Banerj S.A.</option>
-                  <option value="6">Banestado S.A.</option>
-                  <option value="7">Barclays S.A.</option>
-                  <option value="8">BBM S.A.</option>
-                  <option value="9">Beg S.A.</option>
-                  <option value="10">Bem S.A.</option>
-                  <option value="11">BM&amp;F de Serviços de Liquidação e Custódia S.A</option>
-                  <option value="12">BMC S.A.</option>
-                  <option value="13">BMG S.A.</option>
-                  <option value="14">BNP Paribas Brasil S.A.</option>
-                  <option value="15">Boavista Interatlântico S.A.</option>
-                  <option value="16">Bradesco S.A.</option>
-                  <option value="17">Brascan S.A.</option>
-                  <option value="18">Cacique S.A.</option>
-                  <option value="19">Calyon Brasil S.A.</option>
-                  <option value="20">Cargill S.A.</option>
-                  <option value="21">Citibank S.A.</option>
-                  <option value="22">Comercial e de Investimento Sudameris S.A.</option>
-                  <option value="23">Cooperativo do Brasil S.A. – BANCOOB</option>
-                  <option value="24">Cooperativo Sicredi S.A. – BANSICREDI</option>
-                  <option value="25">Credit Suisse (Brasil) S.A.</option>
-                  <option value="26">Cruzeiro do Sul S.A.</option>
-                  <option value="27">Banco da Amazônia S.A.</option>
-                  <option value="28">Daycoval S.A.</option>
-                  <option value="29">Banco de Pernambuco S.A. – BANDEPE</option>
-                  <option value="30">Banco de Tokyo-Mitsubishi UFJ Brasil S.A.</option>
-                  <option value="31">Dibens S.A.</option>
-                  <option value="32">Banco do Brasil S.A.</option>
-                  <option value="33">Banco do Estado de Santa Catarina S.A.</option>
-                  <option value="34">Banco do Estado de Sergipe S.A.</option>
-                  <option value="35">Banco do Estado do Pará S.A.</option>
-                  <option value="36">Banco do Estado do Rio Grande do Sul S.A.</option>
-                  <option value="37">Banco do Nordeste do Brasil S.A.</option>
-                  <option value="38">Fator S.A.</option>
-                  <option value="39">Fibra S.A.</option>
-                  <option value="40">Finasa S.A.</option>
-                  <option value="41">Fininvest S.A.</option>
-                  <option value="42">GE Capital S.A.</option>
-                  <option value="43">Gerdau S.A.</option>
-                  <option value="44">Guanabara S.A.</option>
-                  <option value="45">Ibi S.A. Banco Múltiplo</option>
-                  <option value="46">Industrial do Brasil S.A.</option>
-                  <option value="47">Industrial e Comercial S.A.</option>
-                  <option value="48">Indusval S.A.</option>
-                  <option value="49">Intercap S.A.</option>
-                  <option value="50">Investcred Unibanco S.A.</option>
-                  <option value="51">Itaú S.A.</option>
-                  <option value="52">J. P. Morgan S.A.</option>
-                  <option value="53">J. Safra S.A.</option>
-                  <option value="54">Luso Brasileiro S.A.</option>
-                  <option value="55">Mercantil de São Paulo S.A.</option>
-                  <option value="56">Mercantil do Brasil S.A.</option>
-                  <option value="57">Merrill Lynch de Investimentos S.A.</option>
-                  <option value="58">Nossa Caixa S.A.</option>
-                  <option value="59">Opportunity S.A.</option>
-                  <option value="60">Panamericano S.A.</option>
-                  <option value="61">Paulista S.A.</option>
-                  <option value="62">Pine S.A.</option>
-                  <option value="63">Prosper S.A.</option>
-                  <option value="64">Rabobank International Brasil S.A.</option>
-                  <option value="65">Rendimento S.A.</option>
-                  <option value="66">Rural Mais S.A.</option>
-                  <option value="67">Rural S.A.</option>
-                  <option value="68">Safra S.A.</option>
-                  <option value="69">Santander</option>
-                  <option value="70">Schahin S.A.</option>
-                  <option value="71">Simples S.A.</option>
-                  <option value="72">Société Générale Brasil S.A.</option>
-                  <option value="73">Sofisa S.A.</option>
-                  <option value="74">Sudameris Brasil S.A.</option>
-                  <option value="75">Sumitomo Mitsui Brasileiro S.A.</option>
-                  <option value="76">Triângulo S.A.</option>
-                  <option value="77">UBS Pactual S.A.</option>
-                  <option value="78">UBS S.A.</option>
-                  <option value="79">Único S.A.</option>
-                  <option value="80">Votorantim S.A.</option>
-                  <option value="81">VR S.A.</option>
-                  <option value="82">WestLB do Brasil S.A.</option>
-                  <option value="83">BANESTES S.A. Banco do Estado do Espírito Santo</option>
-                  <option value="84">Banif-Banco Internacional do Funchal (Brasil)S.A.</option>
-                  <option value="85">Bankpar Banco Multiplo S.A.</option>
-                  <option value="86">BRB – Banco de Brasília S.A.</option>
-                  <option value="87">CEF</option>
-                  <option value="88">Citibank N.A.</option>
-                  <option value="89">Deutsche Bank S.A. – Banco Alemão</option>
-                  <option value="90">Dresdner Bank Brasil S.A. – Banco Múltiplo</option>
-                  <option value="91">Dresdner Bank Lateinamerika Aktiengesellschaft</option>
-                  <option value="92">Hipercard Banco Múltiplo S.A.</option>
-                  <option value="93">HSBC</option>
-                  <option value="94">ING Bank N.V.</option>
-                  <option value="95">JPMorgan Chase Bank</option>
-                  <option value="96">Lemon Bank Banco Múltiplo S.A.</option>
-                  <option value="97">UNIBANCO – União de bancos Brasileiros S.A.</option>
-                  <option value="98">Unicard Banco Múltiplo S.A.</option>
-                  <option value="99">CECRED</option>
-                  <option value="100">UNICRED</option>
-                  <option value="101">BB Banco Popular do Brasil S.A.</option>
-                  <option value="102">BPN Brasil Banco Mútiplo S.A.</option>
-                  <option value="103">Caixa Econômica Federal S.A.</option>
-                  <option value="104">Sicoob</option>
-                  <option value="105">Banco Original S.A.</option>
-                  <option value="106">Banco Intermedium S.A.</option>
-                  <option value="107">Nu Pagamentos S.A.</option>
-                  <option value="108">Cresol</option>
-                  <option value="109">Banco do Estado do Pará S. A.</option>
+                  <option *ngFor="let bank of BANKS" [value]="bank.value">{{bank.label}}</option>
                 </select>
               </div>
               <div class="col-3">

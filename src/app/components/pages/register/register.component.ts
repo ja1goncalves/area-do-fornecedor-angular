@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RegisterService } from '../../../services/register/register.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { ufs, banks } from '../../../config/consts';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,8 @@ export class RegisterComponent implements OnInit {
   accessDataForm: FormGroup;
   personalDataForm: FormGroup;
   isValidToken: boolean;
+  UFS: any = ufs;
+  BANKS: any = banks;
 
   accessData = {
     email: '',
@@ -110,6 +113,7 @@ export class RegisterComponent implements OnInit {
   }
 
   nextStep(stepper: any): any {
+    console.log(this.bankAccountData, this.registrationData)
     stepper.next();
   }
   
