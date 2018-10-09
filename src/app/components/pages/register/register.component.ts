@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RegisterService } from '../../../services/register/register.service';
 import { AuthService } from '../../../services/auth/auth.service';
-import { ufs, banks } from '../../../config/consts';
+import { ufs } from '../../../config/consts';
 
 @Component({
   selector: 'app-register',
@@ -13,12 +13,17 @@ import { ufs, banks } from '../../../config/consts';
 export class RegisterComponent implements OnInit {
 
   public accessForm: FormGroup;
-  public personalDataForm: FormGroup;
+  public bankForm: FormGroup;
+  public fidelitiesForm: FormGroup;
+  public personalForm: FormGroup;
   public isValidToken: boolean;
   public UFS: any = ufs;
-  public BANKS: any = banks;
+  public BANKS: any;
+  public SEGMENTS: any;
   public userName: string;
   public userCpf: string;
+  public fidelities: any = [];
+  public programs: any[] = [];
 
   access = {
     email: '',
@@ -92,25 +97,7 @@ export class RegisterComponent implements OnInit {
       city: '',
       state: '' 
     },  
-    fidelities: [
-      {
-        program_id: 'jj',
-        card_number: '',
-        access_password: '' 
-      },{
-        program_id: 'g3',
-        card_number: '',
-        access_password: '' 
-      },{
-        program_id: 'ad',
-        card_number: '',
-        access_password: '' 
-      },{
-        program_id: 'av',
-        card_number: '',
-        access_password: '' 
-      }
-    ],  
+    fidelities: [],  
     bank: {
       bank_id: '',
       type: '',
@@ -145,16 +132,20 @@ export class RegisterComponent implements OnInit {
 
   checkConfirm(stepper: any): void {
 
-    this.login.loginUser(this.access.email, this.access.password)
-     .subscribe((res) => {
-        this.login.getUserAuthenticated()
-        .subscribe((res) => {
-          this.setUserData(res);
-        }, (err) => {
-        })
+    this.login.loginUser(this.access.email, this.access.password).subscribe(
+      (res) => {  
+        this.login.getUserAuthenticated().subscribe(
+          (userAuthenticated) => {
+            this.setUserData(userAuthenticated);
+            this.getBanks();
+            this.getPrograms();
+          }, 
+          (err) => { }
+        )
         stepper.next();
-     }, (err) => {
-     })
+      }, 
+      (err) => { }
+    )
 
   }
 
@@ -167,12 +158,64 @@ export class RegisterComponent implements OnInit {
     stepper.next();
   }
   
-  concludeRegister(): any {
+  concludeRegister(): void {
+    this.requestData.fidelities = this.fidelities.filter(fidelity => fidelity.card_number.length);
     this.register.updateRegister(this.requestData)
      .subscribe((res) => {
      }, (err) => {
      })
   }
+
+  getBanks(): void {
+    this.register.getBanks().subscribe(
+      (banks) => {
+        this.BANKS = banks;
+      },
+      (err) => {
+        console.log(err);
+      }
+    )
+  }
+
+  getSegments(bank_id: number):void {
+    this.register.getSegments(bank_id).subscribe(
+      (segments) => {
+        this.SEGMENTS = segments;
+      },
+      (err) => { }
+    )
+  }
+
+  getPrograms(): void {
+    this.register.getPrograms().subscribe(
+      (programs) => {
+        this.programs = programs.filter(program => !['TRB', 'G3D'].includes(program.code));
+
+        for(const program of this.programs) {
+          this.fidelities.push({program_id: program.id, card_number: '', access_password: ''});
+        }
+
+        console.log(this.fidelities);
+
+      },
+      (err) => { }
+    )
+  }
+
+  // newFidelity(id: string, event: any): void {
+  //   const value = event.target.value;
+
+  //   this.programs.filter((program) => {
+  //     if(program.code === id.toUpperCase()) {
+  //       this.fidelities.push({
+  //         program_id: program.id,
+  //         card_number: value,
+  //         access_password: ''
+  //       })
+  //     }
+  //   });
+  //   console.log(this.fidelities);
+  // }
 
   ngOnInit() {
     this.accessForm = this._formBuilder.group({
@@ -183,6 +226,44 @@ export class RegisterComponent implements OnInit {
       access_passwordConfirmation: ['', Validators.required]
     });
 
+    this.bankForm = this._formBuilder.group({
+      bank_bank_id: [''],
+      bank_type: [''],
+      bank_segment_id: [''],
+      bank_agency: [''],
+      bank_agency_digit: [''],
+      bank_account: [''],
+      bank_account_digit: ['']
+    });
+
+    this.personalForm = this._formBuilder.group({
+      personal_name: [''],
+      personal_cpf: [''],
+      personal_birthday: [''],
+      personal_gender: [''],
+      personal_phone: [''],
+      personal_cellphone: [''],
+      personal_occupation: [''],
+      personal_occupation_id: [''],
+      personal_company: [''],
+      personal_company_phone: [''],
+      residential_zip_code: [''],
+      residential_address: [''],
+      residential_number: [''],
+      residential_complement: [''],
+      residential_neighborhood: [''],
+      residential_city: [''],
+      residential_state: [''],
+    });
+
+    // this.fidelitiesForm = this._formBuilder.group({
+    //   fidelity_jj: '',
+    //   fidelity_g3: '',
+    //   fidelity_ad: '',
+    //   fidelity_av: '',
+    //   fidelity_jj_password: ''
+    // });
+
     this.route.params
     .subscribe((res) => {
       this.register.checkToken(res.code)
@@ -192,6 +273,7 @@ export class RegisterComponent implements OnInit {
       })
     }, (err) => {
     })
+
   }
   
 }

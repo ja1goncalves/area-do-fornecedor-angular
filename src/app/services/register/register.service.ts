@@ -68,8 +68,8 @@ export class RegisterService {
 
     return new Observable((observer) => {
       this.http.get(`${environment.API_URL}/api/banks`)
-       .subscribe((res) => {
-         observer.next(res);
+       .subscribe((banks: any) => {
+         observer.next(banks.data);
        }, (err) => {
          observer.error(err.error);
        })
@@ -77,7 +77,7 @@ export class RegisterService {
 
   }
 
-  public getSegments(bank_id: string): Observable<any> {
+  public getSegments(bank_id: number): Observable<any> {
 
     return new Observable((observer) => {
       this.http.get(`${environment.API_URL}/api/segments/${bank_id}`)
@@ -101,5 +101,18 @@ export class RegisterService {
        })
     });
 
-  } 
+  }
+  
+  public getPrograms(): Observable<any> {
+    
+    return new Observable((observer) => {
+      this.http.get(`${environment.API_URL}/api/programs`)
+       .subscribe((programs: any) => {
+         observer.next(programs.data);
+       }, (err) => {
+         observer.error(err.error);
+       })
+    });
+
+  }
 }

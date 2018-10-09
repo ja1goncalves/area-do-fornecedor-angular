@@ -10,7 +10,7 @@ import {
 import { AuthService } from '../auth/auth.service';
 import { Observable } from 'rxjs';
 import { tap, retry } from 'rxjs/operators';
-// import { HandlerErrorHelpers } from '../../helpers/handler-error/handler-error.helpers';
+import { HandlerErrorHelpers } from '../../helpers/handle-error.helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +18,10 @@ import { tap, retry } from 'rxjs/operators';
 export class TokenInterceptor implements HttpInterceptor {
   protected handlerErrorHelper;
 
-  constructor(public authService: AuthService,
-    // private handler: HandlerErrorHelpers
-    ) {
-    // this.handlerErrorHelper = handler;
+  constructor(
+    public authService: AuthService,
+    private handler: HandlerErrorHelpers) {
+    this.handlerErrorHelper = handler;
   }
 
 
@@ -48,7 +48,7 @@ export class TokenInterceptor implements HttpInterceptor {
         },
         (error: any) => {
           if (error instanceof HttpErrorResponse) {
-            // this.handlerErrorHelper.handle(error);
+            this.handlerErrorHelper.handle(error);
 
           }
         }
