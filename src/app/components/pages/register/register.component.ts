@@ -94,7 +94,19 @@ export class RegisterComponent implements OnInit {
     },  
     fidelities: [
       {
-        program_id: '',
+        program_id: 'jj',
+        card_number: '',
+        access_password: '' 
+      },{
+        program_id: 'g3',
+        card_number: '',
+        access_password: '' 
+      },{
+        program_id: 'ad',
+        card_number: '',
+        access_password: '' 
+      },{
+        program_id: 'av',
         card_number: '',
         access_password: '' 
       }
@@ -111,14 +123,13 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-
   constructor(
     private _formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private register: RegisterService,
     private login: AuthService) {}
 
-  createRegister(stepper: any): any {
+  createRegister(stepper: any): void {
     const requestData = {
       email: this.access.email,
       password: this.access.password,
@@ -129,23 +140,22 @@ export class RegisterComponent implements OnInit {
      .subscribe((res) => {
         stepper.next();
      }, (err) => {
-        console.log('cr err', err)
      });
   }
 
-  checkConfirm(stepper: any): any {
+  checkConfirm(stepper: any): void {
+
     this.login.loginUser(this.access.email, this.access.password)
      .subscribe((res) => {
         this.login.getUserAuthenticated()
         .subscribe((res) => {
           this.setUserData(res);
         }, (err) => {
-          console.log(err);
         })
         stepper.next();
      }, (err) => {
-      console.log('confirm err', err)
      })
+
   }
 
   setUserData(request: object): void {
@@ -153,12 +163,15 @@ export class RegisterComponent implements OnInit {
     this.userCpf = request['cpf'];
   }
 
-  nextStep(stepper: any): any {
+  nextStep(stepper: any): void {
     stepper.next();
   }
   
   concludeRegister(): any {
-    
+    this.register.updateRegister(this.requestData)
+     .subscribe((res) => {
+     }, (err) => {
+     })
   }
 
   ngOnInit() {
@@ -171,16 +184,14 @@ export class RegisterComponent implements OnInit {
     });
 
     this.route.params
-     .subscribe((res) => {
+    .subscribe((res) => {
       this.register.checkToken(res.code)
-       .subscribe((res) => {
-         this.access.email = res.data.email;
-       }, (err) => {
-         console.log(err)
-       })
-     }, (err) => {
-      console.log(err)
-     })
+      .subscribe((res) => {
+        this.access.email = res.data.email;
+      }, (err) => {
+      })
+    }, (err) => {
+    })
   }
   
 }

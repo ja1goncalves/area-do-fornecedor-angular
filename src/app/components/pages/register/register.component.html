@@ -66,7 +66,7 @@
               </div>
               <div class="col-12">
                   <label>Nome</label><br>
-                  <input type="text" [ngModel]="requestData.personal.name"
+                  <input type="text" [ngModel]="userName"
                           name='personal_name' class="form-control" required disabled>
               </div>
               <div class="col-4">
@@ -108,7 +108,7 @@
               </div>
               <div class="col-6">
                 <label>Rua</label>
-                <input type="text" [(ngModel)]="requestData.address.street"
+                <input type="text" [(ngModel)]="requestData.address.address"
                         name="residential_street" class="form-control" placeholder="Rua">
               </div>
               <div class="col-2">
@@ -146,7 +146,7 @@
               </div>
               <div class="col-6">
                 <label>Ocupação</label>
-                <select [(ngModel)]="registrationData.commercialData.role"
+                <select [(ngModel)]="requestData.personal.provider_ocuppation_id"
                         name="commercial_role" class="form-control">
                   <option value>Ocupação</option>
                   <option value="1">Empregado</option>
@@ -162,17 +162,17 @@
               </div>
               <div class="col-6">
                 <label>Profissão</label>
-                <input type="text" [(ngModel)]="registrationData.commercialData.profesion"
+                <input type="text" [(ngModel)]="requestData.personal.occupation"
                         name="commercial_profesion" class="form-control" placeholder="Profissão">
               </div>
               <div class="col-6">
                 <label>Nome da Empresa</label>
-                <input type="text" [(ngModel)]="registrationData.commercialData.company"
+                <input type="text" [(ngModel)]="requestData.personal.company"
                         name="commercial_company" class="form-control" placeholder="Nome da Empresa">
               </div>
               <div class="col-6">
                 <label>Telefone</label>
-                <input type="text" [(ngModel)]="registrationData.commercialData.phone"
+                <input type="text" [(ngModel)]="requestData.personal.company_phone"
                         name="commercial_phone" class="form-control" placeholder="Telefone da Empresa">
               </div>
             </div>
@@ -190,27 +190,27 @@
               </div>
               <div class="col-6">
                 <label>TAM</label>
-                <input type="text" [(ngModel)]="fidelityProgramsData.jj_number"
-                        name="fidelity_jj_number" class="form-control" placeholder="N° TAM Fidelidade">
+                <input type="text" [(ngModel)]="requestData.fidelities[0].card_number"
+                        name="fidelity_jj" class="form-control" placeholder="N° TAM Fidelidade">
               </div>
               <div class="col-6">
                 <label>GOL</label>
-                <input type="text" [(ngModel)]="fidelityProgramsData.g3_number"
-                        name="fidelity_g3_number" class="form-control" placeholder="N° Smiles">
+                <input type="text" [(ngModel)]="requestData.fidelities[1].card_number"
+                        name="fidelity_g3" class="form-control" placeholder="N° Smiles">
               </div>
               <div class="col-6">
                 <label>AZUL</label>
-                <input type="text" [(ngModel)]="fidelityProgramsData.ad_number"
-                        name="fidelity_ad_number" class="form-control" placeholder="N° Tudo Azul">
+                <input type="text" [(ngModel)]="requestData.fidelities[2].card_number"
+                        name="fidelity_ad" class="form-control" placeholder="N° Tudo Azul">
               </div>
               <div class="col-6">
                 <label>AVIANCA</label>
-                <input type="text" [(ngModel)]="fidelityProgramsData.av_number"
-                        name="fidelity_av_number" class="form-control" placeholder="N° Amigo Avianca">
+                <input type="text" [(ngModel)]="requestData.fidelities[3].card_number"
+                        name="fidelity_av" class="form-control" placeholder="N° Amigo Avianca">
               </div>
               <div class="col-12">
                 <label>Senha Multiplus</label>
-                <input type="text" [(ngModel)]="fidelityProgramsData.jj_password"
+                <input type="text" [(ngModel)]="requestData.fidelities[0].access_password"
                         name="fidelity_jj_password" class="form-control" placeholder="Senha Multiplus">
               </div>
             </div>
@@ -228,15 +228,15 @@
               </div>
               <div class="col-5">
                 <label>Nome do Banco</label>
-                <select type="text" [(ngModel)]="bankAccountData.bank_name"
-                        name="bank_bank_name" class="form-control" placeholder="Nome do Banco">
+                <select type="text" [(ngModel)]="requestData.bank.bank_id"
+                        name="bank_bank_id" class="form-control" placeholder="Nome do Banco">
                   <option *ngFor="let bank of BANKS" [value]="bank.value">{{bank.label}}</option>
                 </select>
               </div>
               <div class="col-3">
                 <label>Tipo de conta</label>
-                <select type="text" [(ngModel)]="bankAccountData.type_account"
-                        name="bank_type_account" class="form-control" placeholder="Tipo">
+                <select type="text" [(ngModel)]="requestData.bank.type"
+                        name="bank_type" class="form-control" placeholder="Tipo">
                   <option value>Tipo</option>
                   <option value="CC">Corrente</option>
                   <option value="PP">Poupança</option>
@@ -244,8 +244,8 @@
               </div>
               <div class="col-3">
                 <label>Segmento</label>
-                <select type="text" [(ngModel)]="bankAccountData.segment"
-                        name="bank_segment" class="form-control" placeholder="Segmento">
+                <select type="text" [(ngModel)]="requestData.bank.segment_id"
+                        name="bank_segment_id" class="form-control" placeholder="Segmento">
                   <option value>Segmento</option>
                   <option value="1">Personnalité</option>
                   <option value="2">Private Bank</option>
@@ -259,23 +259,23 @@
               </div>
               <div class="col-3">
                 <label>N° Agência</label>
-                <input type="text" [(ngModel)]="bankAccountData.agency_number"
-                        name="bank_agency_number" class="form-control" placeholder="Agência">
+                <input type="text" [(ngModel)]="requestData.bank.agency"
+                        name="bank_agency" class="form-control" placeholder="Agência">
               </div>
               <div class="col-2">
                 <label>DV</label>
-                <input type="text" [(ngModel)]="bankAccountData.agency_expire_date"
-                        name="bank_agency_expire_date" class="form-control">
+                <input type="text" [(ngModel)]="requestData.bank.agency_digit"
+                        name="bank_agency_digit" class="form-control">
               </div>
               <div class="col-4">
                 <label>N° Conta</label>
-                <input type="text" [(ngModel)]="bankAccountData.account_number"
-                        name="bank_account_number" class="form-control" placeholder="Conta">
+                <input type="text" [(ngModel)]="requestData.bank.account"
+                        name="bank_account" class="form-control" placeholder="Conta">
               </div>
               <div class="col-2">
                 <label>DV</label>
-                <input type="text" [(ngModel)]="bankAccountData.account_expire_date"
-                        name="bank_account_expire_date" class="form-control">
+                <input type="text" [(ngModel)]="requestData.bank.account_digit"
+                        name="bank_account_digit" class="form-control">
               </div>
             </div>
             <div>
