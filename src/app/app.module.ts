@@ -21,7 +21,7 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TokenInterceptor} from './services/token/token.interceptor';
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password';
 import { ConfirmResetPasswordComponent } from './components/pages/confirm-reset-password/confirm-reset-password.component';
-import { RegisterComponent } from './components/pages/register/register.component';
+import { RegisterComponent } from './components/pages/register/register-wrap/register.component';
 import { ConfirmRegisterComponent } from './components/pages/confirm-register/confirm-register.component';
 
 // COMPONENTS
@@ -31,6 +31,11 @@ import {
   MatInputModule,
   MatFormFieldModule,
   MatButtonModule } from '@angular/material';
+import { RegisterAccessDataComponent } from './components/pages/register/register-access-data/register-access-data.component';
+import { RegisterPersonalDataComponent } from './components/pages/register/register-personal-data/register-personal-data.component';
+import { RegisterComercialDataComponent } from './components/pages/register/register-comercial-data/register-comercial-data.component';
+import { RegisterFidelityProgramsComponent } from './components/pages/register/register-fidelity-programs/register-fidelity-programs.component';
+import { RegisterBankDataComponent } from './components/pages/register/register-bank-data/register-bank-data.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +49,11 @@ import {
     ConfirmResetPasswordComponent,
     RegisterComponent,
     ConfirmRegisterComponent,
+    RegisterAccessDataComponent,
+    RegisterPersonalDataComponent,
+    RegisterComercialDataComponent,
+    RegisterFidelityProgramsComponent,
+    RegisterBankDataComponent,
   ],
   imports: [
     BrowserModule,

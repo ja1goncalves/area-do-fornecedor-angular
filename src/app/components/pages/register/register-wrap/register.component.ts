@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { RegisterService } from '../../../services/register/register.service';
-import { AuthService } from '../../../services/auth/auth.service';
-import { UFS, OCCUPATIONS, GENDERS } from '../../../config/consts';
+import { RegisterService } from '../../../../services/register/register.service';
+import { AuthService } from '../../../../services/auth/auth.service';
+import { UFS, OCCUPATIONS, GENDERS } from '../../../../config/consts';
 
 @Component({
   selector: 'app-register',

@@ -5,7 +5,7 @@ import { ProfileComponent } from './components/pages/profile/profile.component';
 import { QuotationsComponent } from './components/pages/quotations/quotations.component';
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password';
 import { ConfirmResetPasswordComponent } from './components/pages/confirm-reset-password/confirm-reset-password.component'
-import { RegisterComponent } from './components/pages/register/register.component';
+import { RegisterComponent } from './components/pages/register/register-wrap/register.component';
 import { ConfirmRegisterComponent } from './components/pages/confirm-register/confirm-register.component';
 
 const routes: Routes = [

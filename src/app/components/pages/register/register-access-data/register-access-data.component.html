@@ -1,0 +1,34 @@
+<form [formGroup]="accessDataForm" (submit)="personalDataSubmit()">
+  <ng-template matStepLabel>Dados de Acesso</ng-template>
+  <div class="row">
+    <div class="col-12">
+      <label>Email:</label><br>
+      <input type="email" class="form-control" name="email" placeholder="Email"
+        formControlName="email">
+    </div>
+    <div class="col-6">
+      <label>Nome</label><br>
+      <input type="text"  class="form-control" name="name" placeholder="Nome Completo*"
+        formControlName="name">
+    </div>
+    <div class="col-6">
+      <label>CPF</label><br>
+      <input type="text" class="form-control" name="cpf" placeholder="CPF*"
+        formControlName="cpf">
+    </div>
+    <div class="col-12">
+      <p><strong>Para continuar, crie uma senha de acesso:</strong></p>
+    </div>
+    <div class="col-6">
+      <input type="password" minlength="8" class="form-control" name="password"
+        placeholder="Senha (min. 8 digitos)" formControlName="password">
+    </div>
+    <div class="col-6">
+      <input type="password" class="form-control" name="confirmPassword"
+        placeholder="Confirmação Senha" formControlName="confirmPassword">
+    </div>
+  </div>
+  <div>
+    <button type="submit" mat-raised-button color="primary">Continuar</button>
+  </div>
+</form>

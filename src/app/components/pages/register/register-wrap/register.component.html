@@ -5,40 +5,7 @@
   <mat-horizontal-stepper linear=true #stepper>
 
     <mat-step [stepControl]="accessForm" [optional]=true>
-      <form [formGroup]="accessForm">
-        <ng-template matStepLabel>Dados de Acesso</ng-template>
-        <div class="row">
-          <div class="col-12">
-            <label>email:</label><br>
-            <input type="email" [(ngModel)]="access.email" class="form-control" name="access_email" placeholder="email"
-              formControlName="access_email" required disabled>
-          </div>
-          <div class="col-6">
-            <label>Nome</label><br>
-            <input type="text" [(ngModel)]="access.name" class="form-control" name="access_name" placeholder="Nome Completo*"
-              formControlName="access_name" required pattern="[a-zA-Z ]*" ngModel>
-          </div>
-          <div class="col-6">
-            <label>CPF</label><br>
-            <input type="text" [(ngModel)]="access.cpf" class="form-control" name="access_cpf" placeholder="CPF*"
-              formControlName="access_cpf" required>
-          </div>
-          <div class="col-12">
-            <p><strong>Para continuar, crie uma senha de acesso:</strong></p>
-          </div>
-          <div class="col-6">
-            <input type="password" [(ngModel)]="access.password" minlength="8" class="form-control" name="access_password"
-              placeholder="Senha (min. 8 digitos)" formControlName="access_password" required>
-          </div>
-          <div class="col-6">
-            <input type="password" [(ngModel)]="access.passwordConfirmation" class="form-control" name="access_passwordConfirmation"
-              placeholder="Confirmação Senha" formControlName="access_passwordConfirmation" required>
-          </div>
-        </div>
-        <div>
-          <button mat-raised-button color="primary" (click)="createRegister(stepper)">Continuar</button>
-        </div>
-      </form>
+      <app-register-access-data></app-register-access-data>
     </mat-step>
 
     <mat-step>
@@ -58,29 +25,29 @@
           </div>
           <div class="col-12">
             <label>Nome</label><br>
-            <input type="text" [ngModel]="userName" formControlName='personal_name' class="form-control" required disabled>
+            <input type="text" formControlName='personal_name' class="form-control" required disabled>
           </div>
           <div class="col-4">
             <label>CPF</label><br>
-            <input type="text" [ngModel]="userCpf" formControlName='personal_cpf' class="form-control" required disabled>
+            <input type="text" formControlName='personal_cpf' class="form-control" required disabled>
           </div>
           <div class="col-4">
             <label>Data de Nascimento</label>
-            <input type="date" [(ngModel)]="requestData.personal.birthday" formControlName="personal_birthday" class="form-control" required>
+            <input type="date" formControlName="personal_birthday" class="form-control" required>
           </div>
           <div class="col-4">
             <label>Sexo</label>
-            <select [(ngModel)]="requestData.personal.gender" formControlName="personal_gender" class="form-control" required>
+            <select formControlName="personal_gender" class="form-control" required>
               <option value>Selecione</option>
               <option *ngFor="let gender of genders" [value]="gender.value">{{gender.label}}</option>
             </select>
           </div>
           <div class="col-6">
-            <input type="text" [(ngModel)]="requestData.personal.phone" formControlName="personal_phone" class="form-control"
+            <input type="text" formControlName="personal_phone" class="form-control"
               placeholder="Telefone Fixo">
           </div>
           <div class="col-6">
-            <input type="text" [(ngModel)]="requestData.personal.cellphone" formControlName="personal_cellphone" class="form-control"
+            <input type="text" formControlName="personal_cellphone" class="form-control"
               placeholder="Celular">
           </div>
         </div>
@@ -90,38 +57,43 @@
           </div>
           <div class="col-4">
             <label>CEP</label>
-            <input type="text" [(ngModel)]="requestData.address.zip_code" formControlName="residential_zip_code" class="form-control"
+            <input type="text" formControlName="residential_zip_code" class="form-control"
               placeholder="CEP">
           </div>
           <div class="col-6">
             <label>Rua</label>
-            <input type="text" [(ngModel)]="requestData.address.address" formControlName="residential_address" class="form-control"
+            <input type="text" formControlName="residential_address" class="form-control"
               placeholder="Rua">
           </div>
           <div class="col-2">
             <label>Número</label>
-            <input type="number" [(ngModel)]="requestData.address.number" formControlName="residential_number" class="form-control"
+            <input type="number" formControlName="residential_number" class="form-control"
               placeholder="N°" min="0">
           </div>
           <div class="col-6">
             <label>Complemento</label>
-            <input type="text" [(ngModel)]="requestData.address.complement" formControlName="residential_complement" class="form-control"
+            <input type="text" formControlName="residential_complement" class="form-control"
               placeholder="Comp.">
           </div>
           <div class="col-6">
             <label>Bairro</label>
-            <input type="text" [(ngModel)]="requestData.address.neighborhood" formControlName="residential_neighborhood" class="form-control"
+            <input type="text" formControlName="residential_neighborhood" class="form-control"
               placeholder="Bairro">
           </div>
           <div class="col-6">
             <label>Cidade</label>
-            <input type="text" [(ngModel)]="requestData.address.city" formControlName="residential_city" class="form-control"
+            <input type="text" formControlName="residential_city" class="form-control"
               placeholder="Cidade">
           </div>
           <div class="col-6">
             <label>Estado</label>
+<<<<<<< Updated upstream:src/app/components/pages/register/register.component.html
             <select [(ngModel)]="requestData.address.state" formControlName="residential_state" class="form-control">
               <option *ngFor="let uf of ufs" [value]="uf.value">{{uf.label}}</option>
+=======
+            <select formControlName="residential_state" class="form-control">
+              <option *ngFor="let uf of UFS" [value]="uf.value">{{uf.label}}</option>
+>>>>>>> Stashed changes:src/app/components/pages/register/register-wrap/register.component.html
             </select>
           </div>
         </div>
@@ -131,24 +103,24 @@
           </div>
           <div class="col-6">
             <label>Ocupação</label>
-            <select [(ngModel)]="requestData.personal.provider_ocuppation_id" formControlName="personal_occupation_id" class="form-control">
+            <select formControlName="personal_occupation_id" class="form-control">
               <option value>Ocupação</option>
               <option *ngFor="let occupation of occupations" [value]="occupation.value">{{occupation.label}}</option>
             </select>
           </div>
           <div class="col-6">
             <label>Profissão</label>
-            <input type="text" [(ngModel)]="requestData.personal.occupation" formControlName="personal_occupation" class="form-control"
+            <input type="text" formControlName="personal_occupation" class="form-control"
               placeholder="Profissão">
           </div>
           <div class="col-6">
             <label>Nome da Empresa</label>
-            <input type="text" [(ngModel)]="requestData.personal.company" formControlName="personal_company" class="form-control"
+            <input type="text" formControlName="personal_company" class="form-control"
               placeholder="Nome da Empresa">
           </div>
           <div class="col-6">
             <label>Telefone</label>
-            <input type="text" [(ngModel)]="requestData.personal.company_phone" formControlName="personal_company_phone" class="form-control"
+            <input type="text" formControlName="personal_company_phone" class="form-control"
               placeholder="Telefone da Empresa">
           </div>
         </div>
@@ -170,35 +142,18 @@
             <div class="row">
               <div [ngClass]="{'col-6': program.code == 'JJ', 'col-12': program.code !== 'JJ'}">
                 <label>{{program.title}}</label>
-                <input type="text" [(ngModel)]="fidelities[i].card_number" name="fidelity_card_number_{{program.code}}"
+                <input type="text"  name="fidelity_card_number_{{program.code}}"
                   class="form-control" placeholder="N° {{program.title}} Fidelidade">
               </div>
               <div *ngIf="program.code == 'JJ'" class="col-6">
                 <label>Senha de Acesso</label>
-                <input type="text" [(ngModel)]="fidelities[i].access_password" name="fidelity_acess_password_{{program.code}}"
+                <input type="text" name="fidelity_acess_password_{{program.code}}"
                   class="form-control" placeholder="Senha de Acesso {{program.title}}">
               </div>
-              <input type="hidden" [(ngModel)]="fidelities[i].program_id" name="fidelity_id_{{program.code}}" [value]="program.id"
+              <input type="hidden"  name="fidelity_id_{{program.code}}" [value]="program.id"
                 class="form-control" placeholder="N° {{program.title}} Fidelidade">
             </div>
           </div>
-
-          <!-- <div class="col-6">
-              <label>GOL</label>
-              <input type="text" name="fidelity_g3" [(ngModel)]="fidelities_g3" formControlName="fidelity_g3" class="form-control" placeholder="N° Smiles">
-            </div>
-            <div class="col-6">
-              <label>AZUL</label>
-              <input type="text" name="fidelity_ad" [(ngModel)]="fidelities_ad" formControlName="fidelity_ad" class="form-control" placeholder="N° Tudo Azul">
-            </div>
-            <div class="col-6">
-              <label>AVIANCA</label>
-              <input type="text" name="fidelity_av" [(ngModel)]="fidelities_av" formControlName="fidelity_av" class="form-control" placeholder="N° Amigo Avianca">
-            </div>
-            <div class="col-12">
-              <label>Senha Multiplus</label>
-              <input type="text" name="fidelity_jj_password" [(ngModel)]="fidelities_jj_password" formControlName="fidelity_jj_password" class="form-control" placeholder="Senha Multiplus">
-            </div> -->
         </div>
         <div>
           <button mat-raised-button color="primary" (click)="nextStep(stepper)">Próximo</button>
@@ -214,7 +169,7 @@
           </div>
           <div class="col-5">
             <label>Nome do Banco</label>
-            <select type="text" [(ngModel)]="requestData.bank.bank_id" name="bank_bank_id" formControlName="bank_bank_id"
+            <select type="text" name="bank_bank_id" formControlName="bank_bank_id"
               class="form-control" placeholder="Nome do Banco" (change)="getSegments(requestData.bank.bank_id)">
               <option value>Nome do Banco</option>
               <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
@@ -222,7 +177,7 @@
           </div>
           <div class="col-3">
             <label>Tipo de conta</label>
-            <select type="text" [(ngModel)]="requestData.bank.type" name="bank_type" formControlName="bank_type" class="form-control"
+            <select type="text" name="bank_type" formControlName="bank_type" class="form-control"
               placeholder="Tipo">
               <option value>Tipo</option>
               <option value="CC">Corrente</option>
@@ -231,7 +186,7 @@
           </div>
           <div class="col-3">
             <label>Segmento</label>
-            <select type="text" [(ngModel)]="requestData.bank.segment_id" name="bank_segment_id" formControlName="bank_segment_id"
+            <select type="text" name="bank_segment_id" formControlName="bank_segment_id"
               class="form-control" placeholder="Segmento">
               <option value>Segmento</option>
               <option *ngFor="let segment of segments" [value]="segment.id">{{segment.title}}</option>
@@ -239,21 +194,21 @@
           </div>
           <div class="col-3">
             <label>N° Agência</label>
-            <input type="text" [(ngModel)]="requestData.bank.agency" name="bank_agency" formControlName="bank_agency"
+            <input type="text" name="bank_agency" formControlName="bank_agency"
               class="form-control" placeholder="Agência">
           </div>
           <div class="col-2">
             <label>DV</label>
-            <input type="text" [(ngModel)]="requestData.bank.agency_digit" name="bank_agency_digit" formControlName="bank_agency_digit" maxlength="1" class="form-control">
+            <input type="text" name="bank_agency_digit" formControlName="bank_agency_digit" maxlength="1" class="form-control">
           </div>
           <div class="col-4">
             <label>N° Conta</label>
-            <input type="text" [(ngModel)]="requestData.bank.account" name="bank_account" formControlName="bank_account"
+            <input type="text" name="bank_account" formControlName="bank_account"
               class="form-control" placeholder="Conta">
           </div>
           <div class="col-2">
             <label>DV</label>
-            <input type="text" [(ngModel)]="requestData.bank.account_digit" name="bank_account_digit" formControlName="bank_account_digit" maxlength="1" class="form-control">
+            <input type="text" name="bank_account_digit" formControlName="bank_account_digit" maxlength="1" class="form-control">
           </div>
         </div>
         <div>
