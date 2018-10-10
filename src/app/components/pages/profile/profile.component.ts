@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { RegisterService } from '../../../services/register/register.service';
 
 @Component({
   selector: 'app-profile',
@@ -7,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+  public updateForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private register: RegisterService) { }
 
   ngOnInit() {
   }

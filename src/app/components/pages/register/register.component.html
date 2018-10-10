@@ -72,8 +72,7 @@
             <label>Sexo</label>
             <select [(ngModel)]="requestData.personal.gender" formControlName="personal_gender" class="form-control" required>
               <option value>Selecione</option>
-              <option value="M">Masculino</option>
-              <option value="F">Feminino</option>
+              <option *ngFor="let gender of genders" [value]="gender.value">{{gender.label}}</option>
             </select>
           </div>
           <div class="col-6">
@@ -122,7 +121,7 @@
           <div class="col-6">
             <label>Estado</label>
             <select [(ngModel)]="requestData.address.state" formControlName="residential_state" class="form-control">
-              <option *ngFor="let uf of UFS" [value]="uf.value">{{uf.label}}</option>
+              <option *ngFor="let uf of ufs" [value]="uf.value">{{uf.label}}</option>
             </select>
           </div>
         </div>
@@ -134,15 +133,7 @@
             <label>Ocupação</label>
             <select [(ngModel)]="requestData.personal.provider_ocuppation_id" formControlName="personal_occupation_id" class="form-control">
               <option value>Ocupação</option>
-              <option value="1">Empregado</option>
-              <option value="2">Empresário</option>
-              <option value="3">Servidor Público</option>
-              <option value="4">Aposentado</option>
-              <option value="5">Autônomo</option>
-              <option value="6">Desempregado</option>
-              <option value="7">Estudante</option>
-              <option value="8">Não Cadastrado</option>
-              <option value="9">Profissional liberal</option>
+              <option *ngFor="let occupation of occupations" [value]="occupation.value">{{occupation.label}}</option>
             </select>
           </div>
           <div class="col-6">
@@ -226,7 +217,7 @@
             <select type="text" [(ngModel)]="requestData.bank.bank_id" name="bank_bank_id" formControlName="bank_bank_id"
               class="form-control" placeholder="Nome do Banco" (change)="getSegments(requestData.bank.bank_id)">
               <option value>Nome do Banco</option>
-              <option *ngFor="let bank of BANKS" [value]="bank.code">{{bank.title}}</option>
+              <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
             </select>
           </div>
           <div class="col-3">
@@ -243,7 +234,7 @@
             <select type="text" [(ngModel)]="requestData.bank.segment_id" name="bank_segment_id" formControlName="bank_segment_id"
               class="form-control" placeholder="Segmento">
               <option value>Segmento</option>
-              <option *ngFor="let segment of SEGMENTS" [value]="segment.id">{{segment.title}}</option>
+              <option *ngFor="let segment of segments" [value]="segment.id">{{segment.title}}</option>
             </select>
           </div>
           <div class="col-3">

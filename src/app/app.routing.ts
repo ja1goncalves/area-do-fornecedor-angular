@@ -13,7 +13,7 @@ const routes: Routes = [
     {path: 'esqueci-minha-senha', component: ResetPasswordComponent},
     {path: 'recuperar-senha/:code/:username', component: ConfirmResetPasswordComponent},
     {path: 'confirmar-cadastro/:code/:username', component: ConfirmRegisterComponent},
-    {path: 'cadastro/:code', component: RegisterComponent},
+    {path: 'cadastro/:token', component: RegisterComponent},
 
     {path: '', redirectTo: 'minhas-cotacoes', pathMatch: 'full'},
     {path: 'minhas-cotacoes', component: QuotationsComponent, canActivate: [AuthGuardService]}, 

@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RegisterService } from '../../../services/register/register.service';
 import { AuthService } from '../../../services/auth/auth.service';
-import { ufs } from '../../../config/consts';
+import { UFS, OCCUPATIONS, GENDERS } from '../../../config/consts';
 
 @Component({
   selector: 'app-register',
@@ -17,9 +17,11 @@ export class RegisterComponent implements OnInit {
   public fidelitiesForm: FormGroup;
   public personalForm: FormGroup;
   public isValidToken: boolean;
-  public UFS: any = ufs;
-  public BANKS: any;
-  public SEGMENTS: any;
+  public ufs: any = UFS;
+  public occupations: any = OCCUPATIONS;
+  public genders: any = GENDERS;
+  public banks: any;
+  public segments: any;
   public userName: string;
   public userCpf: string;
   public fidelities: any = [];
@@ -32,50 +34,6 @@ export class RegisterComponent implements OnInit {
     password: '',
     passwordConfirmation: ''
   }
-
-  // registrationData = {
-  //   personalData: {
-  //     name: '',
-  //     cpf: '',
-  //     birthday: '',
-  //     gender: '',
-  //     phone: '',
-  //     mobile: ''
-  //   },
-  //   residentialData: {
-  //     zip_code: '',
-  //     street: '',
-  //     number: '',
-  //     complement: '',
-  //     district: '',
-  //     city: '',
-  //     state: 'AC'
-  //   },
-  //   commercialData: {
-  //     role: '',
-  //     profesion: '',
-  //     company: '',
-  //     phone: ''
-  //   }
-  // }
-
-  // fidelityProgramsData = {
-  //   jj_number: '',
-  //   jj_password: '',
-  //   g3_number: '',
-  //   ad_number: '',
-  //   av_number: '',
-  // }
-
-  // bankAccountData = {
-  //   bank_name: '',
-  //   type_account: '',
-  //   segment: '',
-  //   agency_number: '',
-  //   agency_expire_date: '',
-  //   account_number: '',
-  //   account_expire_date: '',
-  // }
 
   public requestData: any = {
     personal: {
@@ -116,6 +74,7 @@ export class RegisterComponent implements OnInit {
     private register: RegisterService,
     private login: AuthService) {}
 
+
   createRegister(stepper: any): void {
     const requestData = {
       email: this.access.email,
@@ -123,8 +82,8 @@ export class RegisterComponent implements OnInit {
       cpf: this.access.cpf,
       name: this.access.name
     };
-    this.register.createRegister(requestData)
-     .subscribe((res) => {
+    this.register.createRegister(requestData).subscribe(
+      (createdUser) => {
         stepper.next();
      }, (err) => {
      });
@@ -133,20 +92,24 @@ export class RegisterComponent implements OnInit {
   checkConfirm(stepper: any): void {
 
     this.login.loginUser(this.access.email, this.access.password).subscribe(
-      (res) => {  
-        this.login.getUserAuthenticated().subscribe(
-          (userAuthenticated) => {
-            this.setUserData(userAuthenticated);
-            this.getBanks();
-            this.getPrograms();
-          }, 
-          (err) => { }
-        )
+      (tokenData) => {
+        this.getUserAuthenticated();  
         stepper.next();
       }, 
       (err) => { }
     )
 
+  }
+
+  getUserAuthenticated(): void {
+    this.login.getUserAuthenticated().subscribe(
+      (userAuthenticated) => {
+        this.setUserData(userAuthenticated);
+        this.getBanks();
+        this.getPrograms();
+      }, 
+      (err) => { }
+    )
   }
 
   setUserData(request: object): void {
@@ -160,27 +123,25 @@ export class RegisterComponent implements OnInit {
   
   concludeRegister(): void {
     this.requestData.fidelities = this.fidelities.filter(fidelity => fidelity.card_number.length);
-    this.register.updateRegister(this.requestData)
-     .subscribe((res) => {
-     }, (err) => {
-     })
+    this.register.updateRegister(this.requestData).subscribe(
+      (updatedData) => { },
+      (err) => { }
+    );
   }
 
   getBanks(): void {
     this.register.getBanks().subscribe(
       (banks) => {
-        this.BANKS = banks;
+        this.banks = banks;
       },
-      (err) => {
-        console.log(err);
-      }
+      (err) => { }
     )
   }
 
   getSegments(bank_id: number):void {
     this.register.getSegments(bank_id).subscribe(
       (segments) => {
-        this.SEGMENTS = segments;
+        this.segments = segments;
       },
       (err) => { }
     )
@@ -195,29 +156,29 @@ export class RegisterComponent implements OnInit {
           this.fidelities.push({program_id: program.id, card_number: '', access_password: ''});
         }
 
-        console.log(this.fidelities);
-
       },
       (err) => { }
     )
   }
 
-  // newFidelity(id: string, event: any): void {
-  //   const value = event.target.value;
-
-  //   this.programs.filter((program) => {
-  //     if(program.code === id.toUpperCase()) {
-  //       this.fidelities.push({
-  //         program_id: program.id,
-  //         card_number: value,
-  //         access_password: ''
-  //       })
-  //     }
-  //   });
-  //   console.log(this.fidelities);
-  // }
+  public checkToken(token: string): void {
+    this.register.checkToken(token).subscribe(
+      (tokenInfo) => {
+        this.access.email = tokenInfo.email;
+      },
+      (err) => { }
+    )
+  }
 
   ngOnInit() {
+
+    this.route.params.subscribe(
+      (params: any) => {
+        this.checkToken(params.token);
+      },
+      (err) => { }
+    );
+
     this.accessForm = this._formBuilder.group({
       access_email: ['', Validators.required],
       access_name: ['', Validators.required],
@@ -255,24 +216,6 @@ export class RegisterComponent implements OnInit {
       residential_city: [''],
       residential_state: [''],
     });
-
-    // this.fidelitiesForm = this._formBuilder.group({
-    //   fidelity_jj: '',
-    //   fidelity_g3: '',
-    //   fidelity_ad: '',
-    //   fidelity_av: '',
-    //   fidelity_jj_password: ''
-    // });
-
-    this.route.params
-    .subscribe((res) => {
-      this.register.checkToken(res.code)
-      .subscribe((res) => {
-        this.access.email = res.data.email;
-      }, (err) => {
-      })
-    }, (err) => {
-    })
 
   }
   
