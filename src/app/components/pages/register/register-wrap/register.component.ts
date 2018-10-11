@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RegisterService } from '../../../../services/register/register.service';
 import { AuthService } from '../../../../services/auth/auth.service';
 import { UFS, OCCUPATIONS, GENDERS } from '../../../../config/consts';
+import { PasswordValidation } from 'src/app/helpers/validators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +14,7 @@ import { UFS, OCCUPATIONS, GENDERS } from '../../../../config/consts';
 })
 export class RegisterComponent implements OnInit {
 
-  public accessForm: FormGroup;
+  public accessDataForm: FormGroup;
   public bankForm: FormGroup;
   public fidelitiesForm: FormGroup;
   public personalForm: FormGroup;
@@ -33,6 +35,11 @@ export class RegisterComponent implements OnInit {
     cpf: '',
     password: '',
     passwordConfirmation: ''
+  }
+
+  public click($event) {
+    console.log($event);
+    
   }
 
   public requestData: any = {
@@ -72,7 +79,10 @@ export class RegisterComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private register: RegisterService,
-    private login: AuthService) {}
+    private login: AuthService) {
+
+      
+    }
 
 
   createRegister(stepper: any): void {
@@ -178,14 +188,6 @@ export class RegisterComponent implements OnInit {
       },
       (err) => { }
     );
-
-    this.accessForm = this._formBuilder.group({
-      access_email: ['', Validators.required],
-      access_name: ['', Validators.required],
-      access_cpf: ['', Validators.required],
-      access_password: ['', Validators.required],
-      access_passwordConfirmation: ['', Validators.required]
-    });
 
     this.bankForm = this._formBuilder.group({
       bank_bank_id: [''],

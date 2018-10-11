@@ -1,11 +1,10 @@
 <app-navbar></app-navbar>
-
 <div class="container">
 
   <mat-horizontal-stepper linear=true #stepper>
 
-    <mat-step [stepControl]="accessForm" [optional]=true>
-      <app-register-access-data></app-register-access-data>
+    <mat-step [stepControl]="accessDataForm">
+      <app-register-access-data [accessDataForm]="accessDataForm" (submitData)="click($event)"></app-register-access-data>
     </mat-step>
 
     <mat-step>
@@ -87,13 +86,8 @@
           </div>
           <div class="col-6">
             <label>Estado</label>
-<<<<<<< Updated upstream:src/app/components/pages/register/register.component.html
-            <select [(ngModel)]="requestData.address.state" formControlName="residential_state" class="form-control">
-              <option *ngFor="let uf of ufs" [value]="uf.value">{{uf.label}}</option>
-=======
             <select formControlName="residential_state" class="form-control">
               <option *ngFor="let uf of UFS" [value]="uf.value">{{uf.label}}</option>
->>>>>>> Stashed changes:src/app/components/pages/register/register-wrap/register.component.html
             </select>
           </div>
         </div>

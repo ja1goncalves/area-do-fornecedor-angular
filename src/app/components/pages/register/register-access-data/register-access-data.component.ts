@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { PasswordValidation } from 'src/app/helpers/validators';
+import { AccessData } from 'src/app/models/register-data';
 
 @Component({
   selector: 'app-register-access-data',
@@ -9,34 +10,45 @@ import { PasswordValidation } from 'src/app/helpers/validators';
 })
 export class RegisterAccessDataComponent implements OnInit {
 
-  public accessDataForm: FormGroup;
+  @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
+  public accessData: AccessData;
+  @Input() accessDataForm: FormGroup;
 
   constructor(private fb: FormBuilder) { 
+  
+  }
+
+  ngOnInit() {
+    
     this.accessDataForm = this.fb.group({
-      email:            ['umbertobarrosf@gmail.com', [Validators.required]],
+      email:            [{value: 'umbertobarrosf@gmail.com', disabled: true}, [Validators.required]],
       name:             ['', [Validators.required]],
       cpf:              ['', [Validators.required]],
       password:         ['', [Validators.required]],
       confirmPassword:  ['', [Validators.required]],
-    });
-  }
-
-  ngOnInit() {
-    this.accessDataForm.controls.email.disable();
-    console.log(this.accessDataForm);
-
+    }, {validator: PasswordValidation.MatchPassword});
   }
 
 
-  personalDataSubmit() {
-    console.log(this.accessDataForm)
-
-    if(this.accessDataForm.valid && this.accessDataForm.value.password != this.accessDataForm.value.confirmPassword) {
-      alert('Senhas diferentes'); 
-      return;
+  accessDataSubmit() {
+    if(this.accessDataForm.valid){
+      this.accessData = {
+        email: this.accessDataForm.controls.email.value,
+        name: this.accessDataForm.controls.name.value,
+        cpf: this.accessDataForm.controls.cpf.value,
+        password: this.accessDataForm.controls.password.value,
+        confirmPassword: this.accessDataForm.controls.confirmPassword.value,
+      }
+  
+      this.submitData.emit(this.accessData);
+      console.log(1);
+      
+    }else{
+      console.log(0);
+      
     }
-    
-    console.log(this.accessDataForm)
+
+
 
   }
 }
