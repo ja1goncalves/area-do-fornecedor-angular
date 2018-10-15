@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class RegisterPersonalDataComponent implements OnInit {
 
+  @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
+  @Input() personalDataForm: FormGroup;
 
   constructor() { }
 

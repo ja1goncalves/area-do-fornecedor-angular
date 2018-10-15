@@ -33,7 +33,6 @@ import {
   MatButtonModule } from '@angular/material';
 import { RegisterAccessDataComponent } from './components/pages/register/register-access-data/register-access-data.component';
 import { RegisterPersonalDataComponent } from './components/pages/register/register-personal-data/register-personal-data.component';
-import { RegisterComercialDataComponent } from './components/pages/register/register-comercial-data/register-comercial-data.component';
 import { RegisterFidelityProgramsComponent } from './components/pages/register/register-fidelity-programs/register-fidelity-programs.component';
 import { RegisterBankDataComponent } from './components/pages/register/register-bank-data/register-bank-data.component';
 
@@ -51,7 +50,6 @@ import { RegisterBankDataComponent } from './components/pages/register/register-
     ConfirmRegisterComponent,
     RegisterAccessDataComponent,
     RegisterPersonalDataComponent,
-    RegisterComercialDataComponent,
     RegisterFidelityProgramsComponent,
     RegisterBankDataComponent,
   ],

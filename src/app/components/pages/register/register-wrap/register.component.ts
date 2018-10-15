@@ -6,6 +6,7 @@ import { AuthService } from '../../../../services/auth/auth.service';
 import { UFS, OCCUPATIONS, GENDERS } from '../../../../config/consts';
 import { PasswordValidation } from 'src/app/helpers/validators';
 import { Subject } from 'rxjs';
+import { AccessData } from 'src/app/models/register-data';
 
 @Component({
   selector: 'app-register',
@@ -14,10 +15,16 @@ import { Subject } from 'rxjs';
 })
 export class RegisterComponent implements OnInit {
 
+  //Form
   public accessDataForm: FormGroup;
   public bankForm: FormGroup;
   public fidelitiesForm: FormGroup;
-  public personalForm: FormGroup;
+  public personalDataForm: FormGroup;
+
+  //Data
+  public accessData: AccessData;
+
+
   public isValidToken: boolean;
   public ufs: any = UFS;
   public occupations: any = OCCUPATIONS;
@@ -29,18 +36,13 @@ export class RegisterComponent implements OnInit {
   public fidelities: any = [];
   public programs: any[] = [];
 
-  access = {
-    email: '',
-    name: '',
-    cpf: '',
-    password: '',
-    passwordConfirmation: ''
-  }
 
-  public click($event) {
-    console.log($event);
+  public accessDataReceiver($event, stepper) {
+    this.accessData = $event;
+    stepper.next();
     
   }
+
 
   public requestData: any = {
     personal: {
@@ -79,18 +81,15 @@ export class RegisterComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private register: RegisterService,
-    private login: AuthService) {
-
-      
-    }
+    private login: AuthService) {}
 
 
   createRegister(stepper: any): void {
     const requestData = {
-      email: this.access.email,
-      password: this.access.password,
-      cpf: this.access.cpf,
-      name: this.access.name
+      email: this.accessData.email,
+      password: this.accessData.password,
+      cpf: this.accessData.cpf,
+      name: this.accessData.name
     };
     this.register.createRegister(requestData).subscribe(
       (createdUser) => {
@@ -101,7 +100,7 @@ export class RegisterComponent implements OnInit {
 
   checkConfirm(stepper: any): void {
 
-    this.login.loginUser(this.access.email, this.access.password).subscribe(
+    this.login.loginUser(this.accessData.email, this.accessData.password).subscribe(
       (tokenData) => {
         this.getUserAuthenticated();  
         stepper.next();
@@ -163,7 +162,7 @@ export class RegisterComponent implements OnInit {
         this.programs = programs.filter(program => !['TRB', 'G3D'].includes(program.code));
 
         for(const program of this.programs) {
-          this.fidelities.push({program_id: program.id, card_number: '', access_password: ''});
+          this.fidelities.push({program_id: program.id, card_number: '', accessData_password: ''});
         }
 
       },
@@ -171,23 +170,11 @@ export class RegisterComponent implements OnInit {
     )
   }
 
-  public checkToken(token: string): void {
-    this.register.checkToken(token).subscribe(
-      (tokenInfo) => {
-        this.access.email = tokenInfo.email;
-      },
-      (err) => { }
-    )
-  }
+  
 
   ngOnInit() {
 
-    this.route.params.subscribe(
-      (params: any) => {
-        this.checkToken(params.token);
-      },
-      (err) => { }
-    );
+    
 
     this.bankForm = this._formBuilder.group({
       bank_bank_id: [''],
@@ -199,7 +186,7 @@ export class RegisterComponent implements OnInit {
       bank_account_digit: ['']
     });
 
-    this.personalForm = this._formBuilder.group({
+    this.personalDataForm = this._formBuilder.group({
       personal_name: [''],
       personal_cpf: [''],
       personal_birthday: [''],
