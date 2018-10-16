@@ -6,7 +6,7 @@ import { AuthService } from '../../../../services/auth/auth.service';
 import { UFS, OCCUPATIONS, GENDERS } from '../../../../config/consts';
 import { PasswordValidation } from 'src/app/helpers/validators';
 import { Subject } from 'rxjs';
-import { AccessData } from 'src/app/models/register-data';
+import { AccessData, Personal, RequestData } from 'src/app/models/register-data';
 
 @Component({
   selector: 'app-register',
@@ -14,35 +14,6 @@ import { AccessData } from 'src/app/models/register-data';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-
-  //Form
-  public accessDataForm: FormGroup;
-  public bankForm: FormGroup;
-  public fidelitiesForm: FormGroup;
-  public personalDataForm: FormGroup;
-
-  //Data
-  public accessData: AccessData;
-
-
-  public isValidToken: boolean;
-  public ufs: any = UFS;
-  public occupations: any = OCCUPATIONS;
-  public genders: any = GENDERS;
-  public banks: any;
-  public segments: any;
-  public userName: string;
-  public userCpf: string;
-  public fidelities: any = [];
-  public programs: any[] = [];
-
-
-  public accessDataReceiver($event, stepper) {
-    this.accessData = $event;
-    stepper.next();
-    
-  }
-
 
   public requestData: any = {
     personal: {
@@ -76,6 +47,31 @@ export class RegisterComponent implements OnInit {
       operation: 123
     }
   }
+  public RequestData: RequestData;
+
+
+  //Form
+  public accessDataForm: FormGroup;
+  public bankForm: FormGroup;
+  public fidelitiesForm: FormGroup;
+  public personalDataForm: FormGroup;
+
+  //Data
+  public accessData: AccessData;
+
+  public addressPersonalData;
+
+
+
+
+  public isValidToken: boolean;
+  public banks: any;
+  public segments: any;
+  public userName: string;
+  public userCpf: string;
+  public fidelities: any = [];
+  public programs: any[] = [];
+
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -84,19 +80,30 @@ export class RegisterComponent implements OnInit {
     private login: AuthService) {}
 
 
+  public accessDataReceiver($event, stepper) {
+    this.accessData = $event;
+    this.createRegister(stepper);
+  }
+
+  public personalDataReceiver($event, stepper) {
+    this.addressPersonalData = $event;
+
+    this.requestData.personal = this.addressPersonalData.personal;
+    this.requestData.address = this.addressPersonalData.address;
+    
+
+    stepper.next();
+  }
+
+
+
   createRegister(stepper: any): void {
-    const requestData = {
-      email: this.accessData.email,
-      password: this.accessData.password,
-      cpf: this.accessData.cpf,
-      name: this.accessData.name
-    };
-    this.register.createRegister(requestData).subscribe(
+    this.register.createRegister(this.accessData).subscribe(
       (createdUser) => {
         stepper.next();
      }, (err) => {
      });
-  }
+  };
 
   checkConfirm(stepper: any): void {
 
@@ -137,6 +144,7 @@ export class RegisterComponent implements OnInit {
       (err) => { }
     );
   }
+  
 
   getBanks(): void {
     this.register.getBanks().subscribe(
@@ -160,10 +168,6 @@ export class RegisterComponent implements OnInit {
     this.register.getPrograms().subscribe(
       (programs) => {
         this.programs = programs.filter(program => !['TRB', 'G3D'].includes(program.code));
-
-        for(const program of this.programs) {
-          this.fidelities.push({program_id: program.id, card_number: '', accessData_password: ''});
-        }
 
       },
       (err) => { }

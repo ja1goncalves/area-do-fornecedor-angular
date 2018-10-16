@@ -17,7 +17,7 @@ const routes: Routes = [
 
     {path: '', redirectTo: 'minhas-cotacoes', pathMatch: 'full'},
     {path: 'minhas-cotacoes', component: QuotationsComponent, canActivate: [AuthGuardService]}, 
-    {path: 'editar', component: ProfileComponent, canActivate: [AuthGuardService]},
+    {path: 'editar', component: ProfileComponent},
 
     {path: '**', component: LoginComponent},
 ];

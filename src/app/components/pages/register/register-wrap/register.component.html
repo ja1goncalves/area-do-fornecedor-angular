@@ -23,109 +23,74 @@
     </mat-step>
 
     <mat-step>
-        <!-- [stepControl]="fidelitiesForm" -->
-        <form>
-          <!-- [formGroup]="fidelitiesForm" -->
-          <ng-template matStepLabel>Programas de Fidelidade</ng-template>
-          <div class="row fidelity-form">
-            <div class="col-12">
-              <h3>Programas de Fidelidade</h3>
-            </div>
-            <div *ngFor="let program of programs; let i = index">
-              <div class="row">
-                <div [ngClass]="{'col-6': program.code == 'JJ', 'col-12': program.code !== 'JJ'}">
-                  <label>{{program.title}}</label>
-                  <input type="text" [(ngModel)]="fidelities[i].card_number" name="fidelity_card_number_{{program.code}}"
-                    class="form-control" placeholder="N° {{program.title}} Fidelidade">
-                </div>
-                <div *ngIf="program.code == 'JJ'" class="col-6">
-                  <label>Senha de Acesso</label>
-                  <input type="text" [(ngModel)]="fidelities[i].access_password" name="fidelity_acess_password_{{program.code}}"
-                    class="form-control" placeholder="Senha de Acesso {{program.title}}">
-                </div>
-                <input type="hidden" [(ngModel)]="fidelities[i].program_id" name="fidelity_id_{{program.code}}" [value]="program.id"
-                  class="form-control" placeholder="N° {{program.title}} Fidelidade">
-              </div>
-            </div>
-  
-            <!-- <div class="col-6">
-                <label>GOL</label>
-                <input type="text" name="fidelity_g3" [(ngModel)]="fidelities_g3" formControlName="fidelity_g3" class="form-control" placeholder="N° Smiles">
-              </div>
-              <div class="col-6">
-                <label>AZUL</label>
-                <input type="text" name="fidelity_ad" [(ngModel)]="fidelities_ad" formControlName="fidelity_ad" class="form-control" placeholder="N° Tudo Azul">
-              </div>
-              <div class="col-6">
-                <label>AVIANCA</label>
-                <input type="text" name="fidelity_av" [(ngModel)]="fidelities_av" formControlName="fidelity_av" class="form-control" placeholder="N° Amigo Avianca">
-              </div>
-              <div class="col-12">
-                <label>Senha Multiplus</label>
-                <input type="text" name="fidelity_jj_password" [(ngModel)]="fidelities_jj_password" formControlName="fidelity_jj_password" class="form-control" placeholder="Senha Multiplus">
-              </div> -->
+      <ng-template matStepLabel>Programas de Fidelidade</ng-template>
+      <!-- [stepControl]="fidelitiesForm" -->
+      <app-register-fidelity-programs
+        (submitData)="accessDataReceiver($event, stepper)"
+        [fidelityDataForm]="personalDataForm" 
+        [programs]="programs">
+      </app-register-fidelity-programs>
+    </mat-step>
+
+
+    <mat-step [stepControl]="bankForm">
+      <form [formGroup]="bankForm">
+        <ng-template matStepLabel>Dados Bancários</ng-template>
+        <div class="row bank-form">
+          <div class="col-12">
+            <h3>Dados Bancários</h3>
           </div>
-          <div>
-            <button mat-raised-button color="primary" (click)="nextStep(stepper)">Próximo</button>
+          <div class="col-5">
+            <label>Nome do Banco</label>
+            <select type="text" [(ngModel)]="requestData.bank.bank_id" name="bank_bank_id" formControlName="bank_bank_id"
+              class="form-control" placeholder="Nome do Banco" (change)="getSegments(requestData.bank.bank_id)">
+              <option value>Nome do Banco</option>
+              <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
+            </select>
           </div>
-        </form>
-      </mat-step>
-      <mat-step [stepControl]="bankForm">
-          <form [formGroup]="bankForm">
-            <ng-template matStepLabel>Dados Bancários</ng-template>
-            <div class="row bank-form">
-              <div class="col-12">
-                <h3>Dados Bancários</h3>
-              </div>
-              <div class="col-5">
-                <label>Nome do Banco</label>
-                <select type="text" [(ngModel)]="requestData.bank.bank_id" name="bank_bank_id" formControlName="bank_bank_id"
-                  class="form-control" placeholder="Nome do Banco" (change)="getSegments(requestData.bank.bank_id)">
-                  <option value>Nome do Banco</option>
-                  <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
-                </select>
-              </div>
-              <div class="col-3">
-                <label>Tipo de conta</label>
-                <select type="text" [(ngModel)]="requestData.bank.type" name="bank_type" formControlName="bank_type" class="form-control"
-                  placeholder="Tipo">
-                  <option value>Tipo</option>
-                  <option value="CC">Corrente</option>
-                  <option value="PP">Poupança</option>
-                </select>
-              </div>
-              <div class="col-3">
-                <label>Segmento</label>
-                <select type="text" [(ngModel)]="requestData.bank.segment_id" name="bank_segment_id" formControlName="bank_segment_id"
-                  class="form-control" placeholder="Segmento">
-                  <option value>Segmento</option>
-                  <option *ngFor="let segment of segments" [value]="segment.id">{{segment.title}}</option>
-                </select>
-              </div>
-              <div class="col-3">
-                <label>N° Agência</label>
-                <input type="text" [(ngModel)]="requestData.bank.agency" name="bank_agency" formControlName="bank_agency"
-                  class="form-control" placeholder="Agência">
-              </div>
-              <div class="col-2">
-                <label>DV</label>
-                <input type="text" [(ngModel)]="requestData.bank.agency_digit" name="bank_agency_digit" formControlName="bank_agency_digit" maxlength="1" class="form-control">
-              </div>
-              <div class="col-4">
-                <label>N° Conta</label>
-                <input type="text" [(ngModel)]="requestData.bank.account" name="bank_account" formControlName="bank_account"
-                  class="form-control" placeholder="Conta">
-              </div>
-              <div class="col-2">
-                <label>DV</label>
-                <input type="text" [(ngModel)]="requestData.bank.account_digit" name="bank_account_digit" formControlName="bank_account_digit" maxlength="1" class="form-control">
-              </div>
-            </div>
-            <div>
-              <button mat-raised-button color="primary" (click)="concludeRegister()">Tudo Pronto!</button>
-            </div>
-          </form>
-        </mat-step>
+          <div class="col-3">
+            <label>Tipo de conta</label>
+            <select type="text" [(ngModel)]="requestData.bank.type" name="bank_type" formControlName="bank_type" class="form-control"
+              placeholder="Tipo">
+              <option value>Tipo</option>
+              <option value="CC">Corrente</option>
+              <option value="PP">Poupança</option>
+            </select>
+          </div>
+          <div class="col-3">
+            <label>Segmento</label>
+            <select type="text" [(ngModel)]="requestData.bank.segment_id" name="bank_segment_id" formControlName="bank_segment_id"
+              class="form-control" placeholder="Segmento">
+              <option value>Segmento</option>
+              <option *ngFor="let segment of segments" [value]="segment.id">{{segment.title}}</option>
+            </select>
+          </div>
+          <div class="col-3">
+            <label>N° Agência</label>
+            <input type="text" [(ngModel)]="requestData.bank.agency" name="bank_agency" formControlName="bank_agency"
+              class="form-control" placeholder="Agência">
+          </div>
+          <div class="col-2">
+            <label>DV</label>
+            <input type="text" [(ngModel)]="requestData.bank.agency_digit" name="bank_agency_digit" formControlName="bank_agency_digit"
+              maxlength="1" class="form-control">
+          </div>
+          <div class="col-4">
+            <label>N° Conta</label>
+            <input type="text" [(ngModel)]="requestData.bank.account" name="bank_account" formControlName="bank_account"
+              class="form-control" placeholder="Conta">
+          </div>
+          <div class="col-2">
+            <label>DV</label>
+            <input type="text" [(ngModel)]="requestData.bank.account_digit" name="bank_account_digit" formControlName="bank_account_digit"
+              maxlength="1" class="form-control">
+          </div>
+        </div>
+        <div>
+          <button mat-raised-button color="primary" (click)="concludeRegister()">Tudo Pronto!</button>
+        </div>
+      </form>
+    </mat-step>
   </mat-horizontal-stepper>
 
 </div>
