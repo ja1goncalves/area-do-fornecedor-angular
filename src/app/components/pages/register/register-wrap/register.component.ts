@@ -6,7 +6,7 @@ import { AuthService } from '../../../../services/auth/auth.service';
 import { UFS, OCCUPATIONS, GENDERS } from '../../../../config/consts';
 import { PasswordValidation } from 'src/app/helpers/validators';
 import { Subject } from 'rxjs';
-import { AccessData, Personal, RequestData } from 'src/app/models/register-data';
+import { AccessData, Personal, RequestData, Fidelities } from 'src/app/models/register-data';
 
 @Component({
   selector: 'app-register',
@@ -58,8 +58,8 @@ export class RegisterComponent implements OnInit {
 
   //Data
   public accessData: AccessData;
-
   public addressPersonalData;
+  public fidelitiesData: Fidelities
 
 
 
@@ -88,12 +88,25 @@ export class RegisterComponent implements OnInit {
   public personalDataReceiver($event, stepper) {
     this.addressPersonalData = $event;
 
-    this.requestData.personal = this.addressPersonalData.personal;
-    this.requestData.address = this.addressPersonalData.address;
-    
+    this.RequestData.personal = this.addressPersonalData.personal;
+    this.RequestData.address = this.addressPersonalData.address;
+  
+    stepper.next();
+  }
+
+  public fidelitiesDataReceiver($event, stepper) {
+    this.fidelitiesData = $event;
+    this.RequestData.fidelities = this.fidelitiesData;
 
     stepper.next();
   }
+
+
+
+
+
+
+
 
 
 

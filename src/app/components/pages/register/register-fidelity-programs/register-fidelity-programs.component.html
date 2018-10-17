@@ -1,15 +1,20 @@
-<form [formGroup]="fidelityDataForm" (submit)="fidelityDataSubmit()">
+<form *ngIf="fidelityDataForm" [formGroup]="fidelityDataForm" (submit)="fidelityDataSubmit()">
   <!-- [formGroup]="fidelitiesForm" -->
   <div class="row fidelity-form">
     <div class="col-12">
       <h3>Programas de Fidelidade</h3>
     </div>
-    <div *ngFor="let control of formGroupArray; let i = index">
+    <div *ngFor="let control of programs; let i = index">
       <div class="row">
-        <div [ngClass]="{'col-6': program.code == 'JJ', 'col-12': program.code !== 'JJ'}">
-          <label>{{control.title}}</label>
-          <input type="text" [(ngModel)]="fidelities[i].card_number" name="fidelity_card_number_{{program.code}}"
-            class="form-control" placeholder="N° {{program.title}} Fidelidade">
+        <div>
+          <label>Nº Fidelidade &mdash; {{control.title}}</label>
+          <input type="text" formControlName="card_number_{{control.code}}"
+            class="form-control" placeholder="N° Fidelidade">
+        </div>
+        <div *ngIf="control.code == 'JJ'">
+          <label>Senha Fidelidade &mdash; {{control.title}}</label>
+          <input type="text" formControlName="access_password_{{control.code}}"
+            class="form-control" placeholder="N° Fidelidade">
         </div>
       </div>
     </div>

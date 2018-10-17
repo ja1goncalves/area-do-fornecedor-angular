@@ -26,8 +26,8 @@
       <ng-template matStepLabel>Programas de Fidelidade</ng-template>
       <!-- [stepControl]="fidelitiesForm" -->
       <app-register-fidelity-programs
-        (submitData)="accessDataReceiver($event, stepper)"
-        [fidelityDataForm]="personalDataForm" 
+        (submitData)="fidelitiesDataReceiver($event, stepper)"
+        [fidelityDataForm]="fidelitiesForm" 
         [programs]="programs">
       </app-register-fidelity-programs>
     </mat-step>
