@@ -6,11 +6,11 @@
         </div>
         <div class="col-12">
             <label>Nome</label><br>
-            <input type="text" formControlName='personal_name' class="form-control">
+            <input type="text" formControlName='personal_name' class="form-control" [value]="userInfo.name">
         </div>
         <div class="col-4">
             <label>CPF</label><br>
-            <input type="text" formControlName='personal_cpf' class="form-control">
+            <input type="text" formControlName='personal_cpf' class="form-control"  [value]="userInfo.cpf">
         </div>
         <div class="col-4">
             <label>Data de Nascimento</label>
@@ -60,7 +60,7 @@
         <div class="col-6">
             <label>Estado</label>
             <select formControlName="residential_state" class="form-control">
-                <option *ngFor="let uf of UFS" [value]="uf.value">{{uf.label}}</option>
+                <option *ngFor="let uf of ufs" [value]="uf.value">{{uf.label}}</option>
             </select>
         </div>
     </div>

@@ -12,6 +12,7 @@ export class RegisterPersonalDataComponent implements OnInit {
 
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() personalDataForm: FormGroup;
+  @Input() userInfo: any;
 
   
   public personalData: Personal;
@@ -28,8 +29,8 @@ export class RegisterPersonalDataComponent implements OnInit {
 
   ngOnInit() {
     this.personalDataForm = this.fb.group({
-      personal_name:            ['', [Validators.required]],
-      personal_cpf:             ['', [Validators.required]],
+      personal_name:            [{value: '', disabled: true}, [Validators.required]],
+      personal_cpf:             [{value: '', disabled: true}, [Validators.required]],
       personal_birthday:        ['', [Validators.required]],
       personal_gender:          ['', [Validators.required]],
       personal_phone:           ['', [Validators.required]],
@@ -46,9 +47,12 @@ export class RegisterPersonalDataComponent implements OnInit {
       personal_company:         ['', [Validators.required]],
       personal_company_phone:   ['', [Validators.required]]
     });
+
+    
   }
 
   public personalDataSubmit() {
+    console.log('personal request');
     if(this.personalDataForm.valid){
 
       let formControls = this.personalDataForm.controls;
@@ -58,8 +62,8 @@ export class RegisterPersonalDataComponent implements OnInit {
         gender: formControls.personal_gender.value,
         phone: formControls.personal_phone.value,
         cellphone: formControls.personal_cellphone.value,
-        occupation: formControls.personal_occupation_id.value,
-        provider_ocuppation_id: formControls.personal_occupation.value,
+        occupation: formControls.personal_occupation.value,
+        provider_ocuppation_id: formControls.personal_occupation_id.value,
         company: formControls.personal_company.value,
         company_phone: formControls.personal_company_phone.value
       };
@@ -84,7 +88,5 @@ export class RegisterPersonalDataComponent implements OnInit {
 
     }
   }
-
-
-
+  
 }

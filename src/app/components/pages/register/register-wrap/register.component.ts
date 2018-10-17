@@ -6,7 +6,7 @@ import { AuthService } from '../../../../services/auth/auth.service';
 import { UFS, OCCUPATIONS, GENDERS } from '../../../../config/consts';
 import { PasswordValidation } from 'src/app/helpers/validators';
 import { Subject } from 'rxjs';
-import { AccessData, Personal, RequestData, Fidelities, Bank } from 'src/app/models/register-data';
+import { AccessData, Address, Personal, RequestData, Fidelities, Bank } from 'src/app/models/register-data';
 
 @Component({
   selector: 'app-register',
@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
       operation: 123
     }
   }
-  public RequestData: RequestData;
+  public RequestData: RequestData = {} as RequestData;
 
 
   //Form
@@ -58,7 +58,7 @@ export class RegisterComponent implements OnInit {
 
   //Data
   public accessData: AccessData;
-  public addressPersonalData;
+  public addressPersonalData: {personalData: Personal, addressData: Address};
   public fidelitiesData: Fidelities
   public bankData: Bank;
 
@@ -67,9 +67,7 @@ export class RegisterComponent implements OnInit {
 
   public isValidToken: boolean;
   public banks: any;
-  public segments: any;
-  public userName: string;
-  public userCpf: string;
+  public userInfo: any = { name: '', cpf: '' };
   public fidelities: any = [];
   public programs: any[] = [];
 
@@ -88,9 +86,9 @@ export class RegisterComponent implements OnInit {
 
   public personalDataReceiver($event, stepper) {
     this.addressPersonalData = $event;
-
-    this.RequestData.personal = this.addressPersonalData.personal;
-    this.RequestData.address = this.addressPersonalData.address;
+    
+    this.RequestData.personal = this.addressPersonalData.personalData;
+    this.RequestData.address = this.addressPersonalData.addressData;
   
     stepper.next();
   }
@@ -105,6 +103,8 @@ export class RegisterComponent implements OnInit {
   public bankDataReceiver($event) {
     this.bankData = $event;
     this.RequestData.bank = this.bankData;
+    
+    this.updateRegister();
   }
 
 
@@ -139,7 +139,7 @@ export class RegisterComponent implements OnInit {
   getUserAuthenticated(): void {
     this.login.getUserAuthenticated().subscribe(
       (userAuthenticated) => {
-        this.setUserData(userAuthenticated);
+        this.setUserInfo(userAuthenticated);
         this.getBanks();
         this.getPrograms();
       }, 
@@ -147,18 +147,18 @@ export class RegisterComponent implements OnInit {
     )
   }
 
-  setUserData(request: object): void {
-    this.userName = request['name'];
-    this.userCpf = request['cpf'];
+  setUserInfo(request: object): void {
+    this.userInfo.name = request['name'];
+    this.userInfo.cpf = request['cpf'];
   }
 
-  nextStep(stepper: any): void {
+  nextStep(stepper: any): void { 
     stepper.next();
   }
   
-  concludeRegister(): void {
-    this.requestData.fidelities = this.fidelities.filter(fidelity => fidelity.card_number.length);
-    this.register.updateRegister(this.requestData).subscribe(
+  updateRegister(): void {
+    // this.RequestData.fidelities = this.fidelities.filter(fidelity => fidelity.card_number.length);
+    this.register.updateRegister(this.RequestData).subscribe(
       (updatedData) => { },
       (err) => { }
     );
@@ -174,14 +174,6 @@ export class RegisterComponent implements OnInit {
     )
   }
 
-  getSegments(bank_id: number):void {
-    this.register.getSegments(bank_id).subscribe(
-      (segments) => {
-        this.segments = segments;
-      },
-      (err) => { }
-    )
-  }
 
   getPrograms(): void {
     this.register.getPrograms().subscribe(
@@ -196,6 +188,8 @@ export class RegisterComponent implements OnInit {
   
 
   ngOnInit() {
+    console.log(this.RequestData);
+    
 
    
 

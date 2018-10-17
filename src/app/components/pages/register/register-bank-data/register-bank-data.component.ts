@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Bank } from 'src/app/models/register-data';
+import { RegisterService } from 'src/app/services/register/register.service';
 
 @Component({
   selector: 'app-register-bank-data',
@@ -11,10 +12,12 @@ export class RegisterBankDataComponent implements OnInit {
 
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() bankDataForm: FormGroup;
+  @Input() banks: any;
 
   public bankData: Bank;
+  public segments: any;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private register: RegisterService) { }
 
   ngOnInit() {
     this.bankDataForm = this.fb.group({
@@ -24,7 +27,8 @@ export class RegisterBankDataComponent implements OnInit {
       bank_agency: ['', [Validators.required]],
       bank_agency_digit: ['', [Validators.required]],
       bank_account: ['', [Validators.required]],
-      bank_account_digit: ['', [Validators.required]]
+      bank_account_digit: ['', [Validators.required]],
+      bank_operation: ['', [Validators.required]]
     });
   }
 
@@ -41,13 +45,23 @@ export class RegisterBankDataComponent implements OnInit {
         agency_digit: formControls.bank_agency_digit.value,
         account: formControls.bank_account.value,
         account_digit: formControls.bank_account_digit.value,
-        operation: formControls.bank_bank_id.value //FALTANDO INFORMAÇÃO
+        operation: formControls.bank_operation.value //FALTANDO INFORMAÇÃO
       };
 
       this.submitData.emit(this.bankData);
 
     }
 
+  }
+
+  getSegments():void {
+        
+    this.register.getSegments(this.bankDataForm.controls.bank_id.value).subscribe(
+      (segments) => {
+        this.segments = segments;
+      },
+      (err) => { }
+    )
   }
 
 }

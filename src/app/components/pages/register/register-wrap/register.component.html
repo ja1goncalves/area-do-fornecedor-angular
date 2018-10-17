@@ -19,7 +19,7 @@
 
     <mat-step [stepControl]="personalForm">
       <ng-template matStepLabel> Dados Pessoais</ng-template>
-      <app-register-personal-data [personalDataForm]="personalDataForm" (submitData)="accessDataReceiver($event, stepper)"></app-register-personal-data>
+      <app-register-personal-data [personalDataForm]="personalDataForm" (submitData)="personalDataReceiver($event, stepper)" [userInfo]="userInfo"></app-register-personal-data>
     </mat-step>
 
     <mat-step>
@@ -33,7 +33,7 @@
 
     <mat-step [stepControl]="bankForm">
       <ng-template matStepLabel>Dados Bancários</ng-template>
-      <app-register-bank-data [bankDataForm]="bankDataForm" (submitData)="bankDataReceiver($event)"></app-register-bank-data>
+      <app-register-bank-data [bankDataForm]="bankDataForm" (submitData)="bankDataReceiver($event)" [banks]="banks"></app-register-bank-data>
     </mat-step>
 
 
