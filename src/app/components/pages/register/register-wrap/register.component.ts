@@ -6,7 +6,7 @@ import { AuthService } from '../../../../services/auth/auth.service';
 import { UFS, OCCUPATIONS, GENDERS } from '../../../../config/consts';
 import { PasswordValidation } from 'src/app/helpers/validators';
 import { Subject } from 'rxjs';
-import { AccessData, Personal, RequestData, Fidelities } from 'src/app/models/register-data';
+import { AccessData, Personal, RequestData, Fidelities, Bank } from 'src/app/models/register-data';
 
 @Component({
   selector: 'app-register',
@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
 
   //Form
   public accessDataForm: FormGroup;
-  public bankForm: FormGroup;
+  public bankDataForm: FormGroup;
   public fidelitiesForm: FormGroup;
   public personalDataForm: FormGroup;
 
@@ -60,6 +60,7 @@ export class RegisterComponent implements OnInit {
   public accessData: AccessData;
   public addressPersonalData;
   public fidelitiesData: Fidelities
+  public bankData: Bank;
 
 
 
@@ -99,6 +100,11 @@ export class RegisterComponent implements OnInit {
     this.RequestData.fidelities = this.fidelitiesData;
 
     stepper.next();
+  }
+
+  public bankDataReceiver($event) {
+    this.bankData = $event;
+    this.RequestData.bank = this.bankData;
   }
 
 
@@ -191,37 +197,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
 
-    
-
-    this.bankForm = this._formBuilder.group({
-      bank_bank_id: [''],
-      bank_type: [''],
-      bank_segment_id: [''],
-      bank_agency: [''],
-      bank_agency_digit: [''],
-      bank_account: [''],
-      bank_account_digit: ['']
-    });
-
-    this.personalDataForm = this._formBuilder.group({
-      personal_name: [''],
-      personal_cpf: [''],
-      personal_birthday: [''],
-      personal_gender: [''],
-      personal_phone: [''],
-      personal_cellphone: [''],
-      personal_occupation: [''],
-      personal_occupation_id: [''],
-      personal_company: [''],
-      personal_company_phone: [''],
-      residential_zip_code: [''],
-      residential_address: [''],
-      residential_number: [''],
-      residential_complement: [''],
-      residential_neighborhood: [''],
-      residential_city: [''],
-      residential_state: [''],
-    });
+   
 
   }
   
