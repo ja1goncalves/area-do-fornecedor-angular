@@ -71,7 +71,6 @@
         <div class="col-6">
             <label>Ocupação</label>
             <select formControlName="personal_occupation_id" class="form-control">
-                <option value>Ocupação</option>
                 <option *ngFor="let occupation of occupations" [value]="occupation.value">{{occupation.label}}</option>
             </select>
         </div>

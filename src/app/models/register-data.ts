@@ -10,18 +10,25 @@ export interface AccessData {
 export interface RequestData {
   personal: Personal,
   address: Address,
-  fidelities: Fidelities,
+  fidelities: FidelitiesData,
   bank: Bank
 };
 
 
-export type Fidelities = {
+export type FidelitiesNumbers = {
   card_number_JJ: string
   access_password_JJ: string
   card_number_G3: string
   card_number_AD: string
   card_number_AV: string
 }
+
+export type FidelitiesData = fidelityObject[];
+type fidelityObject = {
+  access_password: string,
+  card_number: string,
+  program_id: number
+};
 
 export type Personal = {
   birthday: string,

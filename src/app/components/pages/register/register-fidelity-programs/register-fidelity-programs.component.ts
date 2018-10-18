@@ -1,6 +1,6 @@
 import { Component, Output, Input, EventEmitter, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Fidelities } from 'src/app/models/register-data';
+import { FidelitiesNumbers } from 'src/app/models/register-data';
 
 @Component({
   selector: 'app-register-fidelity-programs',
@@ -13,7 +13,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges {
   @Input() fidelityDataForm: FormGroup;
   @Input() programs;
 
-  public fidelitiesData: Fidelities;
+  public fidelitiesData: FidelitiesNumbers;
 
   constructor(private fb: FormBuilder) { }
 

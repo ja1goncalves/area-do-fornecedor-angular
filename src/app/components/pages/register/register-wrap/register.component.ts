@@ -6,7 +6,8 @@ import { AuthService } from '../../../../services/auth/auth.service';
 import { UFS, OCCUPATIONS, GENDERS } from '../../../../config/consts';
 import { PasswordValidation } from 'src/app/helpers/validators';
 import { Subject } from 'rxjs';
-import { AccessData, Address, Personal, RequestData, Fidelities, Bank } from 'src/app/models/register-data';
+import { AccessData, Address, Personal, RequestData, FidelitiesData, Bank } from 'src/app/models/register-data';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-register',
@@ -59,7 +60,7 @@ export class RegisterComponent implements OnInit {
   //Data
   public accessData: AccessData;
   public addressPersonalData: {personalData: Personal, addressData: Address};
-  public fidelitiesData: Fidelities
+  public fidelitiesData: FidelitiesData
   public bankData: Bank;
 
 
@@ -95,7 +96,23 @@ export class RegisterComponent implements OnInit {
 
   public fidelitiesDataReceiver($event, stepper) {
     this.fidelitiesData = $event;
-    this.RequestData.fidelities = this.fidelitiesData;
+
+    let fidelities = [];
+
+    this.programs.forEach((program, index) => {
+      // console.log(program, this.fidelitiesData, fidelities);
+      // // console.log(this.fidelitiesData[index]);
+      if(fidelities)
+      fidelities.push(
+        {
+          program_id: program.id,
+          card_number: this.fidelitiesData[`card_number_${program.code}`],
+          access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : ""
+        }
+      );
+    });
+    // console.log(fidelities);
+    this.RequestData.fidelities = fidelities;
 
     stepper.next();
   }
