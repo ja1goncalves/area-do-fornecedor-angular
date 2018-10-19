@@ -16,6 +16,14 @@ export class ProfileComponent implements OnInit {
     private register: RegisterService) { }
 
   ngOnInit() {
+    this.register.getProviderData().subscribe(
+      (providerData) => {
+        console.log(providerData);
+      },
+      (err) => {
+        console.log(err);
+      }
+    )
   }
 
 }

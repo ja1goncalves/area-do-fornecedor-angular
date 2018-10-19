@@ -128,4 +128,19 @@ export class RegisterService {
 
   }
 
+  public getProviderData(): Observable<any> {
+
+    return new Observable((observer) => {
+      this.http.get(`${environment.API_URL}/api/provider`).subscribe(
+        (providerData: any) => {
+          observer.next(providerData.data);
+        },
+        (err) => {
+          observer.error(err.error);
+        }
+      )
+    });
+    
+  }
+
 }
