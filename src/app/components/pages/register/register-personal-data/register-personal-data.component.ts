@@ -59,7 +59,7 @@ export class RegisterPersonalDataComponent implements OnInit {
         phone: formControls.personal_phone.value,
         cellphone: formControls.personal_cellphone.value,
         occupation: formControls.personal_occupation.value,
-        provider_occupation_id: formControls.personal_occupation_id.value * 1,
+        provider_occupation_id: formControls.personal_occupation_id.value,
         company: formControls.personal_company.value,
         company_phone: formControls.personal_company_phone.value
       };
