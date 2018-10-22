@@ -18,24 +18,28 @@ export class RegisterFidelityProgramsComponent implements OnChanges {
   constructor(private fb: FormBuilder) { }
 
   ngOnChanges(change: SimpleChanges) {
-    let allPrograms = change.programs.currentValue;
-    let programFormGroup = [];
+
+    const allPrograms = change.programs.currentValue;
+    const programFormGroup = [];
 
     if (allPrograms.length) {
       allPrograms.forEach((program, index) => {
-        programFormGroup["card_number_" + program.code] = ['', [Validators.required]];
-        if (program.code === "JJ") {
-          programFormGroup["access_password_" + program.code] = ['', [Validators.required]];
-        };
+        programFormGroup[`card_number_${program.code}`] = ['', [Validators.required]];
+        if (program.code === 'JJ') {
+          programFormGroup[`access_password_${program.code}`] = ['', [Validators.required]];
+        }
       });
+
       this.fidelityDataForm = this.fb.group(programFormGroup);
+
     }
   }
 
-  public fidelityDataSubmit() {
+  public fidelityDataSubmit(): void {
+
     if (this.fidelityDataForm.valid) {
 
-      let formControls = this.fidelityDataForm.controls;
+      const formControls = this.fidelityDataForm.controls;
 
       this.fidelitiesData = {
         card_number_JJ: formControls.card_number_JJ.value,
@@ -44,7 +48,6 @@ export class RegisterFidelityProgramsComponent implements OnChanges {
         card_number_AD: formControls.card_number_AD.value,
         card_number_AV: formControls.card_number_AV.value,
       };
-
 
       this.submitData.emit(this.fidelitiesData);
 

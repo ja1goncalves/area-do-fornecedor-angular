@@ -21,21 +21,22 @@ export class RegisterBankDataComponent implements OnInit {
 
   ngOnInit() {
     this.bankDataForm = this.fb.group({
-      bank_id: ['', [Validators.required]],
-      bank_type: ['', [Validators.required]],
-      bank_segment_id: ['', [Validators.required]],
-      bank_agency: ['', [Validators.required]],
-      bank_agency_digit: ['', [Validators.required]],
-      bank_account: ['', [Validators.required]],
+      bank_id:            ['', [Validators.required]],
+      bank_type:          ['', [Validators.required]],
+      bank_segment_id:    ['', [Validators.required]],
+      bank_agency:        ['', [Validators.required]],
+      bank_agency_digit:  ['', [Validators.required]],
+      bank_account:       ['', [Validators.required]],
       bank_account_digit: ['', [Validators.required]],
-      bank_operation: ['', [Validators.required]]
+      bank_operation:     ['', [Validators.required]]
     });
   }
 
-  bankDataSubmit() {
+  bankDataSubmit(): void {
+
     if (this.bankDataForm.valid) {
 
-      let formControls = this.bankDataForm.controls;
+      const formControls = this.bankDataForm.controls;
 
       this.bankData = {
         bank_id: formControls.bank_id.value,
@@ -45,7 +46,7 @@ export class RegisterBankDataComponent implements OnInit {
         agency_digit: formControls.bank_agency_digit.value,
         account: formControls.bank_account.value,
         account_digit: formControls.bank_account_digit.value,
-        operation: formControls.bank_operation.value //FALTANDO INFORMAÇÃO
+        operation: formControls.bank_operation.value
       };
 
       this.submitData.emit(this.bankData);
@@ -54,14 +55,14 @@ export class RegisterBankDataComponent implements OnInit {
 
   }
 
-  getSegments():void {
-        
+  getSegments(): void {
+
     this.register.getSegments(this.bankDataForm.controls.bank_id.value).subscribe(
       (segments) => {
         this.segments = segments;
       },
       (err) => { }
-    )
+    );
   }
 
 }

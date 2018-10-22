@@ -14,20 +14,17 @@ export class RegisterPersonalDataComponent implements OnInit {
   @Input() personalDataForm: FormGroup;
   @Input() userInfo: any;
 
-  
   public personalData: Personal;
   public addressData: Address;
 
-  public genders: any = GENDERS;
+  public genders: any[] = GENDERS;
   public ufs: any[] = UFS;
-  public occupations: any = OCCUPATIONS;
-
-
-
+  public occupations: any[] = OCCUPATIONS;
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+
     this.personalDataForm = this.fb.group({
       personal_name:            [{value: '', disabled: true}, [Validators.required]],
       personal_cpf:             [{value: '', disabled: true}, [Validators.required]],
@@ -48,14 +45,13 @@ export class RegisterPersonalDataComponent implements OnInit {
       personal_company_phone:   ['', [Validators.required]]
     });
 
-    
   }
 
-  public personalDataSubmit() {
-    console.log('personal request');
-    if(this.personalDataForm.valid){
+  public personalDataSubmit(): void {
 
-      let formControls = this.personalDataForm.controls;
+    if (this.personalDataForm.valid) {
+
+      const formControls = this.personalDataForm.controls;
 
       this.personalData = {
         birthday: formControls.personal_birthday.value,
@@ -63,7 +59,7 @@ export class RegisterPersonalDataComponent implements OnInit {
         phone: formControls.personal_phone.value,
         cellphone: formControls.personal_cellphone.value,
         occupation: formControls.personal_occupation.value,
-        provider_ocuppation_id: formControls.personal_occupation_id.value,
+        provider_occupation_id: formControls.personal_occupation_id.value * 1,
         company: formControls.personal_company.value,
         company_phone: formControls.personal_company_phone.value
       };
@@ -76,17 +72,16 @@ export class RegisterPersonalDataComponent implements OnInit {
         neighborhood: formControls.residential_neighborhood.value,
         city: formControls.residential_city.value,
         state: formControls.residential_state.value
-      }
+      };
 
-      let completePersonalData = {
+      const completePersonalData = {
         personalData: this.personalData,
         addressData: this.addressData
       };
-
 
       this.submitData.emit(completePersonalData);
 
     }
   }
-  
+
 }

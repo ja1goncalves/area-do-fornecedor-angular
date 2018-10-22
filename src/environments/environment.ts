@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   NODE_ENV: 'dev',
-  API_URL: 'http://api.provider.test',
+  API_URL: 'http://app.provider.test',
 };
 
 /*

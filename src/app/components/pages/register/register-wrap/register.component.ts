@@ -1,11 +1,7 @@
-import { Component, OnInit, HostListener, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { RegisterService } from '../../../../services/register/register.service';
 import { AuthService } from '../../../../services/auth/auth.service';
-import { UFS, OCCUPATIONS, GENDERS } from '../../../../config/consts';
-import { PasswordValidation } from 'src/app/helpers/validators';
-import { Subject } from 'rxjs';
 import { AccessData, Address, Personal, RequestData, FidelitiesData, Bank } from 'src/app/models/register-data';
 import * as _ from 'lodash';
 
@@ -16,55 +12,52 @@ import * as _ from 'lodash';
 })
 export class RegisterComponent implements OnInit {
 
-  public requestData: any = {
-    personal: {
-      birthday: '',
-      gender: '',
-      phone: '',
-      cellphone: '',
-      occupation: '',
-      provider_ocuppation_id: 1,
-      company: '',
-      company_phone: '' 
-    },  
-    address: {
-      zip_code: '',
-      address: '',
-      number: '',
-      complement: '',
-      neighborhood: '',
-      city: '',
-      state: '' 
-    },  
-    fidelities: [],  
-    bank: {
-      bank_id: '',
-      type: '',
-      segment_id: '',
-      agency: '',
-      agency_digit: '',
-      account: '',
-      account_digit: '',
-      operation: 123
-    }
-  }
+  // public requestData: any = {
+  //   personal: {
+  //     birthday: '',
+  //     gender: '',
+  //     phone: '',
+  //     cellphone: '',
+  //     occupation: '',
+  //     provider_occupation_id: 1,
+  //     company: '',
+  //     company_phone: ''
+  //   },
+  //   address: {
+  //     zip_code: '',
+  //     address: '',
+  //     number: '',
+  //     complement: '',
+  //     neighborhood: '',
+  //     city: '',
+  //     state: ''
+  //   },
+  //   fidelities: [],
+  //   bank: {
+  //     bank_id: '',
+  //     type: '',
+  //     segment_id: '',
+  //     agency: '',
+  //     agency_digit: '',
+  //     account: '',
+  //     account_digit: '',
+  //     operation: 123
+  //   }
+  // }
+
   public RequestData: RequestData = {} as RequestData;
 
-
-  //Form
+  // Form
   public accessDataForm: FormGroup;
   public bankDataForm: FormGroup;
   public fidelitiesForm: FormGroup;
   public personalDataForm: FormGroup;
 
-  //Data
+  // Data
   public accessData: AccessData;
   public addressPersonalData: {personalData: Personal, addressData: Address};
-  public fidelitiesData: FidelitiesData
+  public fidelitiesData: FidelitiesData;
   public bankData: Bank;
-
-
-
 
   public isValidToken: boolean;
   public banks: any;
@@ -72,144 +65,111 @@ export class RegisterComponent implements OnInit {
   public fidelities: any = [];
   public programs: any[] = [];
 
-
   constructor(
-    private _formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private register: RegisterService,
     private login: AuthService) {}
 
-
-  public accessDataReceiver($event, stepper) {
+  public accessDataReceiver($event, stepper): void {
     this.accessData = $event;
     this.createRegister(stepper);
   }
 
-  public personalDataReceiver($event, stepper) {
+  public personalDataReceiver($event, stepper): void {
     this.addressPersonalData = $event;
-    
     this.RequestData.personal = this.addressPersonalData.personalData;
     this.RequestData.address = this.addressPersonalData.addressData;
-  
     stepper.next();
   }
 
-  public fidelitiesDataReceiver($event, stepper) {
+  public fidelitiesDataReceiver($event, stepper): void {
     this.fidelitiesData = $event;
-
-    let fidelities = [];
+    const fidelities = [];
 
     this.programs.forEach((program, index) => {
-      // console.log(program, this.fidelitiesData, fidelities);
-      // // console.log(this.fidelitiesData[index]);
-      if(fidelities)
       fidelities.push(
         {
           program_id: program.id,
           card_number: this.fidelitiesData[`card_number_${program.code}`],
-          access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : ""
+          // tslint:disable-next-line:max-line-length
+          access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : ''
         }
       );
     });
-    // console.log(fidelities);
-    this.RequestData.fidelities = fidelities;
 
+    this.RequestData.fidelities = fidelities;
     stepper.next();
   }
 
-  public bankDataReceiver($event) {
+  public bankDataReceiver($event): void {
     this.bankData = $event;
     this.RequestData.bank = this.bankData;
-    
     this.updateRegister();
   }
 
-
-
-
-
-
-
-
-
-
-  createRegister(stepper: any): void {
+  public createRegister(stepper: any): void {
     this.register.createRegister(this.accessData).subscribe(
-      (createdUser) => {
+      (createdUser: any) => {
         stepper.next();
-     }, (err) => {
-     });
-  };
-
-  checkConfirm(stepper: any): void {
-
-    this.login.loginUser(this.accessData.email, this.accessData.password).subscribe(
-      (tokenData) => {
-        this.getUserAuthenticated();  
-        stepper.next();
-      }, 
-      (err) => { }
-    )
-
+     },
+     (err) => { }
+    );
   }
 
-  getUserAuthenticated(): void {
+  public checkConfirm(stepper: any): void {
+    this.login.loginUser(this.accessData.email, this.accessData.password).subscribe(
+      (tokenData: any) => {
+        this.getUserAuthenticated();
+        stepper.next();
+      },
+      (err) => { }
+    );
+  }
+
+  public getUserAuthenticated(): void {
     this.login.getUserAuthenticated().subscribe(
-      (userAuthenticated) => {
+      (userAuthenticated: any) => {
         this.setUserInfo(userAuthenticated);
         this.getBanks();
         this.getPrograms();
-      }, 
+      },
       (err) => { }
-    )
+    );
   }
 
-  setUserInfo(request: object): void {
+  public setUserInfo(request: object): void {
     this.userInfo.name = request['name'];
     this.userInfo.cpf = request['cpf'];
   }
 
-  nextStep(stepper: any): void { 
+  public nextStep(stepper: any): void {
     stepper.next();
   }
-  
-  updateRegister(): void {
-    // this.RequestData.fidelities = this.fidelities.filter(fidelity => fidelity.card_number.length);
+
+  public updateRegister(): void {
     this.register.updateRegister(this.RequestData).subscribe(
-      (updatedData) => { },
+      (updatedData: any) => { },
       (err) => { }
     );
   }
-  
 
-  getBanks(): void {
+  public getBanks(): void {
     this.register.getBanks().subscribe(
-      (banks) => {
+      (banks: any) => {
         this.banks = banks;
       },
       (err) => { }
-    )
+    );
   }
 
-
-  getPrograms(): void {
+  public getPrograms(): void {
     this.register.getPrograms().subscribe(
-      (programs) => {
+      (programs: any[]) => {
         this.programs = programs.filter(program => !['TRB', 'G3D'].includes(program.code));
-
       },
       (err) => { }
-    )
+    );
   }
 
-  
+  ngOnInit() { }
 
-  ngOnInit() {
-    console.log(this.RequestData);
-    
-
-   
-
-  }
-  
 }

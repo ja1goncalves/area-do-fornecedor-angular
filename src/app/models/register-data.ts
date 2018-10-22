@@ -1,19 +1,17 @@
 
-
 export interface AccessData {
-  email: string,
-  name: string,
-  cpf: string,
-  password: string,
-};
+  email: string;
+  name: string;
+  cpf: string;
+  password: string;
+}
 
 export interface RequestData {
-  personal: Personal,
-  address: Address,
-  fidelities: FidelitiesData,
-  bank: Bank
-};
-
+  personal: Personal;
+  address: Address;
+  fidelities: FidelitiesData;
+  bank: Bank;
+}
 
 export type FidelitiesNumbers = {
   card_number_JJ: string
@@ -21,22 +19,20 @@ export type FidelitiesNumbers = {
   card_number_G3: string
   card_number_AD: string
   card_number_AV: string
-}
-
+};
 export type FidelitiesData = fidelityObject[];
 type fidelityObject = {
   access_password: string,
   card_number: string,
   program_id: number
 };
-
 export type Personal = {
   birthday: string,
   gender: string,
   phone: string,
   cellphone: string,
   occupation: string,
-  provider_ocuppation_id: number,
+  provider_occupation_id: number,
   company: string,
   company_phone: string
 };

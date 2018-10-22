@@ -12,16 +12,15 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class RegisterAccessDataComponent implements OnInit {
 
-  public accessData: AccessData;
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() accessDataForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private register: RegisterService, private route: ActivatedRoute) { 
-  
-  }
+  public accessData: AccessData;
+
+  constructor(private fb: FormBuilder, private register: RegisterService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    
+
     this.accessDataForm = this.fb.group({
       email:            [{value: '', disabled: true}, [Validators.required]],
       name:             ['', [Validators.required]],
@@ -30,9 +29,6 @@ export class RegisterAccessDataComponent implements OnInit {
       confirmPassword:  ['', [Validators.required]],
     }, {validator: PasswordValidation.MatchPassword});
 
-    
-
-  
     this.route.params.subscribe(
       (params: any) => {
         this.checkToken(params.token);
@@ -44,31 +40,25 @@ export class RegisterAccessDataComponent implements OnInit {
 
   public checkToken(token: string): void {
     this.register.checkToken(token).subscribe(
-      (tokenInfo) => {
+      (tokenInfo: any) => {
         this.accessDataForm.controls.email.setValue(tokenInfo.email);
       },
-      (err) => {
-        
-        
-      }
-    )
+      (err) => { }
+    );
   }
 
+  accessDataSubmit(): void {
 
-  accessDataSubmit() {
-    if(this.accessDataForm.valid){
+    if (this.accessDataForm.valid) {
       this.accessData = {
         email: this.accessDataForm.controls.email.value,
         name: this.accessDataForm.controls.name.value,
         cpf: this.accessDataForm.controls.cpf.value,
         password: this.accessDataForm.controls.password.value,
-      }
-  
+      };
+
       this.submitData.emit(this.accessData);
-      
     }
-
-
 
   }
 }

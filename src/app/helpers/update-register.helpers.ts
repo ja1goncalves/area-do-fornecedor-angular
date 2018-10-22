@@ -40,7 +40,7 @@ export class updateRegisterHelpers implements OnInit {
         phone: '',
         cellphone: '',
         occupation: '',
-        provider_ocuppation_id: 1,
+        provider_occupation_id: 1,
         company: '',
         company_phone: '' 
       },  
