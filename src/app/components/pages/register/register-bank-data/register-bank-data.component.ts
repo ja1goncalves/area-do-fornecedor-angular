@@ -57,7 +57,8 @@ export class RegisterBankDataComponent implements OnInit {
 
   getSegments(): void {
 
-    this.register.getSegments(this.bankDataForm.controls.bank_id.value).subscribe(
+    const bank_id = this.bankDataForm.controls.bank_id.value;
+    this.register.getSegments(bank_id).subscribe(
       (segments) => {
         this.segments = segments;
       },

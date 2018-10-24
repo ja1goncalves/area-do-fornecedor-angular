@@ -23,8 +23,7 @@ export class RegisterPersonalDataComponent implements OnInit {
 
   constructor(private fb: FormBuilder) { }
 
-  ngOnInit() {
-
+  private initFormControlls(): void {
     this.personalDataForm = this.fb.group({
       personal_name:            [{value: '', disabled: true}, [Validators.required]],
       personal_cpf:             [{value: '', disabled: true}, [Validators.required]],
@@ -44,6 +43,36 @@ export class RegisterPersonalDataComponent implements OnInit {
       personal_company:         ['', [Validators.required]],
       personal_company_phone:   ['', [Validators.required]]
     });
+  }
+
+  private getPersonalData(): any {
+    const formControls = this.personalDataForm.controls;
+
+    return {
+      birthday: formControls.personal_birthday.value,
+      gender: formControls.personal_gender.value,
+      phone: formControls.personal_phone.value,
+      cellphone: formControls.personal_cellphone.value,
+      occupation: formControls.personal_occupation.value,
+      provider_occupation_id: formControls.personal_occupation_id.value,
+      company: formControls.personal_company.value,
+      company_phone: formControls.personal_company_phone.value
+    };
+
+  }
+
+  private getAddressData(): any {
+    const formControls = this.personalDataForm.controls;
+
+    return {
+      zip_code: formControls.residential_zip_code.value,
+      address: formControls.residential_address.value,
+      number: formControls.residential_number.value,
+      complement: formControls.residential_complement.value,
+      neighborhood: formControls.residential_neighborhood.value,
+      city: formControls.residential_city.value,
+      state: formControls.residential_state.value
+    };
 
   }
 
@@ -51,37 +80,20 @@ export class RegisterPersonalDataComponent implements OnInit {
 
     if (this.personalDataForm.valid) {
 
-      const formControls = this.personalDataForm.controls;
-
-      this.personalData = {
-        birthday: formControls.personal_birthday.value,
-        gender: formControls.personal_gender.value,
-        phone: formControls.personal_phone.value,
-        cellphone: formControls.personal_cellphone.value,
-        occupation: formControls.personal_occupation.value,
-        provider_occupation_id: formControls.personal_occupation_id.value,
-        company: formControls.personal_company.value,
-        company_phone: formControls.personal_company_phone.value
-      };
-
-      this.addressData = {
-        zip_code: formControls.residential_zip_code.value,
-        address: formControls.residential_address.value,
-        number: formControls.residential_number.value,
-        complement: formControls.residential_complement.value,
-        neighborhood: formControls.residential_neighborhood.value,
-        city: formControls.residential_city.value,
-        state: formControls.residential_state.value
-      };
-
       const completePersonalData = {
-        personalData: this.personalData,
-        addressData: this.addressData
+        personalData: this.getPersonalData(),
+        addressData: this.getAddressData()
       };
 
       this.submitData.emit(completePersonalData);
 
     }
+  }
+
+  ngOnInit() {
+
+    this.initFormControlls();
+
   }
 
 }

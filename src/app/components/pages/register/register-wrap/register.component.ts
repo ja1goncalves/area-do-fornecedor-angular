@@ -90,7 +90,6 @@ export class RegisterComponent implements OnInit {
         {
           program_id: program.id,
           card_number: this.fidelitiesData[`card_number_${program.code}`],
-          // tslint:disable-next-line:max-line-length
           access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : ''
         }
       );
