@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -16,25 +16,34 @@ export class RegisterService {
    */
   public checkToken(token: string): Observable<any> {
 
+
+
     return new Observable((observer) => {
-      this.http.post(`${environment.API_URL}/api/check-token`, {token}).subscribe(
+
+
+
+
+      this.http.post(`${environment.API_URL}/api/check-token`, { token }).subscribe(
         (tokenInfo: any) => {
+
           observer.next(tokenInfo.data);
         },
         (err) => {
+
+
           observer.error(err.error);
         }
       );
     });
 
   }
-  
+
   /**
    * 
    * @param requestData
    */
   public createRegister(requestData: any): Observable<any> {
-    
+
     return new Observable((observer) => {
       this.http.post(`${environment.API_URL}/api/provider-register`, requestData).subscribe(
         (createdUser: any) => {
@@ -56,7 +65,7 @@ export class RegisterService {
   public confirmRegister(code: string, username: string): Observable<any> {
 
     return new Observable((observer) => {
-      this.http.post(`${environment.API_URL}/api/confirm-register`, {code, username}).subscribe(
+      this.http.post(`${environment.API_URL}/api/confirm-register`, { code, username }).subscribe(
         (confirmation: any) => {
           observer.next(confirmation);
         },
@@ -67,7 +76,7 @@ export class RegisterService {
     });
 
   }
-  
+
   public getBanks(): Observable<any> {
 
     return new Observable((observer) => {
@@ -97,9 +106,9 @@ export class RegisterService {
     });
 
   }
-  
+
   public getPrograms(): Observable<any> {
-    
+
     return new Observable((observer) => {
       this.http.get(`${environment.API_URL}/api/programs`).subscribe(
         (programs: any) => {
@@ -114,7 +123,7 @@ export class RegisterService {
   }
 
   public updateRegister(requestData: any): Observable<any> {
-      
+
     return new Observable((observer) => {
       this.http.put(`${environment.API_URL}/api/provider-update`, requestData).subscribe(
         (upadtedData) => {

@@ -1,0 +1,53 @@
+<form [formGroup]="bankDataForm" (submit)="bankDataSubmit()">
+  <div class="row bank-form">
+    <div class="col-12">
+      <h3>Dados Bancários</h3>
+    </div>
+    <div class="col-6">
+      <label>Nome do Banco</label>
+      <select type="text" name="bank_id" formControlName="bank_id" class="form-control" placeholder="Nome do Banco"
+        (change)="getSegments()">
+        <option value>Nome do Banco</option>
+        <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
+      </select>
+    </div>
+    <div class="col-6">
+      <label>Tipo de conta</label>
+      <select type="text" name="bank_type" formControlName="bank_type" class="form-control" placeholder="Tipo">
+        <option value>Tipo</option>
+        <option value="CC">Corrente</option>
+        <option value="PP">Poupança</option>
+      </select>
+    </div>
+    <div class="col-4">
+      <label>N° Agência</label>
+      <input type="text" name="bank_agency" formControlName="bank_agency" class="form-control" placeholder="Agência">
+    </div>
+    <div class="col-2">
+      <label>DV</label>
+      <input type="text" name="bank_agency_digit" formControlName="bank_agency_digit" maxlength="1" class="form-control">
+    </div>
+    <div class="col-6">
+      <label>Segmento</label>
+      <select type="text" name="bank_segment_id" formControlName="bank_segment_id" class="form-control" placeholder="Segmento">
+        <option value>Segmento</option>
+        <option *ngFor="let segment of segments" [value]="segment.id">{{segment.title}}</option>
+      </select>
+    </div>
+    <div class="col-4">
+      <label>N° Conta</label>
+      <input type="text" name="bank_account" formControlName="bank_account" class="form-control" placeholder="Conta">
+    </div>
+    <div class="col-2">
+      <label>DV</label>
+      <input type="text" name="bank_account_digit" formControlName="bank_account_digit" maxlength="1" class="form-control">
+    </div>
+    <div class="col-6">
+      <label>Operação</label>
+      <input type="text" name="bank_account" formControlName="bank_operation" class="form-control" placeholder="Operação">
+    </div>
+  </div>
+  <div>
+    <button type="submit" mat-raised-button color="primary">Tudo Pronto!</button>
+  </div>
+</form>

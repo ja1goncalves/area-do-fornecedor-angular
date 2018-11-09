@@ -1,0 +1,93 @@
+<form [formGroup]="personalDataForm" (submit)="personalDataSubmit()">
+    <ng-template matStepLabel>Dados Cadastrais</ng-template>
+    <div class="row personal-form">
+        <div class="col-12">
+            <h3>Dados Pessoais</h3>
+        </div>
+        <div class="col-12">
+            <label>Nome</label><br>
+            <input type="text" formControlName='personal_name' class="form-control" [value]="userInfo.name">
+        </div>
+        <div class="col-4">
+            <label>CPF</label><br>
+            <input type="text" formControlName='personal_cpf' class="form-control" [value]="userInfo.cpf">
+        </div>
+        <div class="col-4">
+            <label>Data de Nascimento</label>
+            <input type="date" formControlName="personal_birthday" class="form-control">
+        </div>
+        <div class="col-4">
+            <label>Sexo</label>
+            <select formControlName="personal_gender" class="form-control">
+                <option *ngFor="let gender of genders" [value]="gender.value">{{gender.label}}</option>
+            </select>
+        </div>
+        <div class="col-6">
+            <input type="text" formControlName="personal_phone" class="form-control" placeholder="Telefone Fixo">
+        </div>
+        <div class="col-6">
+            <input type="text" formControlName="personal_cellphone" class="form-control" placeholder="Celular">
+        </div>
+    </div>
+    <div class="row residential-form">
+        <div class="col-12">
+            <h3>Dados Residenciais</h3>
+        </div>
+        <div class="col-4">
+            <label>CEP</label>
+            <input type="text" formControlName="residential_zip_code" class="form-control" placeholder="CEP">
+        </div>
+        <div class="col-6">
+            <label>Rua</label>
+            <input type="text" formControlName="residential_address" class="form-control" placeholder="Rua">
+        </div>
+        <div class="col-2">
+            <label>Número</label>
+            <input type="number" formControlName="residential_number" class="form-control" placeholder="N°" min="0">
+        </div>
+        <div class="col-6">
+            <label>Complemento</label>
+            <input type="text" formControlName="residential_complement" class="form-control" placeholder="Comp.">
+        </div>
+        <div class="col-6">
+            <label>Bairro</label>
+            <input type="text" formControlName="residential_neighborhood" class="form-control" placeholder="Bairro">
+        </div>
+        <div class="col-6">
+            <label>Cidade</label>
+            <input type="text" formControlName="residential_city" class="form-control" placeholder="Cidade">
+        </div>
+        <div class="col-6">
+            <label>Estado</label>
+            <select formControlName="residential_state" class="form-control">
+                <option *ngFor="let uf of ufs" [value]="uf.value">{{uf.label}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="row commercial-form">
+        <div class="col-12">
+            <h3>Dados Comerciais</h3>
+        </div>
+        <div class="col-6">
+            <label>Ocupação</label>
+            <select formControlName="personal_occupation_id" class="form-control">
+                <option *ngFor="let occupation of occupations" [value]="occupation.value">{{occupation.label}}</option>
+            </select>
+        </div>
+        <div class="col-6">
+            <label>Profissão</label>
+            <input type="text" formControlName="personal_occupation" class="form-control" placeholder="Profissão">
+        </div>
+        <div class="col-6">
+            <label>Nome da Empresa</label>
+            <input type="text" formControlName="personal_company" class="form-control" placeholder="Nome da Empresa">
+        </div>
+        <div class="col-6">
+            <label>Telefone</label>
+            <input type="text" formControlName="personal_company_phone" class="form-control" placeholder="Telefone da Empresa">
+        </div>
+    </div>
+    <div>
+        <button type="submit" mat-raised-button color="primary">Próximo</button>
+    </div>
+</form>

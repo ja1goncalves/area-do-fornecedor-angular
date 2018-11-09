@@ -1,0 +1,24 @@
+<form *ngIf="fidelityDataForm" [formGroup]="fidelityDataForm" (submit)="fidelityDataSubmit()">
+  <!-- [formGroup]="fidelitiesForm" -->
+  <div class="row fidelity-form">
+    <div class="col-12">
+      <h3>Programas de Fidelidade</h3>
+    </div>
+    <div *ngFor="let control of programs; let i = index">
+      <div class="row">
+        <div>
+          <label>Nº Fidelidade &mdash; {{control.title}}</label>
+          <input type="text" formControlName="card_number_{{control.code}}" class="form-control" placeholder="N° Fidelidade">
+        </div>
+        <div *ngIf="control.code == 'JJ'">
+          <label>Senha Fidelidade &mdash; {{control.title}}</label>
+          <input type="text" formControlName="access_password_{{control.code}}" class="form-control" placeholder="N° Fidelidade">
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div>
+    <button type="submit" mat-raised-button color="primary">Próximo</button>
+  </div>
+</form>
