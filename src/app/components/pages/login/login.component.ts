@@ -25,15 +25,15 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authService.loginUser(this.username, this.password)
-      .subscribe(
-        (res) => {
-          this.notify.show('success', 'Bem vindo');
-          this.router.navigate(['']);
-        },
-        (err) => {
-          this.notify.show('warning', 'Verifique o login e senha');
-        });
+    this.authService.loginUser(this.username, this.password).subscribe(
+      (res) => {
+        this.notify.show('success', 'Bem vindo');
+        this.router.navigate(['']);
+      },
+      (err) => {
+        this.notify.show('warning', 'Verifique o login e senha');
+      }
+    );
   }
 
 
