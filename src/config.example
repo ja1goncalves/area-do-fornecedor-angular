@@ -1,5 +1,10 @@
 export const config = {
-  production: ,
+  production: false,
   NODE_ENV: '',
   API_URL: '',
+  NOTIFY_URL: '',
+  GRANT_TYPE : 'password',
+  CLIENT_SECRET : '',
+  CLIENT_ID : '',
+  scope : '*'
 };
