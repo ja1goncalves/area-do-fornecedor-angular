@@ -13,25 +13,19 @@ export class PasswordService {
 
 
   /**
-   *
-   * @param requestData
+   * 
+   * @param email 
    * @returns {Observable<any>}
    */
-  public reset(username: string): any {
+  public reset(email: string): Observable<any> {
     
-    const resetRequestData = {
-      email: username
-    };
-
-    return this.http.post(`${environment.API_URL}/api/password/email`, {username})
-      .subscribe((res) => {
-        const message: string = 'O link para redefinir a senha foi enviado para o seu e-mail.';
-        this.notify.show('success', message);
-      },
-      (err) => {
-        const message: string = 'Algo deu errado. Tente novamente.';
-        this.notify.show('warning', message);
-      });
+    return new Observable((observer) => {
+      this.http.post(`${environment.API_URL}/api/password/email`, {email}).subscribe(
+        (response) => { observer.next(response); },
+        (error) => { observer.next(error); }
+      );
+    });
+    
   }
 
   /**
@@ -62,3 +56,4 @@ export class PasswordService {
   }
 
 }
+
