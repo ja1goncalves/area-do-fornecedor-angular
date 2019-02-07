@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PasswordService } from '../../../services/password/password.service';
-import { NotifyService } from '../../../services/notify/notify.service';
+import { PasswordService } from 'src/app/services/password/password.service';
+import { NotifyService } from 'src/app/services/notify/notify.service';
 import { PasswordValidation } from 'src/app/helpers/validators';
 
 @Component({
@@ -60,14 +60,14 @@ export class ConfirmResetPasswordComponent implements OnInit {
   
   }
 
-  public reset(){
+  public reset(): void {
 
     const requestData = {
       email: this.tokenInfo.email,
       password: this.f.password.value,
       password_confirmation: this.f.confirmPassword.value,
       token: this.tokenInfo.token
-    }
+    };
 
     this.submitted = true;
     

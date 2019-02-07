@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
-import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import { PasswordService } from 'src/app/services/password/password.service';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 
@@ -30,7 +29,7 @@ export class ResetPasswordComponent implements OnInit {
 
   get f(){ return this.emailForm.controls; }
 
-  public reset() {
+  public reset(): void {
 
     const email = this.f.email.value;
 
