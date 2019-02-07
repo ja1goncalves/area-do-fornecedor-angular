@@ -33,26 +33,30 @@ export class PasswordService {
    * @param requestData
    * @returns {Observable<any>}
    */
-  public confirm(requestData: any): any {
-    
-      // const resetRequestData = {
-      //   password: requestData.password,
-      //   password_confirmation: requestData.password_confirmation,
-      //   token: requestData.token
-      // };
+  public confirm(requestData: any): Observable<any> {
 
     return new Observable((observer) => {
-      this.http.post(`${environment.API_URL}/api/password/reset`, requestData)
-        .subscribe((res) => {
-          const message: string = 'A senha foi alterada com sucesso.';
-          this.notify.show('success', message);
-        },
-        (err) => {
-          console.log(err);
-          const message: string = 'A sessão expirou. Tente novamente.';
-          this.notify.show('warning', message);
-        });
-    }) 
+      this.http.post(`${environment.API_URL}/api/password/reset`, requestData).subscribe(
+        (response) => { observer.next(response); }, 
+        (error) => { observer.next(error); }
+      );
+    }); 
+  }
+
+  /**
+   * 
+   * @param token
+   * @returns {Observable<any>} 
+   */
+  public checkResetToken(token: string): Observable<any> {
+    
+    return new Observable((observer) => {
+      this.http.get(`${environment.API_URL}/api/password/find/${token}`).subscribe(
+        (response) => { observer.next(response); },
+        (error) => { observer.next(error); }
+      );
+    });
+
   }
 
 }

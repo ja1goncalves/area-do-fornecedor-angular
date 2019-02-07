@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PasswordService } from '../../../services/password/password.service';
 import { NotifyService } from '../../../services/notify/notify.service';
+import { PasswordValidation } from 'src/app/helpers/validators';
 
 @Component({
   selector: 'app-confirm-reset-password',
@@ -11,68 +12,79 @@ import { NotifyService } from '../../../services/notify/notify.service';
 })
 export class ConfirmResetPasswordComponent implements OnInit {
 
-  resetForm: FormGroup;
-  password: string;
-  password_confirmation: string;
-  code: string;
-  username: string;
+  private tokenInfo: any;
+  public passwordForm: any;
+  public submitted: boolean;
+  public loading: boolean;
 
   constructor(
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private passwordService: PasswordService,
     private notify: NotifyService) { }
 
-  public reset() {
+  ngOnInit() {
+    this.passwordForm = this.formBuilder.group({
+      password:         ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword:  ['', [Validators.required]],
+    }, {validator: PasswordValidation.MatchPassword});
+
+    this.activatedRoute.params.subscribe(
+      (params) => {
+        const token = params.token;
+        this.checkToken(token);
+      }, (error) => { }
+    );
+  }
+
+  get f(){ return this.passwordForm.controls; }
+
+  private checkToken(token: string): void {
+    
+    this.passwordService.checkResetToken(token).subscribe(
+      (response) => {
+        
+        if(response.status === 404) {
+          this.notify.show('error', 'O token não é válido');
+          this.router.navigate(['/login']);
+        }
+
+        this.tokenInfo = response;
+
+      }, (error) => {
+        this.notify.show('error', 'O token não é válido');
+        this.router.navigate(['/login']);
+      }
+    );
+  
+  }
+
+  public reset(){
 
     const requestData = {
-      password: this.password,
-      password_confirmation: this.password_confirmation,
-      code: this.code,
-      username: this.username
+      email: this.tokenInfo.email,
+      password: this.f.password.value,
+      password_confirmation: this.f.confirmPassword.value,
+      token: this.tokenInfo.token
     }
 
-    this.validateData() && this.passwordService.confirm(requestData)
-    .subscribe((res) => {
-      console.log(res);
-    },(err) => {
-      console.log(err);
-    });
-  }
-
-  validateData(): boolean {
-    return (this.validatePassword() && !!this.code);
-  }
-
-  validatePassword(): boolean {
-    if(this.password === undefined || this.password === '') {
-      this.handlerNotify('warning', 'nenhum campo pode ficar vazio');
-      return false;
-    } else if(this.password !== this.password_confirmation) {
-      this.handlerNotify('warning','as senhas devem ser iguais');
-      return false;
-    } else if(this.password.length < 8) {
-      this.handlerNotify('warning','a senha não pode ter menos de 6 caracteres');
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  handlerNotify(type: string, message: string) {
-    this.notify.show(type, message);
-  }
-
-  ngOnInit() {
-    this.resetForm = this.fb.group({
-      password: ['', Validators.required],
-      password_confirmation: ['', Validators.required],
-    });
-    this.route.params.subscribe(res => {
-     this.code = res.code;
-     this.username = res.username;
-    })
+    this.submitted = true;
     
+    if(this.passwordForm.valid){
+      this.loading = true;
+
+      this.passwordService.confirm(requestData).subscribe(
+        (response) => {
+          this.notify.show('success', 'Sua senha foi alterada');
+          this.router.navigate(['/login']);
+        }, (error) => {
+          this.notify.show('error', 'tente novamente');
+          this.loading = false;
+        }
+      );
+    }
+
   }
 
 }

@@ -11,7 +11,7 @@ import { ConfirmRegisterComponent } from './components/pages/confirm-register/co
 const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'esqueci-minha-senha', component: ResetPasswordComponent},
-    {path: 'recuperar-senha/:code/:username', component: ConfirmResetPasswordComponent},
+    {path: 'recuperar-senha/:token', component: ConfirmResetPasswordComponent},
     {path: 'confirmar-cadastro/:code/:username', component: ConfirmRegisterComponent},
     {path: 'cadastro/:token', component: RegisterComponent},
 
