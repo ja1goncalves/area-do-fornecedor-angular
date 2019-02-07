@@ -17,7 +17,7 @@ export class PasswordService {
    * @param email 
    * @returns {Observable<any>}
    */
-  public reset(email: string): Observable<any> {
+  public resetPassword(email: string): Observable<any> {
     
     return new Observable((observer) => {
       this.http.post(`${environment.API_URL}/api/password/email`, {email}).subscribe(
@@ -33,7 +33,7 @@ export class PasswordService {
    * @param requestData
    * @returns {Observable<any>}
    */
-  public confirm(requestData: any): Observable<any> {
+  public confirmPassword(requestData: any): Observable<any> {
 
     return new Observable((observer) => {
       this.http.post(`${environment.API_URL}/api/password/reset`, requestData).subscribe(
