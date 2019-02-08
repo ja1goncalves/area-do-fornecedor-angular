@@ -19,7 +19,7 @@ import {notifierOptions} from './config/consts';
 import {AuthGuardService} from './services/auth/auth-guard.service';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TokenInterceptor} from './services/token/token.interceptor';
-import { ResetPasswordComponent } from './components/pages/reset-password/reset-password';
+import { ResetPasswordComponent } from './components/pages/reset-password/reset-password.component';
 import { ConfirmResetPasswordComponent } from './components/pages/confirm-reset-password/confirm-reset-password.component';
 import { RegisterComponent } from './components/pages/register/register-wrap/register.component';
 import { ConfirmRegisterComponent } from './components/pages/confirm-register/confirm-register.component';
