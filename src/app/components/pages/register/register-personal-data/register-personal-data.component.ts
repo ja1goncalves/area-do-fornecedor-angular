@@ -20,28 +20,37 @@ export class RegisterPersonalDataComponent implements OnInit {
   public genders: any[] = GENDERS;
   public ufs: any[] = UFS;
   public occupations: any[] = OCCUPATIONS;
+  public submitted: boolean;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) { }
 
+  ngOnInit() {
+
+    this.initFormControlls();
+
+  }
+
+  get f():any { return this.personalDataForm.controls; }
+  
   private initFormControlls(): void {
-    this.personalDataForm = this.fb.group({
+    this.personalDataForm = this.formBuilder.group({
       personal_name:            [{value: '', disabled: true}, [Validators.required]],
       personal_cpf:             [{value: '', disabled: true}, [Validators.required]],
-      personal_birthday:        ['', [Validators.required]],
+      personal_birthday:        ['', [Validators.required, Validators.minLength(8)]],
       personal_gender:          ['', [Validators.required]],
-      personal_phone:           ['', [Validators.required]],
-      personal_cellphone:       ['', [Validators.required]],
-      residential_zip_code:     ['', [Validators.required]],
+      personal_phone:           ['', []],
+      personal_cellphone:       ['', [Validators.required, Validators.minLength(11)]],
+      residential_zip_code:     ['', [Validators.required, Validators.minLength(8)]],
       residential_address:      ['', [Validators.required]],
       residential_number:       ['', [Validators.required]],
-      residential_complement:   ['', [Validators.required]],
+      residential_complement:   ['', []],
       residential_neighborhood: ['', [Validators.required]],
       residential_city:         ['', [Validators.required]],
       residential_state:        ['', [Validators.required]],
-      personal_occupation_id:   ['', [Validators.required]],
-      personal_occupation:      ['', [Validators.required]],
-      personal_company:         ['', [Validators.required]],
-      personal_company_phone:   ['', [Validators.required]]
+      personal_occupation_id:   ['', []],
+      personal_occupation:      ['', []],
+      personal_company:         ['', []],
+      personal_company_phone:   ['', []]
     });
   }
 
@@ -77,6 +86,7 @@ export class RegisterPersonalDataComponent implements OnInit {
   }
 
   public personalDataSubmit(): void {
+    this.submitted = true;
 
     if (this.personalDataForm.valid) {
 
@@ -89,11 +99,6 @@ export class RegisterPersonalDataComponent implements OnInit {
 
     }
   }
-
-  ngOnInit() {
-
-    this.initFormControlls();
-
-  }
+  
 
 }

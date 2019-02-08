@@ -83,7 +83,7 @@ export class HandlerErrorHelpers {
    * @param {HttpErrorResponse} error
    */
   private handle422(error: HttpErrorResponse) {
-    this.showObjectMessage(error.error.message);
+    this.showObjectMessage(error.error.errors);
   }
 
 

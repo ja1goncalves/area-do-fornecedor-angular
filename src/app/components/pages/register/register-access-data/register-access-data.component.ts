@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { PasswordValidation } from 'src/app/helpers/validators';
 import { AccessData } from 'src/app/models/register-data';
 import { RegisterService } from 'src/app/services/register/register.service';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-register-access-data',
@@ -16,38 +16,51 @@ export class RegisterAccessDataComponent implements OnInit {
   @Input() accessDataForm: FormGroup;
 
   public accessData: AccessData;
+  public fromQuotation: boolean;
+  public submitted: boolean;
 
-  constructor(private fb: FormBuilder, private register: RegisterService, private route: ActivatedRoute) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private register: RegisterService,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
 
-    this.accessDataForm = this.fb.group({
-      email:            [{value: '', disabled: true}, [Validators.required]],
-      name:             ['', [Validators.required]],
-      cpf:              ['', [Validators.required]],
-      password:         ['', [Validators.required]],
-      confirmPassword:  ['', [Validators.required]],
-    }, {validator: PasswordValidation.MatchPassword});
-
-    this.route.params.subscribe(
-      (params: any) => {
-        this.checkToken(params.token);
-      },
-      (err) => { }
+    this.activatedRoute.data.subscribe(
+      (data) => { this.fromQuotation = data.fromQuotation; },
+      (error) => { }
     );
+
+    this.accessDataForm = this.formBuilder.group({
+      email: [{ value: '', disabled: this.fromQuotation }, [Validators.required, Validators.email]],
+      name: ['', [Validators.required]],
+      cpf: ['', [Validators.required, Validators.minLength(11)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required]],
+    }, { validator: PasswordValidation.MatchPassword });
+
+    if (this.fromQuotation) {
+      this.activatedRoute.params.subscribe(
+        (params) => { this.checkToken(params.token); },
+        (error) => { }
+      );
+    }
 
   }
 
-  public checkToken(token: string): void {
+  get f(): any { return this.accessDataForm.controls; }
+
+  private checkToken(token: string): void {
     this.register.checkToken(token).subscribe(
       (tokenInfo: any) => {
         this.accessDataForm.controls.email.setValue(tokenInfo.email);
-      },
-      (err) => { }
+      }, (error) => { }
     );
   }
 
-  accessDataSubmit(): void {
+  public accessDataSubmit(): void {
+
+    this.submitted = true;
 
     if (this.accessDataForm.valid) {
       this.accessData = {
@@ -57,7 +70,7 @@ export class RegisterAccessDataComponent implements OnInit {
         password: this.accessDataForm.controls.password.value,
       };
 
-      this.submitData.emit(this.accessData);
+      this.submitData.emit({ accessData: this.accessData, fromQuotation: this.fromQuotation });
     }
 
   }

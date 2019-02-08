@@ -17,18 +17,18 @@ export class RegisterBankDataComponent implements OnInit {
   public bankData: Bank;
   public segments: any;
 
-  constructor(private fb: FormBuilder, private register: RegisterService) { }
+  constructor(private formBuilder: FormBuilder, private register: RegisterService) { }
 
   ngOnInit() {
-    this.bankDataForm = this.fb.group({
-      bank_id:            ['', [Validators.required]],
-      bank_type:          ['', [Validators.required]],
-      bank_segment_id:    ['', [Validators.required]],
-      bank_agency:        ['', [Validators.required]],
-      bank_agency_digit:  ['', [Validators.required]],
-      bank_account:       ['', [Validators.required]],
-      bank_account_digit: ['', [Validators.required]],
-      bank_operation:     ['', [Validators.required]]
+    this.bankDataForm = this.formBuilder.group({
+      bank_id:            ['', []],
+      bank_type:          ['', []],
+      bank_segment_id:    ['', []],
+      bank_agency:        ['', []],
+      bank_agency_digit:  ['', []],
+      bank_account:       ['', []],
+      bank_account_digit: ['', []],
+      bank_operation:     ['', []]
     });
   }
 
