@@ -5,27 +5,36 @@
     </div>
     <div class="col-6">
       <label>Nome do Banco</label>
-      <select type="text" name="bank_id" formControlName="bank_id" class="form-control" placeholder="Nome do Banco"
+      <select type="text" name="bank_id" formControlName="bank_id" class="form-control"[ngClass]="{'input-invalid': submitted && f.bank_id.errors}" placeholder="Nome do Banco"
         (change)="getSegments()">
         <option value>Nome do Banco</option>
         <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
       </select>
+      <div *ngIf="submitted && f.bank_id.errors" class="form-validator-error">
+        <div *ngIf="f.bank_id.errors.required">O banco é obrigatório</div>
+      </div>
     </div>
     <div class="col-6">
       <label>Tipo de conta</label>
-      <select type="text" name="bank_type" formControlName="bank_type" class="form-control" placeholder="Tipo">
+      <select type="text" name="bank_type" formControlName="bank_type" class="form-control" [ngClass]="{'input-invalid': submitted && f.bank_type.errors}" placeholder="Tipo">
         <option value>Tipo</option>
         <option value="CC">Corrente</option>
         <option value="PP">Poupança</option>
       </select>
+      <div *ngIf="submitted && f.bank_type.errors" class="form-validator-error">
+        <div *ngIf="f.bank_type.errors.required">O tipo da conta é obrigatório</div>
+      </div>
     </div>
     <div class="col-4">
       <label>N° Agência</label>
-      <input type="text" name="bank_agency" formControlName="bank_agency" class="form-control" placeholder="Agência" mask="0*">
+      <input type="text" name="bank_agency" formControlName="bank_agency" class="form-control" [ngClass]="{'input-invalid': submitted && f.bank_agency.errors}" placeholder="Agência" mask="0*">
+      <div *ngIf="submitted && f.bank_agency.errors" class="form-validator-error">
+        <div *ngIf="f.bank_agency.errors.required">A agência é obrigatória</div>
+      </div>
     </div>
     <div class="col-2">
       <label>DV</label>
-      <input type="text" name="bank_agency_digit" formControlName="bank_agency_digit" maxlength="1" class="form-control" mask="A*">
+      <input type="text" name="bank_agency_digit" formControlName="bank_agency_digit" maxlength="1" class="form-control" [ngClass]="{'input-invalid': submitted && f.bank_agency_digit.errors}" mask="A*">
     </div>
     <div class="col-6">
       <label>Segmento</label>
@@ -36,15 +45,18 @@
     </div>
     <div class="col-4">
       <label>N° Conta</label>
-      <input type="text" name="bank_account" formControlName="bank_account" class="form-control" placeholder="Conta" mask="0*">
+      <input type="text" name="bank_account" formControlName="bank_account" class="form-control" [ngClass]="{'input-invalid': submitted && f.bank_account.errors}" placeholder="Conta" mask="0*">
+      <div *ngIf="submitted && f.bank_account.errors" class="form-validator-error">
+        <div *ngIf="f.bank_account.errors.required">A conta é obrigatória</div>
+      </div>
     </div>
     <div class="col-2">
       <label>DV</label>
-      <input type="text" name="bank_account_digit" formControlName="bank_account_digit" maxlength="1" class="form-control" mask="A*">
+      <input type="text" name="bank_account_digit" formControlName="bank_account_digit" maxlength="1" class="form-control" [ngClass]="{'input-invalid': submitted && f.bank_account_digit.errors}" mask="A*">
     </div>
     <div class="col-6">
       <label>Operação</label>
-      <input type="text" name="bank_account" formControlName="bank_operation" class="form-control" placeholder="Operação" mask="0*">
+      <input type="text" name="bank_operation" formControlName="bank_operation" class="form-control" placeholder="Operação" mask="0*">
     </div>
   </div>
   <div>

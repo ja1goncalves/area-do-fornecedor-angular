@@ -2,6 +2,7 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GENDERS, UFS, OCCUPATIONS } from 'src/app/config/consts';
 import { Address, Personal } from 'src/app/models/register-data';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-register-personal-data',
@@ -56,9 +57,10 @@ export class RegisterPersonalDataComponent implements OnInit {
 
   private getPersonalData(): any {
     const formControls = this.personalDataForm.controls;
+    const birthday = moment(this.personalDataForm.controls.personal_birthday.value, 'DD/MM/YYYY').format('YYYY-MM-DD');
 
     return {
-      birthday: formControls.personal_birthday.value,
+      birthday: birthday,
       gender: formControls.personal_gender.value,
       phone: formControls.personal_phone.value,
       cellphone: formControls.personal_cellphone.value,

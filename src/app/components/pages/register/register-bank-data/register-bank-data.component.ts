@@ -16,23 +16,28 @@ export class RegisterBankDataComponent implements OnInit {
 
   public bankData: Bank;
   public segments: any;
+  public submitted: boolean;
 
   constructor(private formBuilder: FormBuilder, private register: RegisterService) { }
 
   ngOnInit() {
     this.bankDataForm = this.formBuilder.group({
-      bank_id:            ['', []],
-      bank_type:          ['', []],
+      bank_id:            ['', [Validators.required]],
+      bank_type:          ['', [Validators.required]],
       bank_segment_id:    ['', []],
-      bank_agency:        ['', []],
-      bank_agency_digit:  ['', []],
-      bank_account:       ['', []],
-      bank_account_digit: ['', []],
+      bank_agency:        ['', [Validators.required]],
+      bank_agency_digit:  ['', [Validators.required]],
+      bank_account:       ['', [Validators.required]],
+      bank_account_digit: ['', [Validators.required]],
       bank_operation:     ['', []]
     });
   }
 
+  get f() { return this.bankDataForm.controls; }
+
   bankDataSubmit(): void {
+
+    this.submitted = true;
 
     if (this.bankDataForm.valid) {
 
@@ -48,7 +53,7 @@ export class RegisterBankDataComponent implements OnInit {
         account_digit: formControls.bank_account_digit.value,
         operation: formControls.bank_operation.value
       };
-
+      
       this.submitData.emit(this.bankData);
 
     }

@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { AccessData, Address, Personal, RequestData, FidelitiesData, Bank } from 'src/app/models/register-data';
 import * as _ from 'lodash';
 import { NotifyService } from 'src/app/services/notify/notify.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -36,7 +37,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private register: RegisterService,
     private login: AuthService,
-    private notify: NotifyService) {}
+    private notify: NotifyService,
+    private router: Router) {}
 
   public accessDataReceiver($event, stepper): void {
     this.accessData = $event.accessData;
@@ -55,13 +57,15 @@ export class RegisterComponent implements OnInit {
     const fidelities = [];
 
     this.programs.forEach((program, index) => {
-      fidelities.push(
-        {
-          program_id: program.id,
-          card_number: this.fidelitiesData[`card_number_${program.code}`],
-          access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : ''
-        }
-      );
+      if(this.fidelitiesData[`card_number_${program.code}`]) {
+        fidelities.push(
+          {
+            program_id: program.id,
+            card_number: this.fidelitiesData[`card_number_${program.code}`],
+            access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : ''
+          }
+        );
+      }
     });
 
     this.RequestData.fidelities = fidelities;
@@ -116,7 +120,10 @@ export class RegisterComponent implements OnInit {
 
   public updateRegister(): void {
     this.register.updateRegister(this.RequestData).subscribe(
-      (updatedData: any) => { },
+      (updatedData: any) => {
+        this.notify.show('success', 'Cadastro finalizado com sucesso');
+        this.router.navigate(['/minhas-cotacoes']);
+      },
       (err) => { }
     );
   }

@@ -14,7 +14,7 @@
         </div>
         <div class="col-4">
             <label>Data de Nascimento</label>
-            <input type="text" formControlName="personal_birthday" class="form-control" [ngClass]="{'input-invalid': submitted && f.personal_birthday.errors}" mask="00/00/0000">
+            <input type="text" formControlName="personal_birthday" class="form-control" [ngClass]="{'input-invalid': submitted && f.personal_birthday.errors}" [dropSpecialCharacters]="false" mask="00/00/0000">
             <div *ngIf="submitted && f.personal_birthday.errors" class="form-validator-error">
                 <div *ngIf="f.personal_birthday.errors.required">A data de nascimento é obrigatória</div>
                 <div *ngIf="f.personal_birthday.errors.minlength">Informe uma data válida</div>
@@ -31,11 +31,11 @@
         </div>
         <div class="col-6">
             <label>Telefone fixo</label>
-            <input type="text" formControlName="personal_phone" class="form-control" placeholder="Telefone Fixo" mask="(00) 0000-0000">
+            <input type="text" formControlName="personal_phone" class="form-control" placeholder="Telefone Fixo" [dropSpecialCharacters]="false" mask="(00) 0000-0000">
         </div>
         <div class="col-6">
             <label>Celular</label>
-            <input type="text" formControlName="personal_cellphone" class="form-control" [ngClass]="{'input-invalid': submitted && f.personal_cellphone.errors}" placeholder="Celular" mask="(00) 00000-0000">
+            <input type="text" formControlName="personal_cellphone" class="form-control" [ngClass]="{'input-invalid': submitted && f.personal_cellphone.errors}" placeholder="Celular" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
             <div *ngIf="submitted && f.personal_cellphone.errors" class="form-validator-error">
                 <div *ngIf="f.personal_cellphone.errors.required">O celular é obrigatório</div>
                 <div *ngIf="f.personal_cellphone.errors.minlength">Informe um número válido</div>
@@ -48,7 +48,7 @@
         </div>
         <div class="col-4">
             <label>CEP</label>
-            <input type="text" formControlName="residential_zip_code" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_zip_code.errors}" placeholder="CEP" mask="00000-000">
+            <input type="text" formControlName="residential_zip_code" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_zip_code.errors}" placeholder="CEP" [dropSpecialCharacters]="false" mask="00000-000">
             <div *ngIf="submitted && f.residential_zip_code.errors" class="form-validator-error">
                 <div *ngIf="f.residential_zip_code.errors.required">O nome é obrigatório</div>
                 <div *ngIf="f.residential_zip_code.errors.minlength">Informe um CEP válido</div>
@@ -116,7 +116,7 @@
         </div>
         <div class="col-6">
             <label>Telefone</label>
-            <input type="text" formControlName="personal_company_phone" class="form-control" placeholder="Telefone da Empresa" mask="(00) 00000-0000">
+            <input type="text" formControlName="personal_company_phone" class="form-control" placeholder="Telefone da Empresa" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
         </div>
     </div>
     <div>

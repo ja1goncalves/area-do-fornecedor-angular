@@ -18,7 +18,7 @@
     </div>
     <div class="col-6">
       <label>CPF</label><br>
-      <input type="text" class="form-control" [ngClass]="{'input-invalid': submitted && f.cpf.errors}" name="cpf" placeholder="CPF" formControlName="cpf" mask="000.000.000-00">
+      <input type="text" class="form-control" [ngClass]="{'input-invalid': submitted && f.cpf.errors}" name="cpf" placeholder="CPF" formControlName="cpf" [dropSpecialCharacters]="false" mask="000.000.000-00">
       <div *ngIf="submitted && f.cpf.errors" class="form-validator-error">
         <div *ngIf="f.cpf.errors.required">O CPF é obrigatório</div>
         <div *ngIf="f.cpf.errors.minlength">Informe um cpf válido</div>
