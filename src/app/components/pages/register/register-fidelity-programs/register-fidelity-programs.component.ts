@@ -15,7 +15,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges {
 
   public fidelitiesData: FidelitiesNumbers;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnChanges(change: SimpleChanges) {
 
@@ -30,7 +30,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges {
         }
       });
 
-      this.fidelityDataForm = this.fb.group(programFormGroup);
+      this.fidelityDataForm = this.formBuilder.group(programFormGroup);
 
     }
   }
