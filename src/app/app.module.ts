@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
+import { NgxMaskModule } from 'ngx-mask';
 
 // SIMPLE COMPONENTS
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -64,7 +65,8 @@ import { RegisterBankDataComponent } from './components/pages/register/register-
     MatStepperModule,
     MatInputModule,
     MatFormFieldModule,
-    MatButtonModule
+    MatButtonModule,
+    NgxMaskModule.forRoot()
   ],
   providers: [
     AuthGuardService,

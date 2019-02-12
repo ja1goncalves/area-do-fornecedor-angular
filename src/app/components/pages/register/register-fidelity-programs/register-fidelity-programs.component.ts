@@ -15,7 +15,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges {
 
   public fidelitiesData: FidelitiesNumbers;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnChanges(change: SimpleChanges) {
 
@@ -24,13 +24,13 @@ export class RegisterFidelityProgramsComponent implements OnChanges {
 
     if (allPrograms.length) {
       allPrograms.forEach((program, index) => {
-        programFormGroup[`card_number_${program.code}`] = ['', [Validators.required]];
+        programFormGroup[`card_number_${program.code}`] = ['', []];
         if (program.code === 'JJ') {
-          programFormGroup[`access_password_${program.code}`] = ['', [Validators.required]];
+          programFormGroup[`access_password_${program.code}`] = ['', []];
         }
       });
 
-      this.fidelityDataForm = this.fb.group(programFormGroup);
+      this.fidelityDataForm = this.formBuilder.group(programFormGroup);
 
     }
   }

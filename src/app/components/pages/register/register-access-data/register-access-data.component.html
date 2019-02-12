@@ -1,26 +1,45 @@
 <form [formGroup]="accessDataForm" (submit)="accessDataSubmit()">
-  <ng-template matStepLabel>Dados de Acesso</ng-template>
+  <h3>Dados de Acesso</h3>
   <div class="row">
     <div class="col-12">
       <label>Email:</label><br>
-      <input type="email" class="form-control" name="email" placeholder="Email" formControlName="email">
+      <input type="email" class="form-control" [ngClass]="{'input-invalid': submitted && f.email.errors}" name="email" placeholder="Email" formControlName="email">
+      <div *ngIf="submitted && f.email.errors" class="form-validator-error">
+        <div *ngIf="f.email.errors.required">O email é obrigatório</div>
+        <div *ngIf="f.email.errors.email">Informe um email válido</div>
+      </div>
     </div>
     <div class="col-6">
       <label>Nome</label><br>
-      <input type="text"  class="form-control" name="name" placeholder="Nome Completo*" formControlName="name">
+      <input type="text"  class="form-control" [ngClass]="{'input-invalid': submitted && f.name.errors}" name="name" placeholder="Nome Completo" formControlName="name">
+      <div *ngIf="submitted && f.name.errors" class="form-validator-error">
+        <div *ngIf="f.name.errors.required">O nome é obrigatório</div>
+      </div>
     </div>
     <div class="col-6">
       <label>CPF</label><br>
-      <input type="text" class="form-control" name="cpf" placeholder="CPF*" formControlName="cpf">
+      <input type="text" class="form-control" [ngClass]="{'input-invalid': submitted && f.cpf.errors}" name="cpf" placeholder="CPF" formControlName="cpf" [dropSpecialCharacters]="false" mask="000.000.000-00">
+      <div *ngIf="submitted && f.cpf.errors" class="form-validator-error">
+        <div *ngIf="f.cpf.errors.required">O CPF é obrigatório</div>
+        <div *ngIf="f.cpf.errors.minlength">Informe um cpf válido</div>
+      </div>
     </div>
     <div class="col-12">
       <p><strong>Para continuar, crie uma senha de acesso:</strong></p>
     </div>
     <div class="col-6">
-      <input type="password" class="form-control" name="password" placeholder="Senha (min. 8 digitos)" formControlName="password">
+      <input type="password" class="form-control" [ngClass]="{'input-invalid': submitted && f.password.errors}" name="password" placeholder="Senha (min. 8 digitos)" formControlName="password">
+      <div *ngIf="submitted && f.password.errors" class="form-validator-error">
+        <div *ngIf="f.password.errors.required">A senha é obrigatória</div>
+        <div *ngIf="f.password.errors.minlength">A senha deve ter, no mínimo, 8 caracteres</div>
+      </div>
     </div>
     <div class="col-6">
-      <input type="password" class="form-control" name="confirmPassword" placeholder="Confirmação Senha" formControlName="confirmPassword">
+      <input type="password" class="form-control" [ngClass]="{'input-invalid': submitted && f.confirmPassword.errors}" name="confirmPassword" placeholder="Confirmação Senha" formControlName="confirmPassword">
+      <div *ngIf="submitted && f.confirmPassword.errors" class="form-validator-error">
+        <div *ngIf="f.confirmPassword.errors.required">A confirmação de senha é obrigatória</div>
+        <div *ngIf="f.confirmPassword.errors.MatchPassword">As senhas devem ser iguais</div>
+      </div>
     </div>
   </div>
   <div>

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { RegisterService } from '../../../../services/register/register.service';
-import { AuthService } from '../../../../services/auth/auth.service';
+import { RegisterService } from 'src/app/services/register/register.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { AccessData, Address, Personal, RequestData, FidelitiesData, Bank } from 'src/app/models/register-data';
 import * as _ from 'lodash';
+import { NotifyService } from 'src/app/services/notify/notify.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,39 +13,6 @@ import * as _ from 'lodash';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-
-  // public requestData: any = {
-  //   personal: {
-  //     birthday: '',
-  //     gender: '',
-  //     phone: '',
-  //     cellphone: '',
-  //     occupation: '',
-  //     provider_occupation_id: 1,
-  //     company: '',
-  //     company_phone: ''
-  //   },
-  //   address: {
-  //     zip_code: '',
-  //     address: '',
-  //     number: '',
-  //     complement: '',
-  //     neighborhood: '',
-  //     city: '',
-  //     state: ''
-  //   },
-  //   fidelities: [],
-  //   bank: {
-  //     bank_id: '',
-  //     type: '',
-  //     segment_id: '',
-  //     agency: '',
-  //     agency_digit: '',
-  //     account: '',
-  //     account_digit: '',
-  //     operation: 123
-  //   }
-  // }
 
   public RequestData: RequestData = {} as RequestData;
 
@@ -67,11 +36,13 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private register: RegisterService,
-    private login: AuthService) {}
+    private login: AuthService,
+    private notify: NotifyService,
+    private router: Router) {}
 
   public accessDataReceiver($event, stepper): void {
-    this.accessData = $event;
-    this.createRegister(stepper);
+    this.accessData = $event.accessData;
+    this.createRegister(stepper, $event.fromQuotation);
   }
 
   public personalDataReceiver($event, stepper): void {
@@ -86,13 +57,15 @@ export class RegisterComponent implements OnInit {
     const fidelities = [];
 
     this.programs.forEach((program, index) => {
-      fidelities.push(
-        {
-          program_id: program.id,
-          card_number: this.fidelitiesData[`card_number_${program.code}`],
-          access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : ''
-        }
-      );
+      if(this.fidelitiesData[`card_number_${program.code}`]) {
+        fidelities.push(
+          {
+            program_id: program.id,
+            card_number: this.fidelitiesData[`card_number_${program.code}`],
+            access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : ''
+          }
+        );
+      }
     });
 
     this.RequestData.fidelities = fidelities;
@@ -105,9 +78,10 @@ export class RegisterComponent implements OnInit {
     this.updateRegister();
   }
 
-  public createRegister(stepper: any): void {
-    this.register.createRegister(this.accessData).subscribe(
+  public createRegister(stepper: any, fromQuotation:boolean): void {
+    this.register.createRegister(this.accessData, fromQuotation).subscribe(
       (createdUser: any) => {
+        this.notify.show('success', 'Por favor, verifique seu email');
         stepper.next();
      },
      (err) => { }
@@ -146,7 +120,10 @@ export class RegisterComponent implements OnInit {
 
   public updateRegister(): void {
     this.register.updateRegister(this.RequestData).subscribe(
-      (updatedData: any) => { },
+      (updatedData: any) => {
+        this.notify.show('success', 'Cadastro finalizado com sucesso');
+        this.router.navigate(['/minhas-cotacoes']);
+      },
       (err) => { }
     );
   }

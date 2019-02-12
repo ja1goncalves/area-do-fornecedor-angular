@@ -2,6 +2,7 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GENDERS, UFS, OCCUPATIONS } from 'src/app/config/consts';
 import { Address, Personal } from 'src/app/models/register-data';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-register-personal-data',
@@ -20,36 +21,46 @@ export class RegisterPersonalDataComponent implements OnInit {
   public genders: any[] = GENDERS;
   public ufs: any[] = UFS;
   public occupations: any[] = OCCUPATIONS;
+  public submitted: boolean;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) { }
 
+  ngOnInit() {
+
+    this.initFormControlls();
+
+  }
+
+  get f():any { return this.personalDataForm.controls; }
+  
   private initFormControlls(): void {
-    this.personalDataForm = this.fb.group({
+    this.personalDataForm = this.formBuilder.group({
       personal_name:            [{value: '', disabled: true}, [Validators.required]],
       personal_cpf:             [{value: '', disabled: true}, [Validators.required]],
-      personal_birthday:        ['', [Validators.required]],
+      personal_birthday:        ['', [Validators.required, Validators.minLength(8)]],
       personal_gender:          ['', [Validators.required]],
-      personal_phone:           ['', [Validators.required]],
-      personal_cellphone:       ['', [Validators.required]],
-      residential_zip_code:     ['', [Validators.required]],
+      personal_phone:           ['', []],
+      personal_cellphone:       ['', [Validators.required, Validators.minLength(11)]],
+      residential_zip_code:     ['', [Validators.required, Validators.minLength(8)]],
       residential_address:      ['', [Validators.required]],
       residential_number:       ['', [Validators.required]],
-      residential_complement:   ['', [Validators.required]],
+      residential_complement:   ['', []],
       residential_neighborhood: ['', [Validators.required]],
       residential_city:         ['', [Validators.required]],
       residential_state:        ['', [Validators.required]],
-      personal_occupation_id:   ['', [Validators.required]],
-      personal_occupation:      ['', [Validators.required]],
-      personal_company:         ['', [Validators.required]],
-      personal_company_phone:   ['', [Validators.required]]
+      personal_occupation_id:   ['', []],
+      personal_occupation:      ['', []],
+      personal_company:         ['', []],
+      personal_company_phone:   ['', []]
     });
   }
 
   private getPersonalData(): any {
     const formControls = this.personalDataForm.controls;
+    const birthday = moment(this.personalDataForm.controls.personal_birthday.value, 'DD/MM/YYYY').format('YYYY-MM-DD');
 
     return {
-      birthday: formControls.personal_birthday.value,
+      birthday: birthday,
       gender: formControls.personal_gender.value,
       phone: formControls.personal_phone.value,
       cellphone: formControls.personal_cellphone.value,
@@ -77,6 +88,7 @@ export class RegisterPersonalDataComponent implements OnInit {
   }
 
   public personalDataSubmit(): void {
+    this.submitted = true;
 
     if (this.personalDataForm.valid) {
 
@@ -89,11 +101,6 @@ export class RegisterPersonalDataComponent implements OnInit {
 
     }
   }
-
-  ngOnInit() {
-
-    this.initFormControlls();
-
-  }
+  
 
 }

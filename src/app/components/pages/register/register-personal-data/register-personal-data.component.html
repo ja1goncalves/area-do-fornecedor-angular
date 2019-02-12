@@ -10,23 +10,36 @@
         </div>
         <div class="col-4">
             <label>CPF</label><br>
-            <input type="text" formControlName='personal_cpf' class="form-control" [value]="userInfo.cpf">
+            <input type="text" formControlName='personal_cpf' class="form-control" [value]="userInfo.cpf" mask="000.000.000-00">
         </div>
         <div class="col-4">
             <label>Data de Nascimento</label>
-            <input type="date" formControlName="personal_birthday" class="form-control">
+            <input type="text" formControlName="personal_birthday" class="form-control" [ngClass]="{'input-invalid': submitted && f.personal_birthday.errors}" [dropSpecialCharacters]="false" mask="00/00/0000">
+            <div *ngIf="submitted && f.personal_birthday.errors" class="form-validator-error">
+                <div *ngIf="f.personal_birthday.errors.required">A data de nascimento é obrigatória</div>
+                <div *ngIf="f.personal_birthday.errors.minlength">Informe uma data válida</div>
+            </div>
         </div>
         <div class="col-4">
             <label>Sexo</label>
-            <select formControlName="personal_gender" class="form-control">
+            <select formControlName="personal_gender" class="form-control" [ngClass]="{'input-invalid': submitted && f.personal_gender.errors}">
                 <option *ngFor="let gender of genders" [value]="gender.value">{{gender.label}}</option>
             </select>
+            <div *ngIf="submitted && f.personal_gender.errors" class="form-validator-error">
+                <div *ngIf="f.personal_gender.errors.required">O sexo é obrigatório</div>
+            </div>
         </div>
         <div class="col-6">
-            <input type="text" formControlName="personal_phone" class="form-control" placeholder="Telefone Fixo">
+            <label>Telefone fixo</label>
+            <input type="text" formControlName="personal_phone" class="form-control" placeholder="Telefone Fixo" [dropSpecialCharacters]="false" mask="(00) 0000-0000">
         </div>
         <div class="col-6">
-            <input type="text" formControlName="personal_cellphone" class="form-control" placeholder="Celular">
+            <label>Celular</label>
+            <input type="text" formControlName="personal_cellphone" class="form-control" [ngClass]="{'input-invalid': submitted && f.personal_cellphone.errors}" placeholder="Celular" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
+            <div *ngIf="submitted && f.personal_cellphone.errors" class="form-validator-error">
+                <div *ngIf="f.personal_cellphone.errors.required">O celular é obrigatório</div>
+                <div *ngIf="f.personal_cellphone.errors.minlength">Informe um número válido</div>
+            </div>
         </div>
     </div>
     <div class="row residential-form">
@@ -35,15 +48,25 @@
         </div>
         <div class="col-4">
             <label>CEP</label>
-            <input type="text" formControlName="residential_zip_code" class="form-control" placeholder="CEP">
+            <input type="text" formControlName="residential_zip_code" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_zip_code.errors}" placeholder="CEP" [dropSpecialCharacters]="false" mask="00000-000">
+            <div *ngIf="submitted && f.residential_zip_code.errors" class="form-validator-error">
+                <div *ngIf="f.residential_zip_code.errors.required">O nome é obrigatório</div>
+                <div *ngIf="f.residential_zip_code.errors.minlength">Informe um CEP válido</div>
+            </div>
         </div>
         <div class="col-6">
             <label>Rua</label>
-            <input type="text" formControlName="residential_address" class="form-control" placeholder="Rua">
+            <input type="text" formControlName="residential_address" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_address.errors}" placeholder="Rua">
+            <div *ngIf="submitted && f.residential_address.errors" class="form-validator-error">
+                <div *ngIf="f.residential_address.errors.required">A rua é obrigatória</div>
+            </div>
         </div>
         <div class="col-2">
             <label>Número</label>
-            <input type="number" formControlName="residential_number" class="form-control" placeholder="N°" min="0">
+            <input type="text" formControlName="residential_number" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_number.errors}" placeholder="N°" min="0" mask="0*">
+            <div *ngIf="submitted && f.residential_number.errors" class="form-validator-error">
+                <div *ngIf="f.residential_number.errors.required">O número é obrigatório</div>
+            </div>
         </div>
         <div class="col-6">
             <label>Complemento</label>
@@ -51,17 +74,26 @@
         </div>
         <div class="col-6">
             <label>Bairro</label>
-            <input type="text" formControlName="residential_neighborhood" class="form-control" placeholder="Bairro">
+            <input type="text" formControlName="residential_neighborhood" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_neighborhood.errors}" placeholder="Bairro">
+            <div *ngIf="submitted && f.residential_neighborhood.errors" class="form-validator-error">
+                <div *ngIf="f.residential_neighborhood.errors.required">O bairro é obrigatório</div>
+            </div>
         </div>
         <div class="col-6">
             <label>Cidade</label>
-            <input type="text" formControlName="residential_city" class="form-control" placeholder="Cidade">
+            <input type="text" formControlName="residential_city" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_city.errors}" placeholder="Cidade">
+            <div *ngIf="submitted && f.residential_city.errors" class="form-validator-error">
+                <div *ngIf="f.residential_city.errors.required">A cidade é obrigatória</div>
+            </div>
         </div>
         <div class="col-6">
             <label>Estado</label>
-            <select formControlName="residential_state" class="form-control">
+            <select formControlName="residential_state" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_state.errors}">
                 <option *ngFor="let uf of ufs" [value]="uf.value">{{uf.label}}</option>
             </select>
+            <div *ngIf="submitted && f.residential_state.errors" class="form-validator-error">
+                <div *ngIf="f.residential_state.errors.required">O estado é obrigatório</div>
+            </div>
         </div>
     </div>
     <div class="row commercial-form">
@@ -84,7 +116,7 @@
         </div>
         <div class="col-6">
             <label>Telefone</label>
-            <input type="text" formControlName="personal_company_phone" class="form-control" placeholder="Telefone da Empresa">
+            <input type="text" formControlName="personal_company_phone" class="form-control" placeholder="Telefone da Empresa" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
         </div>
     </div>
     <div>
