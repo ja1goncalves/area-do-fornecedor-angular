@@ -135,4 +135,19 @@ export class RegisterService {
     
   }
 
+  /**
+   * @param id
+   * @returns {Observable<any>}
+   */
+  public getProgramInfo(id: number): Observable<any> {
+
+    return new Observable((observer) => {
+      this.http.get(`${environment.API_URL}/api/programs/${id}`).subscribe(
+        (response: any) => { observer.next(response); },
+        (error) => { observer.error(error); }
+      );
+    });
+
+  }
+
 }
