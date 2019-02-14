@@ -12,7 +12,7 @@ const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'esqueci-minha-senha', component: ResetPasswordComponent},
     {path: 'recuperar-senha/:token', component: ConfirmResetPasswordComponent},
-    {path: 'confirmar-cadastro/:code/:username', component: ConfirmRegisterComponent},
+    {path: 'confirmar-cadastro/:token', component: ConfirmRegisterComponent},
     {path: 'cadastro/:token', component: RegisterComponent, data: {fromQuotation: true}},
     {path: 'cadastro', component: RegisterComponent, data: {fromQuotation: false}},
 

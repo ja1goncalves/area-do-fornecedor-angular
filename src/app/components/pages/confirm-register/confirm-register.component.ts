@@ -9,27 +9,32 @@ import { RegisterService } from '../../../services/register/register.service';
 })
 export class ConfirmRegisterComponent implements OnInit {
 
-  code: string;
-  username: string;
+  public token: string;
+  public confirmed: boolean;
+  public loading = true;
   error: boolean;
-  loading: boolean;
 
-  constructor(private route: ActivatedRoute, private registerService: RegisterService) { }
+  constructor(private activatedRoute: ActivatedRoute, private registerService: RegisterService) { }
 
   ngOnInit() {
     
-    this.route.params.subscribe((res) => {
-      this.code = res.code;
-      this.username = res.username;
-    });
+    this.activatedRoute.params.subscribe(
+      (params) => { 
+        this.token = params.token;
+      },
+      (error) => { }
+    );
 
-    this.registerService.confirmRegister(this.code, this.username)
-    .subscribe((res) => {
-      console.log(res);
-    },
-    (err) => {
-      console.log();
-    });
+    this.registerService.confirmRegister(this.token).subscribe(
+      (response) => {
+        this.loading = false;
+        this.confirmed = true;
+      },
+      (error) => { 
+        this.error = true;
+        this.loading = false;
+      }
+    );
 
   }
 

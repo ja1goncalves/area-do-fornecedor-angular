@@ -76,8 +76,13 @@ export class ConfirmResetPasswordComponent implements OnInit {
 
       this.passwordService.confirmPassword(requestData).subscribe(
         (response) => {
-          this.notify.show('success', 'Sua senha foi alterada');
-          this.router.navigate(['/login']);
+          if(response.hasOwnProperty('errors')) {
+            this.notify.show('error', 'Verifique as informações e tente novamente');
+            this.loading = false;
+          } else {
+            this.notify.show('success', 'Sua senha foi alterada');
+            this.router.navigate(['/login']);
+          }
         }, (error) => {
           this.notify.show('error', 'tente novamente');
           this.loading = false;

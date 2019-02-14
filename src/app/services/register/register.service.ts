@@ -18,7 +18,7 @@ export class RegisterService {
   public checkToken(token: string): Observable<any> { 
 
     return new Observable((observer) => { 
-      this.http.post(`${environment.API_URL}/api/check-token`, { token }).subscribe(
+      this.http.post(`${environment.API_URL}/api/provider/check-token`, { token }).subscribe(
         (response: any) => { observer.next(response.data); },
         (error) => { observer.error(error.error); }
       );
@@ -34,10 +34,10 @@ export class RegisterService {
    */
   public createRegister(requestData: any, fromQuotation: boolean): Observable<any> {
 
-    const route = fromQuotation ? 'provider-register' : 'providerRegister';
+    const route = fromQuotation ? 'provider-Quotation' : 'provider-noQuotation';
 
     return new Observable((observer) => {
-      this.http.post(`${environment.API_URL}/api/${route}`, requestData).subscribe(
+      this.http.post(`${environment.API_URL}/api/provider/${route}`, requestData).subscribe(
         (response: any) => {  observer.next(response); },
         (error) => { observer.error(error.error); }
       );
@@ -51,10 +51,10 @@ export class RegisterService {
    * @param username 
    * @returns {Observable<any>}
    */
-  public confirmRegister(code: string, username: string): Observable<any> {
+  public confirmRegister(token: string): Observable<any> {
 
     return new Observable((observer) => {
-      this.http.post(`${environment.API_URL}/api/confirm-register`, { code, username }).subscribe(
+      this.http.get(`${environment.API_URL}/api/provider/activate/${token}`).subscribe(
         (response: any) => { observer.next(response); },
         (error) => { observer.error(error.error); }
       );
@@ -68,7 +68,7 @@ export class RegisterService {
   public getBanks(): Observable<any> {
 
     return new Observable((observer) => {
-      this.http.get(`${environment.API_URL}/api/banks`).subscribe(
+      this.http.get(`${environment.API_URL}/api/provider/banks`).subscribe(
         (response: any) => {  observer.next(response.data); },
         (error) => { observer.error(error.error); }
       );
@@ -83,7 +83,7 @@ export class RegisterService {
   public getSegments(bankId: number): Observable<any> {
 
     return new Observable((observer) => {
-      this.http.get(`${environment.API_URL}/api/segments/${bankId}`).subscribe(
+      this.http.get(`${environment.API_URL}/api/provider/segments/${bankId}`).subscribe(
         (reponse: any) => { observer.next(reponse); },
         (error) => { observer.error(error.error); }
       );
@@ -97,8 +97,23 @@ export class RegisterService {
   public getPrograms(): Observable<any> {
 
     return new Observable((observer) => {
-      this.http.get(`${environment.API_URL}/api/programs`).subscribe(
+      this.http.get(`${environment.API_URL}/api/provider/programs`).subscribe(
         (response: any) => { observer.next(response.data); },
+        (error) => { observer.error(error); }
+      );
+    });
+
+  }
+
+  /**
+   * @param id
+   * @returns {Observable<any>}
+   */
+  public getProgramInfo(id: number): Observable<any> {
+
+    return new Observable((observer) => {
+      this.http.get(`${environment.API_URL}/api/provider/programs/${id}`).subscribe(
+        (response: any) => { observer.next(response); },
         (error) => { observer.error(error); }
       );
     });
@@ -113,7 +128,7 @@ export class RegisterService {
   public updateRegister(requestData: any): Observable<any> {
 
     return new Observable((observer) => {
-      this.http.put(`${environment.API_URL}/api/provider-update`, requestData).subscribe(
+      this.http.put(`${environment.API_URL}/api/provider/update`, requestData).subscribe(
         (response) => { observer.next(response); },
         (error) => { observer.error(error.error); }
       );
@@ -127,27 +142,12 @@ export class RegisterService {
   public getProviderData(): Observable<any> {
 
     return new Observable((observer) => {
-      this.http.get(`${environment.API_URL}/api/provider`).subscribe(
+      this.http.get(`${environment.API_URL}/api/provider/data`).subscribe(
         (response: any) => { observer.next(response.data); },
         (error) => { observer.error(error.error); }
       );
     });
     
-  }
-
-  /**
-   * @param id
-   * @returns {Observable<any>}
-   */
-  public getProgramInfo(id: number): Observable<any> {
-
-    return new Observable((observer) => {
-      this.http.get(`${environment.API_URL}/api/programs/${id}`).subscribe(
-        (response: any) => { observer.next(response); },
-        (error) => { observer.error(error); }
-      );
-    });
-
   }
 
 }

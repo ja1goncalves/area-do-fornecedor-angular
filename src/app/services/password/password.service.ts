@@ -19,7 +19,7 @@ export class PasswordService {
   public resetPassword(email: string): Observable<any> {
     
     return new Observable((observer) => {
-      this.http.post(`${environment.API_URL}/api/password/email`, {email}).subscribe(
+      this.http.post(`${environment.API_URL}/api/provider/password/email`, {email}).subscribe(
         (response) => { observer.next(response); },
         (error) => { observer.next(error); }
       );
@@ -35,7 +35,7 @@ export class PasswordService {
   public confirmPassword(requestData: any): Observable<any> {
 
     return new Observable((observer) => {
-      this.http.post(`${environment.API_URL}/api/password/reset`, requestData).subscribe(
+      this.http.post(`${environment.API_URL}/api/provider/password/reset`, requestData).subscribe(
         (response) => { observer.next(response); }, 
         (error) => { observer.next(error); }
       );
@@ -51,7 +51,7 @@ export class PasswordService {
   public checkResetToken(token: string): Observable<any> {
     
     return new Observable((observer) => {
-      this.http.get(`${environment.API_URL}/api/password/find/${token}`).subscribe(
+      this.http.get(`${environment.API_URL}/api/provider/password/find/${token}`).subscribe(
         (response) => { observer.next(response); },
         (error) => { observer.next(error); }
       );
