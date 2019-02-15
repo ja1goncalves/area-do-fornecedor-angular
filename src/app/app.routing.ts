@@ -23,5 +23,5 @@ const routes: Routes = [
     {path: '**', component: LoginComponent},
 ];
 
-export const routing = RouterModule.forRoot(routes, {useHash: true});
+export const routing = RouterModule.forRoot(routes);
 
