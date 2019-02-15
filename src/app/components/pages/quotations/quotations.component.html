@@ -1,4 +1,4 @@
-<div class="container-fornecedor">
+<!-- <div class="container-fornecedor">
 
   <div *ngFor="let quotation of quotations; let i = index">
     <ul class="cotation-list-table">
@@ -34,25 +34,24 @@
                 <span class="title">
                   {{program.value}} mil
                 </span>
-              </div><!-- /.col-milhas -->
+              </div>
               <div class="col col-4 col-programa">
                 <span class="programa-fidelidade">
                   <span class="logo">
-                    <img [alt]="program.program_title" [src]="'assets/imgs/cias/'+program.program_code.toLowerCase()+'.png'" />
+                    <img [alt]="program.program_title"
+                      [src]="'assets/imgs/cias/'+program.program_code.toLowerCase()+'.png'" />
                     ({{program.program_title}})
                   </span>
                 </span>
-              </div><!-- /.col-programa -->
+              </div>
               <div class="col col-valores col-4 text-center">
                 <span class="valor">
                   {{program.price | currency:'R$'}}
                 </span>
               </div>
-            </div><!-- /.col-row -->
 
             <div class="col-row clearfix border-bottom" *ngIf="isVisibleForm(quotation.id)">
 
-              <!-- tam -->
               <div *ngIf="['JJ', 'TRB'].includes(program.program_code)">
                 <div class="col col-6">
                   <div class="form-group">
@@ -60,8 +59,8 @@
                       CPF
                     </label>
                     <div class="input text">
-                      <input type="text" class="form-control" [(ngModel)]="fidelities[quotation.id][program.program_id].number"
-                        maxlength="11">
+                      <input type="text" class="form-control"
+                        [(ngModel)]="fidelities[quotation.id][program.program_id].number" maxlength="11">
                     </div>
                   </div>
                 </div>
@@ -69,14 +68,12 @@
                   <div class="form-group">
                     <label for="tamSenha">Senha de Acesso Multiplus</label>
                     <div class="input text">
-                      <input type="text" class="form-control" [(ngModel)]="fidelities[quotation.id][program.program_id].access_password">
+                      <input type="text" class="form-control"
+                        [(ngModel)]="fidelities[quotation.id][program.program_id].access_password">
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- tam -->
-
-              <!-- gol -->
               <div *ngIf="['AD', 'AV', 'G3'].includes(program.program_code)">
                 <div class="col col-6">
                   <div class="form-group">
@@ -84,7 +81,8 @@
                       Nº do cartão {{program.program_title.toLowerCase()}}
                     </label>
                     <div class="input text">
-                      <input type="text" class="form-control" [(ngModel)]="fidelities[quotation.id][program.program_id].number">
+                      <input type="text" class="form-control"
+                        [(ngModel)]="fidelities[quotation.id][program.program_id].number">
                     </div>
                   </div>
                 </div>
@@ -92,12 +90,12 @@
                   <div class="form-group">
                     <label for="tamSenha">PrintScreen</label>
                     <div class="input text">
-                      <input type="file" class="form-control" (change)="uploadFile($event, quotation.id, program.program_id)">
+                      <input type="file" class="form-control"
+                        (change)="uploadFile($event, quotation.id, program.program_id)">
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- gol -->
 
 
             </div>
@@ -110,20 +108,100 @@
         </div>
 
         <div class="col col-2 clearfix" style="background: #0275d8; color: #fff">
-          <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isVisibleForm(quotation.id) && !quotation.first_order && i == 0">Vender</button>
-          <button class="button button-select" (click)="saveFidelities(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.first_order">Confirmar</button>
-          <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.first_order">Cancelar</button>
-          <span *ngIf="quotation.first_order"><strong>STATUS:</strong><br>{{quotation.first_order.status.toUpperCase()}}</span>
+          <button class="button button-select" (click)="sellQuotation(quotation.id)"
+            *ngIf="!isVisibleForm(quotation.id) && !quotation.first_order && i == 0">Vender</button>
+          <button class="button button-select" (click)="saveFidelities(quotation.id)"
+            *ngIf="isVisibleForm(quotation.id) && !quotation.first_order">Confirmar</button>
+          <button class="button button-select" (click)="unsellQuotation(quotation.id)"
+            *ngIf="isVisibleForm(quotation.id) && !quotation.first_order">Cancelar</button>
+          <span
+            *ngIf="quotation.first_order"><strong>STATUS:</strong><br>{{quotation.first_order.status.toUpperCase()}}</span>
         </div>
       </li>
     </ul>
   </div>
+</div> -->
+
+<div class="container">
+  <div *ngFor="let quotation of quotations; let i = index" class="quotation-item">
+    <div class="header">
+      <div class="title">milhas</div>
+      <div class="title">programa de fidelidade</div>
+      <div class="title">valor</div>
+    </div>
+    <div class="infos">
+      <div class="title"><small>cotação</small><br /><strong>{{quotation.id}}</strong></div>
+      <div class="title"><small>{{quotation.created_at | date: 'dd/MM/yyyy'}}</small></div>
+    </div>
+    <div class="center-content">
+      <div class="programs">
+        <div *ngFor="let program of quotation.programs" class="item">
+          <div class="info">
+            <div class="title">{{program.value}} mil</div>
+            <div class="title">
+              <img [alt]="program.program_title"
+                [src]="'assets/imgs/cias/'+program.program_code.toLowerCase()+'.png'" />
+              ({{program.program_title}})
+            </div>
+            <div class="title">{{program.price | currency:'R$ '}}</div>
+          </div>
+          <div class="form" *ngIf="isVisibleForm(quotation.id)">
+            <div  class="section">
+              <label>{{program.program_code === 'JJ' ? 'CPF' : 'Nº cartão de acesso '+program.program_title}}</label>
+              <input type="text" class="form-control" [(ngModel)]="fidelities[quotation.id][program.program_id].number" mask="{{program.program_code === 'JJ' ? '000.000.000-00' : '0*'}}" required>
+              <div style="max-width: 100%">
+                <label>Inicial</label>
+                <input type="file" class="form-control choose-file" 
+                  (change)="uploadFile($event, quotation.id, program.program_id)" required>
+                <label>Extrato</label>
+                <input type="file" class="form-control choose-file" 
+                  (change)="uploadFile($event, quotation.id, program.program_id)" required>
+              </div>
+            </div>
+            <div class="section">
+              <label>Senha de acesso {{program.program_title}}</label>
+              <input type="text" class="form-control" [(ngModel)]="fidelities[quotation.id][program.program_id].access_password" required>
+              <div style="max-width: 100%">
+                <label>Telefone</label>
+                <input type="file" class="form-control choose-file" 
+                  (change)="uploadFile($event, quotation.id, program.program_id)" required>
+                <label>Endereço</label>
+                <input type="file" class="form-control choose-file" 
+                  (change)="uploadFile($event, quotation.id, program.program_id)" required>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="total">
+        <div class="title">Valor Total: <strong>{{quotation.total |currency:'R$ '}}</strong></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-action" (click)="sellQuotation(quotation.id)"
+        *ngIf="!isVisibleForm(quotation.id) && !quotation.first_order && i == 0">
+        Vender
+      </button>
+      <button class="btn btn-action" (click)="saveFidelities(quotation.id)"
+        *ngIf="isVisibleForm(quotation.id) && !quotation.first_order">
+        Confirmar
+      </button>
+      <button class="btn btn-action" (click)="unsellQuotation(quotation.id)"
+        *ngIf="isVisibleForm(quotation.id) && !quotation.first_order">
+        Cancelar
+      </button>
+      <div class="title" *ngIf="quotation.first_order">
+        STATUS: <strong>{{quotation.first_order.status.toUpperCase()}}</strong>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-<section class="wrapper" >
+<section class="wrapper">
   <div class="container-fornecedor">
     <div style="width: 100%;text-align: center;padding: 20px;">
-      <h3 *ngIf="loading" > Carregando...</h3>
+      <h3 *ngIf="loading"> Carregando...</h3>
       <h3 *ngIf="!loading && quotations.length == 0">Nenhuma cotação recente</h3>
     </div>
   </div>

@@ -63,6 +63,8 @@ export class QuotationsComponent implements OnInit {
       orders_programs: this.fidelities[id].filter(f => f)
     };
 
+    console.log(data);
+
     this.quotationService.createOrder(data)
     .subscribe(res => {
       this.notify.show('success', 'Dados enviados com!');
@@ -73,6 +75,7 @@ export class QuotationsComponent implements OnInit {
   }
 
   public uploadFile(event, quotation_id, program_id) {
+    console.log(event)
     const reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
