@@ -40,7 +40,6 @@ export class QuotationsComponent implements OnInit {
         }
       }
     }, err => {
-      console.log(err);
       this.loading = false;
     });
   }

@@ -11,11 +11,11 @@ export class QuotationService {
   constructor(private http: HttpClient) { }
 
   public getQuotations(): Observable<any> {
-    return this.http.get(`${environment.API_URL}/api/provider-quotations`);
+    return this.http.get(`${environment.API_URL}/api/provider/quotations`);
   }
 
   public createOrder(data): Observable<any> {
-    return this.http.post(`${environment.API_URL}/api/orders`, data);
+    return this.http.post(`${environment.API_URL}/api/provider/orders`, data);
   }
 
 }

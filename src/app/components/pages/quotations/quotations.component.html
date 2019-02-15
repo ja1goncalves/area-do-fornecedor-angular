@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fornecedor">
 
   <div *ngFor="let quotation of quotations; let i = index">
     <ul class="cotation-list-table">
@@ -121,7 +121,7 @@
 </div>
 
 <section class="wrapper" >
-  <div class="container">
+  <div class="container-fornecedor">
     <div style="width: 100%;text-align: center;padding: 20px;">
       <h3 *ngIf="loading" > Carregando...</h3>
       <h3 *ngIf="!loading && quotations.length == 0">Nenhuma cotação recente</h3>

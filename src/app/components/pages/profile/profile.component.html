@@ -1,240 +1,259 @@
-<div id="containerFormularioCadastro">
-  <div class="row-fluid" id="formCadastroPt1">
-    <div class="row">
+<div class="container-fornecedor" *ngIf="updateForm">
+  <form [formGroup]="updateForm" (submit)="submitForm()">
+    <div class="row-fluid" id="formCadastroPt1">
+      <div class="row">
 
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h2 class="fieldset-title">Dados Pessoais</h2>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
+          <h2 class="fieldset-title">Dados Pessoais</h2>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="form-group">
+            <label>Nome</label>
+            <input type="tex" class="form-control" formControlName="name" placeholder="Nome">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label>CPF</label>
+            <input type="text" class="form-control" formControlName="cpf" placeholder="CPF">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label>Data de nascimento</label>
+            <input type="text" class="form-control" formControlName="birthday" placeholder="Data de Nascimento"
+              mask="00/00/0000" [dropSpecialCharacters]="false">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label>Sexo</label>
+            <select class="custom-select" formControlName="gender">
+              <option *ngFor="let gender of genders" [value]="gender.value">{{gender.label}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Telefone fixo</label>
+            <input type="text" class="form-control" placeholder="(XX) XXXX-XXXX" mask="(00) 0000-0000"
+              formControlName="phone">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Celular</label>
+            <input type="text" class="form-control" formControlName="cellphone" placeholder="(XX) XXXXX-XXXX"
+              mask="(00) 00000-0000">
+          </div>
+        </div>
+
       </div>
 
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <div class="form-group">
-          <label>Nome</label>
-          <input type="email" class="form-control" id="email" placeholder="Email">
+      <hr />
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
+          <h2 class="fieldset-title">Dados Residenciais</h2>
+        </div>
+
+        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+          <div class="form-group">
+            <label>CEP</label>
+            <input type="text" class="form-control" formControlName="zip_code" placeholder="CEP"
+              [dropSpecialCharacters]="false" mask="00000-000">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-9 col-md-7 col-lg-7">
+          <div class="form-group">
+            <label>Rua</label>
+            <input type="text" class="form-control" formControlName="address" placeholder="Rua">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+          <label>Número</label>
+          <input type="text" class="form-control" formControlName="number" placeholder="Número" mask="0*">
+        </div>
+
+        <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Complemento</label>
+            <input type="text" class="form-control" formControlName="complement" placeholder="Comp.">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Bairro</label>
+            <input type="text" class="form-control" formControlName="neighborhood" placeholder="Bairro">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Cidade</label>
+            <input type="text" class="form-control" formControlName="city" placeholder="Cidade">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Estado</label>
+            <select class="custom-select" formControlName="state">
+              <option *ngFor="let uf of ufs" [value]="uf.value">{{uf.label}}</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <hr />
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
+          <h2 class="fieldset-title with-icon icon-suitcase">Dados Comerciais</h2>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Cargo</label>
+            <select class="custom-select" formControlName="provider_occupation_id">
+              <option *ngFor="let occupation of occupations" [value]="occupation.value">{{occupation.label}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Profissão</label>
+            <input type="text" class="form-control" formControlName="occupation" placeholder="Profissão">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Empresa</label>
+            <input type="text" class="form-control" formControlName="company" placeholder="Nome da Empresa">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Telefone da empresa</label>
+            <input type="text" class="form-control" formControlName="company_phone" placeholder="Telefone da Empresa"
+              mask="(00) 00000-0000">
+          </div>
+        </div>
+
+      </div>
+
+      <hr />
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
+          <h2 class="fieldset-title with-icon icon-suitcase">Dados de Fidelidade</h2>
+        </div>
+
+        <div *ngFor="let program of programs" class="col-12">
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-6" *ngIf="f.card_number_JJ">
+              <label>Nº Fidelidade {{program.title}}</label>
+              <input type="text" formControlName="card_number_{{program.code}}" class="form-control">
+            </div>
+            <div *ngIf="f.card_number_JJ && program.code === 'JJ'" class="col-12 col-sm-6 col-md-6 col-lg-6">
+              <label>Senha Fidelidade {{program.title}}</label>
+              <input type="text" formControlName="access_password_{{program.code}}" class="form-control">
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-        <div class="form-group">
-          <label>CPF</label>
-          <input type="text" class="form-control" id="birthday" placeholder="CPF">
-        </div>
-      </div>
+      <hr />
 
-      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-        <div class="form-group">
-          <label>Data de nascimento</label>
-          <input type="text" class="form-control" id="birthday" placeholder="Data de Nascimento">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
+          <h2 class="fieldset-title with-icon icon-suitcase">Dados Bancários</h2>
         </div>
-      </div>
 
-      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-        <div class="form-group">
-          <label>Sexo</label>
-          <select class="custom-select">
-            <option value="I">Selecione</option>
-            <option value="M">Masculino</option>
-            <option value="F">Feminino</option>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Nome do banco</label>
+            <select type="text" name="bank_id" formControlName="bank_id" class="form-control"
+              [ngClass]="{'input-invalid': submitted && f.bank_id.errors}" placeholder="Nome do Banco"
+              (change)="getSegments()">
+              <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Tipo de Conta</label>
+            <select class="custom-select" formControlName="type">
+              <option value="CC">Corrente</option>
+              <option value="PP">Poupança</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-xs-9 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label>Agência</label>
+            <input type="text" class="form-control" placeholder="Agência" formControlName="agency">
+          </div>
+        </div>
+
+        <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2">
+          <div class="form-group">
+            <label>DV</label>
+            <input type="text" class="form-control" placeholder="DV" formControlName="agency_digit">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <label>Segmento</label>
+          <select class="custom-select" formControlName="segment_id">
+            <option *ngFor="let segment of segments" [value]="segment.id">{{segment.title}}</option>
           </select>
         </div>
-      </div>
-      
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>Telefone fixo</label>
-          <input type="text" class="form-control" id="landline_phone" placeholder="(XX) XXXX-XXXX">
+
+        <div class="col-xs-9 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label>Conta</label>
+            <input type="text" class="form-control" placeholder="Conta" formControlName="account">
+          </div>
         </div>
-      </div>
 
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>Celular</label>
-          <input type="text" class="form-control" id="mobile_phone" placeholder="(XX) XXXXX-XXXX">
+        <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2">
+          <div class="form-group">
+            <label>DV</label>
+            <input type="text" class="form-control" placeholder="DV" formControlName="account_digit">
+          </div>
         </div>
-      </div>
 
-    </div>
-
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h2 class="fieldset-title">Dados Residenciais</h2>
-      </div>
-
-      <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-        <div class="form-group">
-          <label>CEP</label>
-          <input type="text" class="form-control" id="zip_code" placeholder="CEP">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>Operação</label>
+            <input type="text" class="form-control" placeholder="Operação" formControlName="operation">
+          </div>
         </div>
-      </div>
 
-      <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-        <div class="form-group">
-          <label>Rua</label>
-          <input type="text" class="form-control" id="street" placeholder="Rua">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <small class="legend">* Seus dados serão encaminhados para análise</small>
         </div>
-      </div>
 
-      <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-        <label>Número</label>
-        <input type="text" class="form-control" id="street_number" placeholder="Número">  
-      </div>
-
-      <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-        <div class="form-group">
-          <label>Complemento</label>
-          <input type="text" class="form-control" id="complement" placeholder="Comp.">  
+        <div class="col-12 col-sm-12 col-md-2 col-lg-2">
+          <button class="btn btn-primary btn-block" type="submit">Atualizar</button>
         </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-        <div class="form-group">
-          <label>Bairro</label>
-          <input type="text" class="form-control" id="neighborhood" placeholder="Bairro">  
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-        <div class="form-group">
-          <label>Cidade</label>
-          <input type="text" class="form-control" id="city" placeholder="Cidade">    
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-        <div class="form-group">
-          <label>Estado</label>
-          <input type="text" class="form-control" id="state" placeholder="Estado">  
-        </div>
-      </div>
-
-    </div>
-
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h2 class="fieldset-title with-icon icon-suitcase">Dados Comerciais</h2>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>Cargo</label>
-          <select class="custom-select">
-            <option value="empregado">Empregado</option>
-            <option value="empresario">Empresário</option>
-            <option value="servidor_publico">Servidor Público</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>Profissão</label>
-          <input type="text" class="form-control" id="profession" placeholder="Profissão">  
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>Empresa</label>
-          <input type="text" class="form-control" id="company_name" placeholder="Nome da Empresa">             
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>Telefone da empresa</label>
-          <input type="text" class="form-control" id="company_phone" placeholder="Telefone da Empresa">
-        </div>
-      </div>
-
-    </div>
-
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h2 class="fieldset-title with-icon icon-suitcase">Dados de Fidelidade</h2>
-      </div>
-
-      <!-- <div class="form-row two-cols clearfix">
-        <?= $this->element('_fidelities', ['fidelities' => $provider->fidelities]) ?>
-      </div> -->
-    </div>
-
-    <hr/>
-
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h2 class="fieldset-title with-icon icon-suitcase">Dados Bancários</h2>
-      </div>
-
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>Nome do banco</label>
-          <select class="custom-select">
-            <option value="Indefinido">Nome do Banco</option>
-            <option value="banco_brasil">Banco do Brasil</option>
-            <option value="caixa_federal">Caixa Econômica Federal</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>Tipo de Conta</label>
-          <select class="custom-select">
-            <option value="tipo">Tipo</option>
-            <option value="corrente">Corrente</option>
-            <option value="poupanca">Poupança</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="col-xs-9 col-sm-4 col-md-4 col-lg-4">
-        <div class="form-group">
-          <label>Agência</label>
-          <input type="text" class="form-control" id="bank_agency" placeholder="Agência">
-        </div>
-      </div>
-
-      <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2">
-        <div class="form-group">
-          <label>DV</label>
-          <input type="text" class="form-control" id="dv_bank" placeholder="DV">
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <label>Segmento</label>
-        <select class="custom-select">
-          <option value="segment">Segmento</option>
-          <option value="estilo">Estilo</option>
-          <option value="prime">Prime</option>
-        </select>
-      </div>
-
-      <div class="col-xs-9 col-sm-4 col-md-4 col-lg-4">
-        <div class="form-group">
-          <label>Conta</label>
-          <input type="text" class="form-control" id="bank_account" placeholder="Conta">
-        </div>
-      </div>
-
-      <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2">
-        <div class="form-group">
-          <label>DV</label>
-          <input type="text" class="form-control" id="dv_account" placeholder="DV">
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>Operação</label>
-          <input type="text" class="form-control" id="dv" placeholder="Operação">
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <small class="legend">* Seus dados serão encaminhados para análise</small>
-        <br>
-        <button class="btn btn-primary" id="formCadastroBotao" type="submit">Atualizar</button>
       </div>
     </div>
-  </div>
+  </form>
 </div>

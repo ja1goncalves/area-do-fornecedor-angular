@@ -3,8 +3,22 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 .container-fornecedor {
-    max-width: 668px;
-    margin-bottom: 30px;
-    margin-left: auto;
+    max-width: 800px;
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-right: 15px;
+    padding-left: 15px;
     margin-right: auto;
+    margin-left: auto;
+}
+
+.fieldset-title {
+    color: #e3ad15;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background-color: #0275d8!important;
 }

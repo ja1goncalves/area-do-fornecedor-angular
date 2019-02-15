@@ -1,11 +1,3 @@
-#containerFornecedorLogin, #containerFormularioCadastro{
-  max-width: 668px;
-  margin-bottom: 30px;
-	margin-left: auto;
-  margin-right: auto;
+a {
+  color: #666666;
 }
-
-#containerFormularioCadastro.fidelidade{
-  width: inherit;
-}
-

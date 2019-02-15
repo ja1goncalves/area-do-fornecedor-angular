@@ -7,15 +7,17 @@ import { Observable } from 'rxjs';
 import {getObjectCookie, getCookie, eraseCookie} from '../../app.utils';
 import { environment } from '../../../environments/environment';
 import {NotifyService} from '../notify/notify.service';
+import { ShareDataService } from '../share/share-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  
   constructor(
     private router: Router,
-    private http: HttpClient ) { }
+    private http: HttpClient,
+    private share: ShareDataService ) { }
 
   /**
    *
@@ -74,6 +76,21 @@ export class AuthService {
 
   }
 
+  /**
+   *
+   * @returns {any}
+   */
+  public getUsername(): any {
+
+    const jsonData: any = getObjectCookie('user_data');
+
+    if (_.isEmpty(jsonData) && !_.isObject(jsonData)) {
+      return '';
+    }
+
+    return jsonData.name;
+
+  }
 
   /**
    *
@@ -81,7 +98,7 @@ export class AuthService {
    */
   public isLoggedIn(): boolean {
     
-    let result: boolean;
+    let result = false;
 
     try {
       moment.locale('pt-br');
@@ -108,6 +125,8 @@ export class AuthService {
 
   public logout(): void {
 
+    this.share.sendLoginState(false);
+
     eraseCookie('token');
     eraseCookie('user_data');
     this.router.navigate(['login']);
@@ -121,7 +140,7 @@ export class AuthService {
    */
   public getUserAuthenticated(): Observable<any> {
 
-    return this.http.get(`${environment.API_URL}/api/user-authenticated`);
+    return this.http.get(`${environment.API_URL}/api/provider/auth-authenticated`);
 
   }
 
@@ -144,12 +163,13 @@ export class AuthService {
 
     return new Observable((observer) => {
 
-      this.http.post(`${environment.API_URL}/api/authentication`, requestData).subscribe(
+      this.http.post(`${environment.API_URL}/api/provider/oauth/token`, requestData).subscribe(
         (tokenInfo) => {
           const token: string = JSON.stringify({ token: tokenInfo, timeLogin: new Date().getTime() });
           this.createTokenData(token);
           this.getUserAuthenticated().subscribe(
             (data) => {
+              this.share.sendLoginState(true);
               const user = JSON.stringify(data);
               this.createUserData(user);
               observer.next();

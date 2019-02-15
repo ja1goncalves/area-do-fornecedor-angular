@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fornecedor">
 
   <mat-horizontal-stepper linear=true #stepper>
 
@@ -9,9 +9,14 @@
 
     <mat-step>
       <ng-template matStepLabel> Confirmar Cadastro</ng-template>
-      <p>Verifique seu e-mail e confirme o cadastro.</p>
-      <div>
-        <button mat-raised-button color="primary" (click)="checkConfirm(stepper)">Próximo</button>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
+          <h3 class="fieldset-title">Confirmar conta</h3>
+          <p>Verifique seu e-mail e confirme sua conta.</p>
+        </div>
+        <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+          <button class="btn btn-primary btn-block" (click)="checkConfirm(stepper)">Continuar</button>
+        </div>
       </div>
     </mat-step>
 
