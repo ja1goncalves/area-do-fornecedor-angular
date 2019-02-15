@@ -2,7 +2,7 @@
   <nav class="navbar navbar-light bg-light justify-content-end align-items-center">
     <div class="header-item">
       <div class="icon phone">
-        <a  href="tel:8140429760">
+        <a href="tel:8140429760">
           <i class="fa fa-phone" aria-hidden="true"></i>
         </a>
       </div>
@@ -15,26 +15,28 @@
   </nav>
 </header>
 
-<nav class="navbar navbar-light nav-primary">
-    <div class="container">
-      <a [routerLink]="[auth.isLoggedIn() ? '': 'login']" class="navbar-brand" title="Página inicial Elomilhas">
-        <img src="assets/imgs/elomilhas-logo-small.png" />
-      </a>
-  
-      <button *ngIf=" width <= 991" (click)="toggleMenu($event)" class="btn-toggle"><i class="fa fa-bars" (focusout)="toggleMenu($event)"></i></button>
-  
-      <div *ngIf="width > 991" class="navbar-menu" id="menu-desktop">
-        <a href="https://elomilhas.com.br" target="_blank" title="Site Elomilhas">Site EloMilhas</a>
-        <a *ngIf="auth.isLoggedIn()" [routerLink]="['/minhas-cotacoes']" title="Minhas Cotações">Minhas Cotações</a>
-        <a *ngIf="auth.isLoggedIn()" [routerLink]="['/editar']" title="Meus Dados">Meus Dados</a>
-        <a href="https://elomilhas.com.br/faq/" target="_blank" title="Dúvidas">Dúvidas?</a>
-      </div>
-  
-      <div class="navbar-menu" [ngClass]="{'active': status.open}" id="menu-mobile" *ngIf=" width <= 991" (click)="toggleMenu($event)">
-        <a href="https://elomilhas.com.br" target="_blank" title="Site Elomilhas">Site EloMilhas</a>
-        <a *ngIf="auth.isLoggedIn()" [routerLink]="['/minhas-cotacoes']" title="Minhas Cotações">Minhas Cotações</a>
-        <a *ngIf="auth.isLoggedIn()" [routerLink]="['/editar']" title="Meus Dados">Meus Dados</a>
-        <a href="https://elomilhas.com.br/faq/" target="_blank" title="Dúvidas">Dúvidas?</a>
-      </div>
+<nav class="navbar navbar-light nav-primary p-0">
+  <div class="container">
+    <a [routerLink]="[auth.isLoggedIn() ? '': 'login']" class="navbar-brand" title="Página inicial Elomilhas">
+      <img src="assets/imgs/elomilhas-logo-small.png" />
+    </a>
+
+    <button *ngIf=" width <= 991" (click)="toggleMenu($event)" class="btn-toggle"><i class="fa fa-bars"
+        (focusout)="toggleMenu($event)"></i></button>
+
+    <div *ngIf="width > 991" class="navbar-menu" id="menu-desktop">
+      <a href="https://elomilhas.com.br" target="_blank" title="Site Elomilhas">Site EloMilhas</a>
+      <a *ngIf="auth.isLoggedIn()" [routerLink]="['/minhas-cotacoes']" title="Minhas Cotações">Minhas Cotações</a>
+      <a *ngIf="auth.isLoggedIn()" [routerLink]="['/editar']" title="Meus Dados">Meus Dados</a>
+      <a href="https://elomilhas.com.br/faq/" target="_blank" title="Dúvidas">Dúvidas?</a>
     </div>
-  </nav>
+
+    <div class="navbar-menu" [ngClass]="{'active': status.open}" id="menu-mobile" *ngIf=" width <= 991"
+      (click)="toggleMenu($event)">
+      <a href="https://elomilhas.com.br" target="_blank" title="Site Elomilhas">Site EloMilhas</a>
+      <a *ngIf="auth.isLoggedIn()" [routerLink]="['/minhas-cotacoes']" title="Minhas Cotações">Minhas Cotações</a>
+      <a *ngIf="auth.isLoggedIn()" [routerLink]="['/editar']" title="Meus Dados">Meus Dados</a>
+      <a href="https://elomilhas.com.br/faq/" target="_blank" title="Dúvidas">Dúvidas?</a>
+    </div>
+  </div>
+</nav>
