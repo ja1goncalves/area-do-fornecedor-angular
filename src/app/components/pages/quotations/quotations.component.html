@@ -149,26 +149,30 @@
             <div  class="section">
               <label>{{program.program_code === 'JJ' ? 'CPF' : 'Nº cartão de acesso '+program.program_title}}</label>
               <input type="text" class="form-control" [(ngModel)]="fidelities[quotation.id][program.program_id].number" mask="{{program.program_code === 'JJ' ? '000.000.000-00' : '0*'}}" required>
-              <div style="max-width: 100%">
-                <label>Inicial</label>
-                <input type="file" class="form-control choose-file" 
-                  (change)="uploadFile($event, quotation.id, program.program_id)" required>
-                <label>Extrato</label>
-                <input type="file" class="form-control choose-file" 
-                  (change)="uploadFile($event, quotation.id, program.program_id)" required>
-              </div>
             </div>
-            <div class="section">
+            <div  class="section">
               <label>Senha de acesso {{program.program_title}}</label>
               <input type="text" class="form-control" [(ngModel)]="fidelities[quotation.id][program.program_id].access_password" required>
-              <div style="max-width: 100%">
-                <label>Telefone</label>
-                <input type="file" class="form-control choose-file" 
+            </div>
+            <div  class="section">
+              <label class="choose-file" for="file_initial_{{program.program_code}}">Inicial</label>
+              <input hidden id="file_initial_{{program.program_code}}" type="file" class="form-control choose-file" 
                   (change)="uploadFile($event, quotation.id, program.program_id)" required>
-                <label>Endereço</label>
-                <input type="file" class="form-control choose-file" 
+            </div>
+            <div  class="section">  
+              <label class="choose-file" for="file_extract_{{program.program_code}}">Extrato</label>
+              <input hidden id="file_extract_{{program.program_code}}" type="file" class="form-control choose-file" 
                   (change)="uploadFile($event, quotation.id, program.program_id)" required>
-                </div>
+            </div>
+            <div  class="section">
+              <label class="choose-file" for="file_phone_{{program.program_code}}">Telefone</label>
+              <input hidden id="file_phone_{{program.program_code}}" type="file" class="form-control choose-file" 
+                (change)="uploadFile($event, quotation.id, program.program_id)" required>
+            </div>
+            <div  class="section">
+              <label class="choose-file" for="file_address_{{program.program_code}}">Endereço</label>
+              <input hidden id="file_address_{{program.program_code}}" type="file" class="form-control choose-file" 
+                (change)="uploadFile($event, quotation.id, program.program_id)" required>
             </div>
           </div>
         </div>

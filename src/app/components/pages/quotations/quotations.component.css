@@ -94,6 +94,9 @@
     flex-wrap: wrap;
     justify-content: space-around;
     margin: 20px 0;
+    -webkit-box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    -moz-box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 }
 .quotation-item .title {
     order: 1;
@@ -178,7 +181,7 @@
 .programs .form {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
     width: auto;
     width: 100%;
@@ -217,15 +220,17 @@
     min-height: 40px;
 }
 .choose-file {
-    max-width: 100%;
-    margin: 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    height: 40px;
-    vertical-align: middle;
+    margin: 13px 10px;
+    padding: 8px 20px;
+    border: 1px solid #0076d3;
+    background-color: #0076d3;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 50%;
     text-align: center;
 }
-
 @media (max-width: 767px) {
     .quotation-item .header {
         padding: 5px;
@@ -248,6 +253,9 @@
         flex-direction: column;
     }
     .form .section {
+        width: 100%;
+    }
+    .choose-file {
         width: 100%;
     }
 }

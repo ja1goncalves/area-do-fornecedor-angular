@@ -31,11 +31,12 @@ export class QuotationsComponent implements OnInit {
         this.fidelities[quotation.id] = [];
         for (const program of quotation.programs) {
           this.fidelities[quotation.id][program.program_id] = {
-            id: program.program_id,
+            program_id: program.program_id,
             number: ['JJ', 'TRB'].includes(program.program_code) ? this.authService.getDataUser().cpf : null,
+            access_password: null,
             price: program.price,
             value: program.value,
-            file: null
+            files: null
           };
         }
       }
@@ -60,11 +61,10 @@ export class QuotationsComponent implements OnInit {
 
     const data = {
       quotation_id: id,
-      orders_programs: this.fidelities[id].filter(f => f)
+      orders: this.fidelities[id].filter(f => f)
     };
 
-    console.log(data);
-
+    console.log(data)
     this.quotationService.createOrder(data)
     .subscribe(res => {
       this.notify.show('success', 'Dados enviados com!');
@@ -75,18 +75,24 @@ export class QuotationsComponent implements OnInit {
   }
 
   public uploadFile(event, quotation_id, program_id) {
-    console.log(event)
     const reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       reader.readAsDataURL(file);
 
       reader.onload = () => {
-        this.fidelities[quotation_id][program_id].file = {
-          filename: file.name,
-          filetype: file.type,
+        if(!this.fidelities[quotation_id][program_id].files) {
+          this.fidelities[quotation_id][program_id].files = [];
+        }
+        console.log(file)
+        console.log(reader)
+        
+        this.fidelities[quotation_id][program_id].files.push({
+          name: file.name,
+          type: file.type,
+          size: file.size,
           value: reader.result.split(',')[1]
-        };
+        });
       };
     }
   }
