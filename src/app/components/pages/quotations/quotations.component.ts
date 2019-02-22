@@ -64,7 +64,6 @@ export class QuotationsComponent implements OnInit {
       orders: this.fidelities[id].filter(f => f)
     };
 
-    console.log(data)
     this.quotationService.createOrder(data)
     .subscribe(res => {
       this.notify.show('success', 'Dados enviados com!');
@@ -84,8 +83,6 @@ export class QuotationsComponent implements OnInit {
         if(!this.fidelities[quotation_id][program_id].files) {
           this.fidelities[quotation_id][program_id].files = [];
         }
-        console.log(file)
-        console.log(reader)
         
         this.fidelities[quotation_id][program_id].files.push({
           name: file.name,

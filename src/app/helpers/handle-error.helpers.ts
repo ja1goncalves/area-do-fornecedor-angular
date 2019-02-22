@@ -68,7 +68,7 @@ export class HandlerErrorHelpers {
   private handle401(error: HttpErrorResponse) {
 
     if(error.error.message.includes('not activated')) {
-      this.notify.show('warning', 'Verifique se e-mail e confirme sua conta');
+      this.notify.show('warning', 'Verifique seu e-mail e confirme sua conta');
     } else if (this.auth.isLoggedIn()) {
       this.notify.show('error', 'Sessão expirada, realize o login novamente');
       this.auth.logout();

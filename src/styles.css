@@ -22,3 +22,7 @@
 .btn-primary {
     background-color: #0275d8!important;
 }
+
+app-register .mat-step-header {
+    pointer-events: none;
+}
