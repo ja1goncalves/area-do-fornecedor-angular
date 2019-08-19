@@ -34,10 +34,10 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.getUserData();
-    this.getProviderData();
-    this.initForm();
-    this.getBanks();
     this.getPrograms();
+    this.getBanks();
+    this.initForm();
+    this.getProviderData();
   }
 
   get f() { return this.updateForm.controls; }
@@ -137,17 +137,12 @@ export class ProfileComponent implements OnInit {
   public mountProgramsControls(): void {
     this.programs.forEach((program) => {
       this.updateForm.addControl(`card_number_${program['code']}`, new FormControl('', []));
-      if(program['code'] === 'JJ') {
-        this.updateForm.addControl(`access_password_${program['code']}`, new FormControl('', []));
-      }
+      this.updateForm.addControl(`access_password_${program['code']}`, new FormControl('', []));
 
       this.initialValues.fidelities.forEach(fidelity => {
         if(fidelity['program_id'] === program.id) {
           this.f[`card_number_${program['code']}`].setValue(fidelity['card_number']);
-
-          if(program['code'] === 'JJ') {
-            this.f[`access_password_${program['code']}`].setValue(fidelity['access_password']);
-          }  
+          this.f[`access_password_${program['code']}`].setValue(fidelity['access_password']);
         }
       });       
     });

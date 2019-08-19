@@ -8,3 +8,7 @@
 #containerFormularioCadastro.fidelidade{
   width: inherit;
 }
+
+.negrito{
+	font-weight: bold !important;
+}
