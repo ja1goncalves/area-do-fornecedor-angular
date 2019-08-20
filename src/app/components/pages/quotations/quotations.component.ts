@@ -61,7 +61,7 @@ export class QuotationsComponent implements OnInit {
       this.loading = false;
       for (const quotation of this.quotations) {
         this.fidelities[quotation.id] = [];
-        this.getProviderFidelities(quotation.programs)
+        this.getProviderFidelities(quotation.programs) //gambi why return subscribe don't wait the function over
             .then(() => {
               for (const program of quotation.programs) {
                 this.fidelities[quotation.id][program.program_id] = {
@@ -69,7 +69,7 @@ export class QuotationsComponent implements OnInit {
                   number: ['JJ', 'TRB'].includes(program.program_code) ? this.authService.getDataUser().cpf : this.detailsFidelities[(program.program_id - 1)].card_number,
                   price: program.price,
                   value: program.value,
-                  file: null
+                  files: []
                 };
               }
             });
@@ -111,7 +111,7 @@ export class QuotationsComponent implements OnInit {
       quotation_id: id,
       orders_programs: this.fidelities[id].filter(f => f)
     };
-
+    console.log(data);
     this.quotationService.createOrder(data)
     .subscribe(res => {
       this.notify.show('success', 'Dados enviados com!');
@@ -128,11 +128,11 @@ export class QuotationsComponent implements OnInit {
       reader.readAsDataURL(file);
 
       reader.onload = () => {
-        this.fidelities[quotation_id][program_id].file = {
+        this.fidelities[quotation_id][program_id].files.push({
           filename: file.name,
           filetype: file.type,
           value: reader.result.split(',')[1]
-        };
+        });
       };
     }
   }
