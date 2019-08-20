@@ -14,27 +14,27 @@ export class QuotationsComponent implements OnInit {
     {
       title: 'Latam',
       password_type: 'Multiplus',
-      fidelity: []
+      card_number: ''
     },
     {
       title: 'Gol',
       password_type: 'Smiles',
-      fidelity: []
+      card_number: ''
     },
     {
       title: 'Azul',
       password_type: 'Azul',
-      fidelity: []
+      card_number: ''
     },
     {
       title: 'Avianca',
       password_type: 'Avianca',
-      fidelity: []
+      card_number: ''
     },
     {
       title: 'LATAM Red e Black',
       password_type: 'LATAM Red e Black',
-      fidelity: []
+      card_number: ''
     },
     {
       title: 'Gol Diamante',
@@ -61,34 +61,35 @@ export class QuotationsComponent implements OnInit {
       this.loading = false;
       for (const quotation of this.quotations) {
         this.fidelities[quotation.id] = [];
-        for (const program of quotation.programs) {
-          this.getProviderFidelities(quotation.id, program);
-          this.fidelities[quotation.id][program.program_id] = {
-            id: program.program_id,
-            number: ['JJ', 'TRB'].includes(program.program_code) ? this.authService.getDataUser().cpf : this.detailsFidelities[program.id].card_number,
-            price: program.price,
-            value: program.value,
-            file: null
-          };
-        }
+        this.getProviderFidelities(quotation.programs)
+            .then(() => {
+              for (const program of quotation.programs) {
+                this.fidelities[quotation.id][program.program_id] = {
+                  id: program.program_id,
+                  number: ['JJ', 'TRB'].includes(program.program_code) ? this.authService.getDataUser().cpf : this.detailsFidelities[(program.program_id - 1)].card_number,
+                  price: program.price,
+                  value: program.value,
+                  file: null
+                };
+              }
+            });
       }
     }, err => {
       this.loading = false;
     });
   }
 
-  public getProviderFidelities(quotation_id, programs): void {
-    this.quotationService.getProviderFidelities(quotation_id).subscribe(
+  public getProviderFidelities(programs): any {
+    return this.quotationService.getProviderFidelities().toPromise().then(
       (fidelities) => {
-        fidelities.forEach((fidelity) => {
-          programs.forEach((program) => {
-            if(fidelity.program_id === program.id) {
-              this.detailsFidelities[program.id].card_number = fidelity.card_number;
-            } 
-          });  
+        programs.forEach((program) => {
+          fidelities.forEach((fidelity) => {
+              if(fidelity.program_id === program.program_id) {
+                this.detailsFidelities[(program.program_id - 1)].card_number = fidelity.card_number;
+              } 
+            });  
         });
-      },
-      (error) => { console.log(error); }
+      }
     );
   }
 
