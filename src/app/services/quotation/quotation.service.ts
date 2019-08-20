@@ -18,4 +18,8 @@ export class QuotationService {
     return this.http.post(`${environment.API_URL}/api/provider/orders`, data);
   }
 
+  public getProviderFidelities(quotation_id): Observable<any> {
+    return this.http.get(`${environment.API_URL}/api/provider/fidelities/${quotation_id}`);
+  }
+
 }

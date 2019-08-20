@@ -10,6 +10,38 @@ import { NotifyService } from '../../../services/notify/notify.service';
 })
 export class QuotationsComponent implements OnInit {
 
+  public detailsFidelities = [
+    {
+      title: 'Latam',
+      password_type: 'Multiplus',
+      fidelity: []
+    },
+    {
+      title: 'Gol',
+      password_type: 'Smiles',
+      fidelity: []
+    },
+    {
+      title: 'Azul',
+      password_type: 'Azul',
+      fidelity: []
+    },
+    {
+      title: 'Avianca',
+      password_type: 'Avianca',
+      fidelity: []
+    },
+    {
+      title: 'LATAM Red e Black',
+      password_type: 'LATAM Red e Black',
+      fidelity: []
+    },
+    {
+      title: 'Gol Diamante',
+      password_type: 'Smiles Diamante',
+      card_number: ''
+    }
+  ];
   quotations: Array<any> = [];
   visibleForms: Array<any> = [];
   fidelities: Array<any> = [];
@@ -30,9 +62,10 @@ export class QuotationsComponent implements OnInit {
       for (const quotation of this.quotations) {
         this.fidelities[quotation.id] = [];
         for (const program of quotation.programs) {
+          this.getProviderFidelities(quotation.id, program);
           this.fidelities[quotation.id][program.program_id] = {
             id: program.program_id,
-            number: ['JJ', 'TRB'].includes(program.program_code) ? this.authService.getDataUser().cpf : null,
+            number: ['JJ', 'TRB'].includes(program.program_code) ? this.authService.getDataUser().cpf : this.detailsFidelities[program.id].card_number,
             price: program.price,
             value: program.value,
             file: null
@@ -42,6 +75,21 @@ export class QuotationsComponent implements OnInit {
     }, err => {
       this.loading = false;
     });
+  }
+
+  public getProviderFidelities(quotation_id, programs): void {
+    this.quotationService.getProviderFidelities(quotation_id).subscribe(
+      (fidelities) => {
+        fidelities.forEach((fidelity) => {
+          programs.forEach((program) => {
+            if(fidelity.program_id === program.id) {
+              this.detailsFidelities[program.id].card_number = fidelity.card_number;
+            } 
+          });  
+        });
+      },
+      (error) => { console.log(error); }
+    );
   }
 
   public sellQuotation(id) {
