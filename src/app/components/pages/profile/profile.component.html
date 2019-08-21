@@ -166,13 +166,13 @@
           <div class="row m-l-xs m-r-xs">
             <div class="col-12 col-sm-6 col-md-6 col-lg-6" *ngIf="f.card_number_JJ">
               <div class="form-group">
-                <label>Nº Fidelidade {{program.title}}</label>
+                <label>Nº Fidelidade {{program.title.replace('TAM', 'LATAM')}}</label>
                 <input type="text" formControlName="card_number_{{program.code}}" class="form-control">
               </div>
             </div>
             <div *ngIf="f.card_number_JJ" class="col-12 col-sm-6 col-md-6 col-lg-6">
               <div class="form-group">
-                <label>Senha Fidelidade {{program.title}}</label>
+                <label>Senha Fidelidade {{program.title.replace('TAM', 'LATAM')}}</label>
                 <input type="password" formControlName="access_password_{{program.code}}" class="form-control">
               </div>
             </div>
