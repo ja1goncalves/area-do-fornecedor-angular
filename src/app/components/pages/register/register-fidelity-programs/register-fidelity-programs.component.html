@@ -6,12 +6,15 @@
   </div>
   <div *ngFor="let control of programs; let i = index" class="row">
     <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
-      <label>Nº Fidelidade &mdash; {{control.title}}</label>
+      <label>
+        <img [alt]="control.title" [src]="'assets/imgs/cias/'+control.code.toLowerCase()+'.png'" style="width: 23px"/>
+        Nº Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}
+      </label>
       <input type="text" formControlName="card_number_{{control.code}}" class="form-control" placeholder="N° Fidelidade">
     </div>
-    <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3" *ngIf="control.code == 'JJ'">
-      <label>Senha Fidelidade &mdash; {{control.title}}</label>
-      <input type="text" formControlName="access_password_{{control.code}}" class="form-control" placeholder="N° Fidelidade">
+    <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
+      <label>Senha Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}</label>
+      <input type="password" formControlName="access_password_{{control.code}}" class="form-control" placeholder="N° Fidelidade">
     </div>
   </div>
   <div class="row">
