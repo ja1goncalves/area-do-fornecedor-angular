@@ -69,7 +69,9 @@ export class ProfileComponent implements OnInit {
       occupation: ['', []],
       phone: ['', []],
       provider_occupation_id: ['', []],
-    })
+      address_id: ['', []],
+      banks_id: ['', []],
+    });
   }
 
   public fillForm(providerData) {
@@ -102,7 +104,7 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  public getUserData():void {
+  public getUserData(): void {
     this.auth.getUserAuthenticated().subscribe(
       (userData) => {
         this.userData['name'] = userData['name'];
@@ -119,6 +121,8 @@ export class ProfileComponent implements OnInit {
         this.mountProgramsControls();
         this.providerData = {...providerData.address, ...providerData.bank, ...providerData.personal, ...this.userData };
         this.providerData['birthday'] = moment(this.providerData['birthday']).format('DD/MM/YYYY');
+        this.providerData['address_id'] = providerData.address.id;
+        this.providerData['banks_id'] = providerData.bank.id;
         this.fillForm(this.providerData);
       },
       (error) => { console.log(error); }
@@ -154,6 +158,7 @@ export class ProfileComponent implements OnInit {
     const fidelities = [];
     
     requestData['address'] = {
+      id: controls.address_id.value,
       address: controls.address.value,
       city: controls.city.value,
       complement: controls.complement.value,
@@ -164,6 +169,7 @@ export class ProfileComponent implements OnInit {
     }
 
     requestData['bank'] = {
+      id: controls.banks_id.value,
       account: controls.account.value,
       account_digit: controls.account_digit.value,
       agency: controls.agency.value,
@@ -201,18 +207,18 @@ export class ProfileComponent implements OnInit {
           }
         });
 
-        if(program.code === 'JJ') {
+        // if(program.code === 'JJ') {
           fidelity['access_password'] = controls[`access_password_${program.code}`].value;
-        }
+        // }
 
         fidelities.push(fidelity);
       }
-    }); 
-    
+    });
+
     requestData['fidelities'] = fidelities;
-    
+
     return requestData;
-    
+
   }
 
   public submitForm():void {
@@ -220,8 +226,8 @@ export class ProfileComponent implements OnInit {
     this.mountRequestData();
 
     this.register.updateRegister(requestData).subscribe(
-      (response) => { 
-        this.notify.show('success', 'Seus dados foram encaminhados para análise'); 
+      (response) => {
+        this.notify.show('success', 'Seus dados foram encaminhados para análise');
       },
       (error) => { console.log(error); }
     );
