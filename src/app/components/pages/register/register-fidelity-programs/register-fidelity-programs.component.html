@@ -5,17 +5,25 @@
     </div>
   </div>
   <div *ngFor="let control of programs; let i = index" class="row">
-    <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
+    <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code != 'TRB' || control.code != 'G3D'">
       <label>
         <img [alt]="control.title" [src]="'assets/imgs/cias/'+control.code.toLowerCase()+'.png'" style="width: 23px"/>
         Nº Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}
       </label>
       <input type="text" formControlName="card_number_{{control.code}}" class="form-control" placeholder="N° Fidelidade">
     </div>
-    <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
+    <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3">
       <label>Senha Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}</label>
       <input type="password" formControlName="access_password_{{control.code}}" class="form-control" placeholder="N° Fidelidade">
     </div>
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'JJ'">
+          <label>Latam Red & Black</label>
+          <input type="checkbox" formControlName="type_{{control.code}}" class="form-control" style="width: 10%">
+      </div>
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'G3'">
+          <label>Gol Diamante</label>
+          <input type="checkbox" formControlName="type_{{control.code}}" class="form-control" style="width: 10%">
+      </div>
   </div>
   <div class="row">
     <div class="col-12 col-sm-12 col-md-3 col-lg-3">

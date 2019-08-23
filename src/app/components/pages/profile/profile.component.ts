@@ -121,8 +121,8 @@ export class ProfileComponent implements OnInit {
         this.mountProgramsControls();
         this.providerData = {...providerData.address, ...providerData.bank, ...providerData.personal, ...this.userData };
         this.providerData['birthday'] = moment(this.providerData['birthday']).format('DD/MM/YYYY');
-        this.providerData['address_id'] = providerData.address.id;
-        this.providerData['banks_id'] = providerData.bank.id;
+        this.providerData['address_id'] = providerData.address ? providerData.address.id : null;
+        this.providerData['banks_id'] = providerData.bank ? providerData.bank.id : null;
         this.fillForm(this.providerData);
       },
       (error) => { console.log(error); }

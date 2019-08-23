@@ -57,12 +57,13 @@ export class RegisterComponent implements OnInit {
     const fidelities = [];
 
     this.programs.forEach((program, index) => {
-      if(this.fidelitiesData[`card_number_${program.code}`]) {
+      if (this.fidelitiesData[`card_number_${program.code}`]) {
         fidelities.push(
           {
             program_id: program.id,
             card_number: this.fidelitiesData[`card_number_${program.code}`],
-            access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : ''
+            access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : '',
+            type: this.fidelitiesData[`type_${program.code}`] ? this.fidelitiesData[`type_${program.code}`] : ''
           }
         );
       }
