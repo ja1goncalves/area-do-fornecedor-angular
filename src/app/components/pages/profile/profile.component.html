@@ -167,7 +167,7 @@
             <div class="col-12 col-sm-6 col-md-6 col-lg-6" *ngIf="f.card_number_JJ">
               <div class="form-group">
                 <label>
-                  <img [alt]="program.title" [src]="'assets/imgs/cias/'+program.code.toLowerCase()+'.png'" style="width:23px;" />
+                  <img [alt]="program.title" [src]="'assets/imgs/cias/'+program.code.toLowerCase()+'.png'" style="width:23px;" mask="0*" />
                   Nº Fidelidade {{program.title.replace('TAM', 'LATAM')}}
                 </label>
                 <input type="text" formControlName="card_number_{{program.code}}" class="form-control">
