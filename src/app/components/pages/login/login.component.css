@@ -1,3 +1,9 @@
 a {
   color: #666666;
 }
+
+.form-validator-error {
+  color: #ff0000;
+  font-size: 12px;
+  padding: 5px;
+}

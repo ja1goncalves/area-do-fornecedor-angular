@@ -14,24 +14,29 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
   constructor(private authService: AuthService,  private fb: FormBuilder, private router: Router, private notify: NotifyService) { }
+  get f(): any { return this.loginForm.controls; }
+  public submitted: boolean;
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+      username: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
 
   login() {
-    const { username, password } = this.loginForm.value;
-    this.authService.loginUser(username, password).subscribe(
-      (response) => {
-        this.router.navigate(['']);
-      },
-      (error) => {
-        this.notify.show('warning', 'Verifique o login e senha');
-      }
-    );
+    this.submitted = true;
+    if (this.loginForm.valid) {
+      const {username, password} = this.loginForm.value;
+      this.authService.loginUser(username, password).subscribe(
+          (response) => {
+            this.router.navigate(['']);
+          },
+          (error) => {
+            this.notify.show('warning', 'Verifique o login e senha');
+          }
+      );
+    }
   }
 
 
