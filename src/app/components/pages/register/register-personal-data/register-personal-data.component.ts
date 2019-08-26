@@ -36,14 +36,14 @@ export class RegisterPersonalDataComponent implements OnInit {
   private initFormControlls(): void {
     this.personalDataForm = this.formBuilder.group({
       personal_name:            [{value: '', disabled: true}, [Validators.required]],
-      personal_cpf:             [{value: '', disabled: true}, [Validators.required]],
+      personal_cpf:             [{value: '', disabled: true}, [Validators.required, Validators.minLength(11)]],
       personal_birthday:        ['', [Validators.required, Validators.minLength(8)]],
       personal_gender:          ['', [Validators.required]],
       personal_phone:           ['', []],
       personal_cellphone:       ['', [Validators.required, Validators.minLength(11)]],
       residential_zip_code:     ['', [Validators.required, Validators.minLength(8)]],
       residential_address:      ['', [Validators.required]],
-      residential_number:       ['', [Validators.required]],
+      residential_number:       ['', [Validators.required, Validators.minLength(9)]],
       residential_complement:   ['', []],
       residential_neighborhood: ['', [Validators.required]],
       residential_city:         ['', [Validators.required]],

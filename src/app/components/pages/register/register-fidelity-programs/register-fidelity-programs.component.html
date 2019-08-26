@@ -10,7 +10,7 @@
         <img [alt]="control.title" [src]="'assets/imgs/cias/'+control.code.toLowerCase()+'.png'" style="width: 23px"/>
         Nº Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}
       </label>
-      <input type="text" formControlName="card_number_{{control.code}}" class="form-control" placeholder="N° Fidelidade">
+      <input type="text" mask="0*" min="0" [dropSpecialCharacters]="false" formControlName="card_number_{{control.code}}" class="form-control" placeholder="N° Fidelidade">
     </div>
     <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3">
       <label>Senha Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}</label>

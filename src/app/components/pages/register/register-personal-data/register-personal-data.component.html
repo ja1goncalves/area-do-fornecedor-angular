@@ -8,9 +8,9 @@
             <label>Nome</label><br>
             <input type="text" formControlName='personal_name' class="form-control" [value]="userInfo.name">
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-3">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-3">!
             <label>CPF</label><br>
-            <input type="text" formControlName='personal_cpf' class="form-control" [value]="userInfo.cpf" mask="000.000.000-00">
+            <input type="text" formControlName='personal_cpf' class="form-control" name="cpf" [value]="userInfo.cpf" [dropSpecialCharacters]="false" mask="000.000.000-00">
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-3">
             <label>Data de Nascimento</label>
@@ -44,7 +44,7 @@
     </div>
     <div class="row residential-form">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-            <h3>Dados Residenciais</h3>
+            <h3 class="fieldset-title">Dados Residenciais</h3>
         </div>
         <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3">
             <label>CEP</label>
