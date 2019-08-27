@@ -71,23 +71,20 @@ export class ProfileComponent implements OnInit {
       address_id: ['', []],
       banks_id: ['', []],
     });
-
-    console.log('initForm');
   }
 
   public fillForm(providerData) {
     Object.keys(providerData).forEach(data => {
-      if(this.updateForm.controls[data]) {
+      if (this.updateForm.controls[data]) {
         this.updateForm.controls[data].setValue(providerData[data]);
       }
     });
-  };
+  }
 
   public getBanks() {
     this.register.getBanks().subscribe(
       (banks) => {
         this.banks = banks;
-        console.log('getBanks');
         },
       (error) => { }
     );
@@ -106,7 +103,6 @@ export class ProfileComponent implements OnInit {
       (programs) => {
           this.programs = programs;
           this.getProviderData();
-          console.log('getPrograms');
         },
       (error) => { }
     );
@@ -117,7 +113,6 @@ export class ProfileComponent implements OnInit {
       (userData) => {
         this.userData['name'] = userData['name'];
         this.userData['cpf'] = userData['cpf'];
-        console.log('getUserData');
       },
       (error) => { }
     );
@@ -133,7 +128,6 @@ export class ProfileComponent implements OnInit {
         this.providerData['address_id'] = providerData.address ? providerData.address.id : null;
         this.providerData['banks_id'] = providerData.bank ? providerData.bank.id : null;
         this.fillForm(this.providerData);
-        console.log('getProviderData');
       },
       (error) => { console.log(error); }
     );
@@ -141,9 +135,7 @@ export class ProfileComponent implements OnInit {
 
   public getProgramInfo(id: number): void {
     this.register.getProgramInfo(id).subscribe(
-      (program) => {
-        
-      },
+      (program) => {},
       (error) => { console.log(error); }
     );
   }
@@ -166,7 +158,7 @@ export class ProfileComponent implements OnInit {
     const requestData = {}
     const controls = this.updateForm.controls;
     const fidelities = [];
-    
+
     requestData['address'] = {
       id: controls.address_id.value,
       address: controls.address.value,
@@ -176,7 +168,7 @@ export class ProfileComponent implements OnInit {
       number: controls.number.value,
       state: controls.state.value,
       zip_code: controls.zip_code.value
-    }
+    };
 
     requestData['bank'] = {
       id: controls.banks_id.value,
@@ -188,7 +180,7 @@ export class ProfileComponent implements OnInit {
       operation: controls.operation.value,
       segment_id: controls.segment_id.value,
       type: controls.type.value
-    }
+    };
 
     requestData['personal'] = {
       birthday: controls.birthday.value,
@@ -199,20 +191,20 @@ export class ProfileComponent implements OnInit {
       occupation: controls.occupation.value,
       phone: controls.phone.value,
       provider_occupation_id: controls.provider_occupation_id.value
-    }
+    };
 
     requestData['personal']['birthday'] = moment(requestData['personal']['birthday'], 'DD/MM/YYYY').format('YYYY-MM-DD');
 
 
     this.programs.forEach((program, index) => {
-      if(controls[`card_number_${program.code}`].value) {
+      if (controls[`card_number_${program.code}`].value) {
         let fidelity = {};
         fidelity['card_number'] = controls[`card_number_${program.code}`].value;
         fidelity['access_password'] = null;
         fidelity['program_id'] = program.id;
 
         this.initialValues.fidelities.forEach((initial_fidelity) => {
-          if(initial_fidelity['program_id'] === program.id) {
+          if (initial_fidelity['program_id'] === program.id) {
             fidelity['id'] = initial_fidelity.id;
           }
         });
