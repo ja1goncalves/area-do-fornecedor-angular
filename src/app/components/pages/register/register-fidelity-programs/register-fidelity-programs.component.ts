@@ -24,8 +24,8 @@ export class RegisterFidelityProgramsComponent implements OnChanges {
 
     if (allPrograms.length) {
       allPrograms.forEach((program, index) => {
-        programFormGroup[`card_number_${program.code}`] = ['', [Validators.minLength(20)]];
-        programFormGroup[`access_password_${program.code}`] = ['', [Validators.minLength(20)]];
+        programFormGroup[`card_number_${program.code}`] = ['', [Validators.maxLength(20)]];
+        programFormGroup[`access_password_${program.code}`] = ['', [Validators.maxLength(20)]];
         if (program.code === 'JJ' || program.code === 'G3') {
           programFormGroup[`type_${program.code}`] = ['', []];
         }
