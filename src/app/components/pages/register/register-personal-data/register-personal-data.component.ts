@@ -26,14 +26,12 @@ export class RegisterPersonalDataComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-
-    this.initFormControlls();
-
+    this.initFormControls();
   }
 
-  get f():any { return this.personalDataForm.controls; }
-  
-  private initFormControlls(): void {
+  get f(): any { return this.personalDataForm.controls; }
+
+  private initFormControls(): void {
     this.personalDataForm = this.formBuilder.group({
       personal_name:            [{value: '', disabled: true}, [Validators.required]],
       personal_cpf:             [{value: '', disabled: true}, [Validators.required, Validators.minLength(11)]],
@@ -101,6 +99,5 @@ export class RegisterPersonalDataComponent implements OnInit {
 
     }
   }
-  
 
 }

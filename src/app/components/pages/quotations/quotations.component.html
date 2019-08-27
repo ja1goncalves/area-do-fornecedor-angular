@@ -57,7 +57,7 @@
                   <label *ngIf="['JJ', 'TRB'].includes(program.program_code)" for="tamCartao">
                     CPF
                   </label>
-                  <label *ngIf="['AD', 'AV', 'G3'].includes(program.program_code)" for="tamCartao">
+                  <label *ngIf="['AD', 'AV', 'G3', 'G3D'].includes(program.program_code)" for="tamCartao">
                     Nº do cartão {{detailsFidelities[program.program_id-1].title}}
                   </label>
                   <div class="input text">
