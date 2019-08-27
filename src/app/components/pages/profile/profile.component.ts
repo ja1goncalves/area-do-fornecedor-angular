@@ -32,12 +32,12 @@ export class ProfileComponent implements OnInit {
     private auth: AuthService,
     private notify: NotifyService) { }
 
-  ngOnInit() {
-    this.getUserData();
-    this.getPrograms();
-    this.getBanks();
-    this.initForm();
-    this.getProviderData();
+  async ngOnInit() {
+    await this.getUserData();
+    await this.getPrograms();
+    await this.getBanks();
+    await this.getProviderData();
+    await this.initForm();
   }
 
   get f() { return this.updateForm.controls; }
@@ -72,6 +72,8 @@ export class ProfileComponent implements OnInit {
       address_id: ['', []],
       banks_id: ['', []],
     });
+
+    console.log('initForm');
   }
 
   public fillForm(providerData) {
@@ -84,7 +86,10 @@ export class ProfileComponent implements OnInit {
 
   public getBanks() {
     this.register.getBanks().subscribe(
-      (banks) => { this.banks = banks; },
+      (banks) => {
+        this.banks = banks;
+        console.log('getBanks');
+        },
       (error) => { }
     );
   }
@@ -99,7 +104,10 @@ export class ProfileComponent implements OnInit {
 
   public getPrograms() {
     this.register.getPrograms().subscribe(
-      (programs) => { this.programs = programs; },
+      (programs) => {
+          this.programs = programs;
+          console.log('getPrograms');
+        },
       (error) => { }
     );
   }
@@ -109,6 +117,7 @@ export class ProfileComponent implements OnInit {
       (userData) => {
         this.userData['name'] = userData['name'];
         this.userData['cpf'] = userData['cpf'];
+        console.log('getUserData');
       },
       (error) => { }
     );
@@ -124,6 +133,7 @@ export class ProfileComponent implements OnInit {
         this.providerData['address_id'] = providerData.address ? providerData.address.id : null;
         this.providerData['banks_id'] = providerData.bank ? providerData.bank.id : null;
         this.fillForm(this.providerData);
+        console.log('getProviderData');
       },
       (error) => { console.log(error); }
     );
