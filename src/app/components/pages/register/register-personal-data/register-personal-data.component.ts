@@ -43,7 +43,7 @@ export class RegisterPersonalDataComponent implements OnInit {
       personal_cellphone:       ['', [Validators.required, Validators.minLength(11)]],
       residential_zip_code:     ['', [Validators.required, Validators.minLength(8)]],
       residential_address:      ['', [Validators.required]],
-      residential_number:       ['', [Validators.required, Validators.minLength(9)]],
+      residential_number:       ['', [Validators.required, Validators.maxLength(9)]],
       residential_complement:   ['', []],
       residential_neighborhood: ['', [Validators.required]],
       residential_city:         ['', [Validators.required]],
