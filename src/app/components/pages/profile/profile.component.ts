@@ -36,7 +36,6 @@ export class ProfileComponent implements OnInit {
     await this.getUserData();
     await this.getPrograms();
     await this.getBanks();
-    await this.getProviderData();
     await this.initForm();
   }
 
@@ -106,6 +105,7 @@ export class ProfileComponent implements OnInit {
     this.register.getPrograms().subscribe(
       (programs) => {
           this.programs = programs;
+          this.getProviderData();
           console.log('getPrograms');
         },
       (error) => { }
@@ -154,11 +154,11 @@ export class ProfileComponent implements OnInit {
       this.updateForm.addControl(`access_password_${program['code']}`, new FormControl('', []));
 
       this.initialValues.fidelities.forEach(fidelity => {
-        if(fidelity['program_id'] === program.id) {
+        if (fidelity['program_id'] === program.id) {
           this.f[`card_number_${program['code']}`].setValue(fidelity['card_number']);
           this.f[`access_password_${program['code']}`].setValue(fidelity['access_password']);
         }
-      });       
+      });
     });
   }
 
