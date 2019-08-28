@@ -114,7 +114,7 @@ export class QuotationsComponent implements OnInit {
     console.log(data);
     this.quotationService.createOrder(data)
     .subscribe(res => {
-      this.notify.show('success', 'Dados enviados com!');
+      this.notify.show('success', 'Dados enviados com sucesso!');
       this.getQuotations();
     }, err => {
       this.notify.show('error', 'Ocorreu um erro ao tentar enviar seus dados!');

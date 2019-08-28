@@ -77,6 +77,9 @@ export class ProfileComponent implements OnInit {
     Object.keys(providerData).forEach(data => {
       if (this.updateForm.controls[data]) {
         this.updateForm.controls[data].setValue(providerData[data]);
+        if (!this.updateForm.controls[data].value) {
+          this.updateForm.controls[data].enable();
+        }
       }
     });
   }
@@ -155,7 +158,7 @@ export class ProfileComponent implements OnInit {
   }
 
   public mountRequestData(): any {
-    const requestData = {}
+    const requestData = {};
     const controls = this.updateForm.controls;
     const fidelities = [];
 
@@ -223,7 +226,7 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  public submitForm():void {
+  public submitForm(): void {
     const requestData = this.mountRequestData();
     this.mountRequestData();
 
@@ -231,7 +234,10 @@ export class ProfileComponent implements OnInit {
       (response) => {
         this.notify.show('success', 'Seus dados foram encaminhados para análise');
       },
-      (error) => { console.log(error); }
+      (error) => {
+        console.log(error);
+        this.notify.show('error', error.message);
+      }
     );
   }
 
