@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { RegisterService } from 'src/app/services/register/register.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AccessData, Address, Personal, RequestData, FidelitiesData, Bank } from 'src/app/models/register-data';
-import * as _ from 'lodash';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 import { Router } from '@angular/router';
 
@@ -22,6 +21,12 @@ export class RegisterComponent implements OnInit {
   public fidelitiesForm: FormGroup;
   public personalDataForm: FormGroup;
 
+  ngOnInit() {
+    this.accessDataForm = this._formBuilder.group({
+      hiddenCtrl: ['', Validators.required]
+    });
+  }
+
   // Data
   public accessData: AccessData;
   public addressPersonalData: {personalData: Personal, addressData: Address};
@@ -38,7 +43,8 @@ export class RegisterComponent implements OnInit {
     private register: RegisterService,
     private login: AuthService,
     private notify: NotifyService,
-    private router: Router) {}
+    private router: Router,
+    private _formBuilder: FormBuilder) {}
 
   public accessDataReceiver($event, stepper): void {
     this.accessData = $event.accessData;
@@ -83,6 +89,7 @@ export class RegisterComponent implements OnInit {
     this.register.createRegister(this.accessData, fromQuotation).subscribe(
       (createdUser: any) => {
         this.notify.show('success', 'Por favor, verifique seu email');
+        this.accessDataForm.controls['hiddenCtrl'].setValue('Check');
         stepper.next();
      },
      (err) => { }
@@ -146,7 +153,5 @@ export class RegisterComponent implements OnInit {
       (err) => { }
     );
   }
-
-  ngOnInit() { }
 
 }

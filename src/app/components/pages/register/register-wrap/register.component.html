@@ -2,12 +2,21 @@
 
   <mat-horizontal-stepper linear=true #stepper>
 
-    <mat-step [stepControl]="accessDataForm">
+    <mat-step [stepControl]="accessDataForm" [editable]="false">
       <ng-template matStepLabel> Dados de Acesso</ng-template>
       <app-register-access-data [accessDataForm]="accessDataForm" (submitData)="accessDataReceiver($event, stepper)"></app-register-access-data>
+      <form [formGroup]="accessDataForm" hidden>
+        <ng-template matStepLabel>Fill out your name</ng-template>
+        <mat-form-field>
+          <input matInput formControlName="hiddenCtrl" required>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
     </mat-step>
 
-    <mat-step>
+    <mat-step [editable]="false">
       <ng-template matStepLabel> Confirmar Cadastro</ng-template>
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
@@ -20,7 +29,7 @@
       </div>
     </mat-step>
 
-    <mat-step [stepControl]="personalForm">
+    <mat-step [stepControl]="personalDataForm">
       <ng-template matStepLabel> Dados Pessoais</ng-template>
       <app-register-personal-data [personalDataForm]="personalDataForm" (submitData)="personalDataReceiver($event, stepper)"
         [userInfo]="userInfo"></app-register-personal-data>
@@ -34,7 +43,7 @@
     </mat-step>
 
 
-    <mat-step [stepControl]="bankForm">
+    <mat-step [stepControl]="bankDataForm">
       <ng-template matStepLabel>Dados Bancários</ng-template>
       <app-register-bank-data [bankDataForm]="bankDataForm" (submitData)="bankDataReceiver($event)" [banks]="banks"></app-register-bank-data>
     </mat-step>
