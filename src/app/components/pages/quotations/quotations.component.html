@@ -10,7 +10,7 @@
             <div class="col col-4"> Programa de Fidelidade</div>
             <div class="col col-4 text-center">Valor</div>
           </div>
-          <div class="col col-2"></div>
+          <div *ngIf="quotation.status_orders" class="col col-2 text-center">Status</div>
         </div>
       </li>
 
@@ -118,10 +118,14 @@
         </div>
 
         <div class="col col-2 clearfix" style="background: #0275d8; color: #fff">
-          <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isVisibleForm(quotation.id) && !quotation.first_order && i == 0">Vender</button>
-          <button class="button button-select" (click)="saveFidelities(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.first_order">Confirmar</button>
-          <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.first_order">Cancelar</button>
-          <span *ngIf="quotation.first_order"><strong>STATUS:</strong><br>{{quotation.first_order.status.toUpperCase()}}</span>
+          <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isVisibleForm(quotation.id) && !quotation.status_orders && i == 0">Vender</button>
+          <button class="button button-select" (click)="saveFidelities(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.status_orders">Confirmar</button>
+          <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.status_orders">Cancelar</button>
+          <span *ngIf="quotation.status_orders" >
+            <p *ngFor="let status of quotation.status_orders;" style="margin-bottom: 0rem">
+               <img [alt]="status.program" [src]="'assets/imgs/cias/'+status.program.toLowerCase()+'.png'" style="width: 30%"/>: {{status.status.toUpperCase()}}
+            </p>
+          </span>
         </div>
       </li>
     </ul>

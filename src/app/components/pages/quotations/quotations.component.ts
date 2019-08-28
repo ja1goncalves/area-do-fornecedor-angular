@@ -116,6 +116,7 @@ export class QuotationsComponent implements OnInit {
     .subscribe(res => {
       this.notify.show('success', 'Dados enviados com sucesso!');
       this.getQuotations();
+      this.unsellQuotation(id);
     }, err => {
       this.notify.show('error', 'Ocorreu um erro ao tentar enviar seus dados!');
     });
