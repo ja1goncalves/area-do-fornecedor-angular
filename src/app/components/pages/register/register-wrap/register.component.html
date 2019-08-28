@@ -6,18 +6,19 @@
       <ng-template matStepLabel> Dados de Acesso</ng-template>
       <app-register-access-data [accessDataForm]="accessDataForm" (submitData)="accessDataReceiver($event, stepper)"></app-register-access-data>
       <form [formGroup]="accessDataForm" hidden>
-        <ng-template matStepLabel>Fill out your name</ng-template>
         <mat-form-field>
           <input matInput formControlName="hiddenCtrl" required>
         </mat-form-field>
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
       </form>
     </mat-step>
 
-    <mat-step [editable]="false">
+    <mat-step [stepControl]="confirmForm" [editable]="false">
       <ng-template matStepLabel> Confirmar Cadastro</ng-template>
+      <form [formGroup]="confirmForm" hidden>
+        <mat-form-field>
+          <input matInput formControlName="confirmCtrl" required>
+        </mat-form-field>
+      </form>
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
           <h3 class="fieldset-title">Confirmar conta</h3>

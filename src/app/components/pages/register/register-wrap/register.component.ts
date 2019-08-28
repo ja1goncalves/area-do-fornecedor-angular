@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
 
   // Form
   public accessDataForm: FormGroup;
+  public confirmForm: FormGroup;
   public bankDataForm: FormGroup;
   public fidelitiesForm: FormGroup;
   public personalDataForm: FormGroup;
@@ -24,6 +25,10 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.accessDataForm = this._formBuilder.group({
       hiddenCtrl: ['', Validators.required]
+    });
+
+    this.confirmForm = this._formBuilder.group({
+      confirmCtrl: ['', Validators.required]
     });
   }
 
@@ -100,6 +105,7 @@ export class RegisterComponent implements OnInit {
     this.login.loginUser(this.accessData.email, this.accessData.password).subscribe(
       (tokenData: any) => {
         this.getUserAuthenticated();
+        this.confirmForm.controls['confirmCtrl'].setValue('Check');
         stepper.next();
       },
       (err) => { }
