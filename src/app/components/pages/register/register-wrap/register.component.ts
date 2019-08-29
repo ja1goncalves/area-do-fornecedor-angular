@@ -97,7 +97,9 @@ export class RegisterComponent implements OnInit {
         this.accessDataForm.controls['hiddenCtrl'].setValue('Check');
         stepper.next();
      },
-     (err) => { }
+     (err) => {
+       this.notify.show('error', err.message);
+     }
     );
   }
 
