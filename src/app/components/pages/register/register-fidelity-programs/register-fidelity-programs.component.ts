@@ -41,7 +41,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges {
     if (this.fidelityDataForm.valid) {
 
       const formControls = this.fidelityDataForm.controls;
-      console.log(formControls);
+
       this.fidelitiesData = {
         card_number_JJ: formControls.card_number_JJ.value,
         access_password_JJ: formControls.access_password_JJ.value,

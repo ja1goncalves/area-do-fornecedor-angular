@@ -90,7 +90,7 @@ export class RegisterComponent implements OnInit {
     this.updateRegister();
   }
 
-  public createRegister(stepper: any, fromQuotation:boolean): void {
+  public createRegister(stepper: any, fromQuotation: boolean): void {
     this.register.createRegister(this.accessData, fromQuotation).subscribe(
       (createdUser: any) => {
         this.notify.show('success', 'Por favor, verifique seu email');
@@ -140,7 +140,9 @@ export class RegisterComponent implements OnInit {
         this.notify.show('success', 'Cadastro finalizado com sucesso');
         this.router.navigate(['/minhas-cotacoes']);
       },
-      (err) => { }
+      (err) => {
+        this.notify.show('error', err.message);
+      }
     );
   }
 
