@@ -37,7 +37,7 @@ export class RegisterPersonalDataComponent implements OnInit {
       personal_cpf:             [{value: '', disabled: true}, [Validators.required, Validators.minLength(11)]],
       personal_birthday:        ['', [Validators.required, Validators.minLength(8)]],
       personal_gender:          ['', [Validators.required]],
-      personal_phone:           ['', [Validators.maxLength(8)]],
+      personal_phone:           ['', [Validators.minLength(8)]],
       personal_cellphone:       ['', [Validators.required]],
       residential_zip_code:     ['', [Validators.required]],
       residential_address:      ['', [Validators.required, Validators.maxLength(60)]],
