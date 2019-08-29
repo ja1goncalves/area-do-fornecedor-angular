@@ -56,14 +56,14 @@
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Rua</label>
-            <input type="text" formControlName="residential_address" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_address.errors}" placeholder="Rua">
+            <input type="text" formControlName="residential_address" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_address.errors}" placeholder="Rua" maxlength="50">
             <div *ngIf="submitted && f.residential_address.errors" class="form-validator-error">
                 <div *ngIf="f.residential_address.errors.required">A rua é obrigatória</div>
             </div>
         </div>
         <div class="col-12 col-sm-2 col-md-2 col-lg-2 mb-3">
             <label>Número</label>
-            <input type="text" formControlName="residential_number" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_number.errors}" placeholder="N°" min="0" mask="0*">
+            <input type="text" formControlName="residential_number" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_number.errors}" placeholder="N°" min="0" mask="0*" maxlength="9">
             <div *ngIf="submitted && f.residential_number.errors" class="form-validator-error">
                 <div *ngIf="f.residential_number.errors.required">O número é obrigatório</div>
             </div>
@@ -74,14 +74,14 @@
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Bairro</label>
-            <input type="text" formControlName="residential_neighborhood" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_neighborhood.errors}" placeholder="Bairro">
+            <input type="text" formControlName="residential_neighborhood" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_neighborhood.errors}" placeholder="Bairro" maxlength="50">
             <div *ngIf="submitted && f.residential_neighborhood.errors" class="form-validator-error">
                 <div *ngIf="f.residential_neighborhood.errors.required">O bairro é obrigatório</div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Cidade</label>
-            <input type="text" formControlName="residential_city" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_city.errors}" placeholder="Cidade">
+            <input type="text" formControlName="residential_city" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_city.errors}" placeholder="Cidade" maxlength="30">
             <div *ngIf="submitted && f.residential_city.errors" class="form-validator-error">
                 <div *ngIf="f.residential_city.errors.required">A cidade é obrigatória</div>
             </div>
@@ -108,11 +108,11 @@
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Profissão</label>
-            <input type="text" formControlName="personal_occupation" class="form-control" placeholder="Profissão">
+            <input type="text" formControlName="personal_occupation" class="form-control" placeholder="Profissão" maxlength="20">
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Nome da Empresa</label>
-            <input type="text" formControlName="personal_company" class="form-control" placeholder="Nome da Empresa">
+            <input type="text" formControlName="personal_company" class="form-control" placeholder="Nome da Empresa" maxlength="20">
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Telefone</label>

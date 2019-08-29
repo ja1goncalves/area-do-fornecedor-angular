@@ -37,19 +37,19 @@ export class RegisterPersonalDataComponent implements OnInit {
       personal_cpf:             [{value: '', disabled: true}, [Validators.required, Validators.minLength(11)]],
       personal_birthday:        ['', [Validators.required, Validators.minLength(8)]],
       personal_gender:          ['', [Validators.required]],
-      personal_phone:           ['', []],
-      personal_cellphone:       ['', [Validators.required, Validators.minLength(11)]],
-      residential_zip_code:     ['', [Validators.required, Validators.minLength(8)]],
-      residential_address:      ['', [Validators.required]],
+      personal_phone:           ['', [Validators.maxLength(8)]],
+      personal_cellphone:       ['', [Validators.required, Validators.maxLength(11)]],
+      residential_zip_code:     ['', [Validators.required, Validators.maxLength(8)]],
+      residential_address:      ['', [Validators.required, Validators.maxLength(60)]],
       residential_number:       ['', [Validators.required, Validators.maxLength(9)]],
-      residential_complement:   ['', []],
-      residential_neighborhood: ['', [Validators.required]],
-      residential_city:         ['', [Validators.required]],
+      residential_complement:   ['', [Validators.maxLength(50)]],
+      residential_neighborhood: ['', [Validators.required, Validators.maxLength(50)]],
+      residential_city:         ['', [Validators.required, Validators.maxLength(30)]],
       residential_state:        ['', [Validators.required]],
       personal_occupation_id:   ['', []],
-      personal_occupation:      ['', []],
-      personal_company:         ['', []],
-      personal_company_phone:   ['', []]
+      personal_occupation:      ['', [Validators.maxLength(30)]],
+      personal_company:         ['', [Validators.maxLength(30)]],
+      personal_company_phone:   ['', [Validators.maxLength(30)]]
     });
   }
 
