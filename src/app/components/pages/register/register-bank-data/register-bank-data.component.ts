@@ -53,7 +53,7 @@ export class RegisterBankDataComponent implements OnInit {
         account_digit: formControls.bank_account_digit.value,
         operation: formControls.bank_operation.value
       };
-      
+
       this.submitData.emit(this.bankData);
 
     }
