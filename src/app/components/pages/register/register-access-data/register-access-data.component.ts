@@ -37,7 +37,7 @@ export class RegisterAccessDataComponent implements OnInit {
           Validators.required,
           Validators.pattern(/^[a-z A-Z0-9]+$/),
           Validators.maxLength(50),
-          Validators.minLength(10)]
+          Validators.minLength(7)]
       ],
       cpf: ['', [Validators.required, Validators.minLength(11), GenericValidator.isValidCpf()]],
       password: ['', [Validators.required, Validators.minLength(8)]],
