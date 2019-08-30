@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { PasswordValidation } from 'src/app/helpers/validators';
+import {GenericValidator, PasswordValidation} from 'src/app/helpers/validators';
 import { AccessData } from 'src/app/models/register-data';
 import { RegisterService } from 'src/app/services/register/register.service';
 
@@ -33,8 +33,8 @@ export class RegisterAccessDataComponent implements OnInit {
 
     this.accessDataForm = this.formBuilder.group({
       email: [{ value: '', disabled: this.fromQuotation }, [Validators.required, Validators.email]],
-      name: ['', [Validators.required]],
-      cpf: ['', [Validators.required, Validators.minLength(11)]],
+      name: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9]+'), Validators.maxLength(50)]],
+      cpf: ['', [Validators.required, Validators.minLength(11), GenericValidator.isValidCpf()]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]],
     }, { validator: PasswordValidation.MatchPassword });
