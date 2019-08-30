@@ -22,14 +22,21 @@
         </div>
 
         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-          <div class="form-group">
-            <label>Data de nascimento</label>
-            <input type="text" class="form-control" formControlName="birthday" placeholder="Data de Nascimento"
-              mask="00/00/0000" [dropSpecialCharacters]="false">
+          <div class="row form-group">
+            <label>Data de Nascimento</label>
+            <input *ngIf="providerData['birthday'] && providerData['birthday'] !== 'Invalid date'" type="text" class="form-control col-sm-10 col-md-10 col-lg-10" matInput formControlName="birthday" placeholder="Data de Nascimento">
+            <input *ngIf="!providerData['birthday'] || (providerData['birthday'] && providerData['birthday'] === 'Invalid date')" type="text" class="form-control col-sm-10 col-md-10 col-lg-10" matInput [matDatepicker]="picker" formControlName="birthday" placeholder="Data de Nascimento">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker startView="year" [startAt]="startDate" [disabled]="providerData['birthday'] && providerData['birthday'] !== 'Invalid date'"></mat-datepicker>
           </div>
         </div>
 
         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="row">
+            <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+
+            </div>
+          </div>
           <div class="form-group">
             <label>Sexo</label>
             <select class="custom-select" formControlName="gender">

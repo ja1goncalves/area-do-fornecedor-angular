@@ -22,6 +22,7 @@ export class RegisterPersonalDataComponent implements OnInit {
   public ufs: any[] = UFS;
   public occupations: any[] = OCCUPATIONS;
   public submitted: boolean;
+  public startDate = new Date(1990, 0, 1);
 
   constructor(private formBuilder: FormBuilder) { }
 

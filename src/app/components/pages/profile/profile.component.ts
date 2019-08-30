@@ -19,6 +19,7 @@ export class ProfileComponent implements OnInit {
   public banks: any = [];
   public segments: any = [];
   public programs: any = [];
+  public startDate = new Date(1990, 0, 1);
 
   public initialValues: any = {};
   public updateForm: FormGroup;
@@ -77,7 +78,7 @@ export class ProfileComponent implements OnInit {
     Object.keys(providerData).forEach(data => {
       if (this.updateForm.controls[data]) {
         this.updateForm.controls[data].setValue(providerData[data]);
-        if (!this.updateForm.controls[data].value) {
+        if (!this.updateForm.controls[data].value || this.updateForm.controls[data].value === 'Invalid date') {
           this.updateForm.controls[data].enable();
         }
       }
