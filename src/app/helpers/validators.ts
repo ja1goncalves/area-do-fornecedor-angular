@@ -22,7 +22,7 @@ export class GenericValidator {
      */
     static isValidCpf() {
         return (control: AbstractControl): Validators => {
-            const cpf = control.value;
+            const cpf = control.value.replace(/[^0-9]/g, '');
             if (cpf) {
                 let numbers, digits, sum, i, result, equalDigits;
                 equalDigits = 1;

@@ -11,9 +11,10 @@
     </div>
     <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
       <label>Nome</label><br>
-      <input type="text" class="form-control" [ngClass]="{'input-invalid': submitted && f.name.errors}" name="name" placeholder="Nome Completo" formControlName="name">
+      <input type="text" class="form-control" [ngClass]="{'input-invalid': submitted && f.name.errors}" name="name" placeholder="Nome Completo" formControlName="name" maxlength="50">
       <div *ngIf="submitted && f.name.errors" class="form-validator-error">
         <div *ngIf="f.name.errors.required">O nome é obrigatório</div>
+        <div *ngIf="f.name.errors.minlength">O nome é pequeno demais</div>
         <div *ngIf="f.name.errors.pattern">O nome não deve possuir caracteres especiais</div>
       </div>
     </div>

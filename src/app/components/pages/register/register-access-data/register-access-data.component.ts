@@ -33,7 +33,12 @@ export class RegisterAccessDataComponent implements OnInit {
 
     this.accessDataForm = this.formBuilder.group({
       email: [{ value: '', disabled: this.fromQuotation }, [Validators.required, Validators.email]],
-      name: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9]+'), Validators.maxLength(50)]],
+      name: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-z A-Z0-9]+$/),
+          Validators.maxLength(50),
+          Validators.minLength(10)]
+      ],
       cpf: ['', [Validators.required, Validators.minLength(11), GenericValidator.isValidCpf()]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]],
