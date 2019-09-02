@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['']);
           },
           (error) => {
-            this.notify.show('warning', 'Verifique o login e senha');
+            // this.notify.show('warning', 'Verifique o login e senha');
           }
       );
     }
