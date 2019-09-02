@@ -2,32 +2,32 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private route: Router) { }
 
   /**
-   * 
    * @param token
    * @returns {Observable<any>}
    */
-  public checkToken(token: string): Observable<any> { 
+  public checkToken(token: string): Observable<any> {
 
-    return new Observable((observer) => { 
+    return new Observable((observer) => {
       this.http.post(`${environment.API_URL}/api/provider/check-token`, { token }).subscribe(
         (response: any) => { observer.next(response.data); },
-        (error) => { observer.error(error.error); }
+        async (error) => {
+          this.route.navigate(['/login']).then(r => {});
+        }
       );
     });
 
   }
 
   /**
-   * 
    * @param requestData
    * @param fromQuotation
    * @returns {Observable<any>}
@@ -46,10 +46,9 @@ export class RegisterService {
   }
 
   /**
-   * 
-   * @param code 
-   * @param username 
+   *
    * @returns {Observable<any>}
+   * @param token
    */
   public confirmRegister(token: string): Observable<any> {
 
@@ -61,9 +60,9 @@ export class RegisterService {
     });
 
   }
-  
+
   /**
-   * @returns {Observable<any>} 
+   * @returns {Observable<any>}
    */
   public getBanks(): Observable<any> {
 
@@ -121,8 +120,8 @@ export class RegisterService {
   }
 
   /**
-   * 
-   * @param requestData 
+   *
+   * @param requestData
    * @returns {Observable<any>}
    */
   public updateRegister(requestData: any): Observable<any> {
@@ -147,7 +146,6 @@ export class RegisterService {
         (error) => { observer.error(error.error); }
       );
     });
-    
   }
 
 }
