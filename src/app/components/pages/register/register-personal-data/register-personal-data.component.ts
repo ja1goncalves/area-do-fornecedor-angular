@@ -22,36 +22,35 @@ export class RegisterPersonalDataComponent implements OnInit {
   public ufs: any[] = UFS;
   public occupations: any[] = OCCUPATIONS;
   public submitted: boolean;
+  public startDate = new Date(1990, 0, 1);
 
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-
-    this.initFormControlls();
-
+    this.initFormControls();
   }
 
-  get f():any { return this.personalDataForm.controls; }
-  
-  private initFormControlls(): void {
+  get f(): any { return this.personalDataForm.controls; }
+
+  private initFormControls(): void {
     this.personalDataForm = this.formBuilder.group({
       personal_name:            [{value: '', disabled: true}, [Validators.required]],
-      personal_cpf:             [{value: '', disabled: true}, [Validators.required]],
+      personal_cpf:             [{value: '', disabled: true}, [Validators.required, Validators.minLength(11)]],
       personal_birthday:        ['', [Validators.required, Validators.minLength(8)]],
       personal_gender:          ['', [Validators.required]],
-      personal_phone:           ['', []],
-      personal_cellphone:       ['', [Validators.required, Validators.minLength(11)]],
-      residential_zip_code:     ['', [Validators.required, Validators.minLength(8)]],
-      residential_address:      ['', [Validators.required]],
-      residential_number:       ['', [Validators.required]],
-      residential_complement:   ['', []],
-      residential_neighborhood: ['', [Validators.required]],
-      residential_city:         ['', [Validators.required]],
+      personal_phone:           ['', [Validators.minLength(8)]],
+      personal_cellphone:       ['', [Validators.required]],
+      residential_zip_code:     ['', [Validators.required]],
+      residential_address:      ['', [Validators.required, Validators.maxLength(60)]],
+      residential_number:       ['', [Validators.required, Validators.maxLength(9)]],
+      residential_complement:   ['', [Validators.maxLength(50)]],
+      residential_neighborhood: ['', [Validators.required, Validators.maxLength(50)]],
+      residential_city:         ['', [Validators.required, Validators.maxLength(30)]],
       residential_state:        ['', [Validators.required]],
       personal_occupation_id:   ['', []],
-      personal_occupation:      ['', []],
-      personal_company:         ['', []],
-      personal_company_phone:   ['', []]
+      personal_occupation:      ['', [Validators.maxLength(30)]],
+      personal_company:         ['', [Validators.maxLength(30)]],
+      personal_company_phone:   ['', [Validators.maxLength(30)]]
     });
   }
 
@@ -101,6 +100,5 @@ export class RegisterPersonalDataComponent implements OnInit {
 
     }
   }
-  
 
 }

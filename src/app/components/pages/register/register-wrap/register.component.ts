@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { RegisterService } from 'src/app/services/register/register.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AccessData, Address, Personal, RequestData, FidelitiesData, Bank } from 'src/app/models/register-data';
-import * as _ from 'lodash';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 import { Router } from '@angular/router';
 
@@ -18,9 +17,20 @@ export class RegisterComponent implements OnInit {
 
   // Form
   public accessDataForm: FormGroup;
+  public confirmForm: FormGroup;
   public bankDataForm: FormGroup;
   public fidelitiesForm: FormGroup;
   public personalDataForm: FormGroup;
+
+  ngOnInit() {
+    this.accessDataForm = this._formBuilder.group({
+      hiddenCtrl: ['', Validators.required]
+    });
+
+    this.confirmForm = this._formBuilder.group({
+      confirmCtrl: ['', Validators.required]
+    });
+  }
 
   // Data
   public accessData: AccessData;
@@ -38,7 +48,8 @@ export class RegisterComponent implements OnInit {
     private register: RegisterService,
     private login: AuthService,
     private notify: NotifyService,
-    private router: Router) {}
+    private router: Router,
+    private _formBuilder: FormBuilder) {}
 
   public accessDataReceiver($event, stepper): void {
     this.accessData = $event.accessData;
@@ -57,12 +68,13 @@ export class RegisterComponent implements OnInit {
     const fidelities = [];
 
     this.programs.forEach((program, index) => {
-      if(this.fidelitiesData[`card_number_${program.code}`]) {
+      if (this.fidelitiesData[`card_number_${program.code}`]) {
         fidelities.push(
           {
             program_id: program.id,
             card_number: this.fidelitiesData[`card_number_${program.code}`],
-            access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : ''
+            access_password: this.fidelitiesData[`access_password_${program.code}`] ? this.fidelitiesData[`access_password_${program.code}`] : '',
+            type: this.fidelitiesData[`type_${program.code}`] ? this.fidelitiesData[`type_${program.code}`] : ''
           }
         );
       }
@@ -78,13 +90,16 @@ export class RegisterComponent implements OnInit {
     this.updateRegister();
   }
 
-  public createRegister(stepper: any, fromQuotation:boolean): void {
+  public createRegister(stepper: any, fromQuotation: boolean): void {
     this.register.createRegister(this.accessData, fromQuotation).subscribe(
       (createdUser: any) => {
         this.notify.show('success', 'Por favor, verifique seu email');
+        this.accessDataForm.controls['hiddenCtrl'].setValue('Check');
         stepper.next();
      },
-     (err) => { }
+     (err) => {
+       this.notify.show('error', err.message);
+     }
     );
   }
 
@@ -92,6 +107,7 @@ export class RegisterComponent implements OnInit {
     this.login.loginUser(this.accessData.email, this.accessData.password).subscribe(
       (tokenData: any) => {
         this.getUserAuthenticated();
+        this.confirmForm.controls['confirmCtrl'].setValue('Check');
         stepper.next();
       },
       (err) => { }
@@ -124,7 +140,9 @@ export class RegisterComponent implements OnInit {
         this.notify.show('success', 'Cadastro finalizado com sucesso');
         this.router.navigate(['/minhas-cotacoes']);
       },
-      (err) => { }
+      (err) => {
+        this.notify.show('error', err.message);
+      }
     );
   }
 
@@ -145,7 +163,5 @@ export class RegisterComponent implements OnInit {
       (err) => { }
     );
   }
-
-  ngOnInit() { }
 
 }

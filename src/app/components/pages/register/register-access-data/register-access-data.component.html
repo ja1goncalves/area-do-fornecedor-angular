@@ -2,8 +2,8 @@
   <h3 class="fieldset-title">Dados de Acesso</h3>
   <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
-      <label>Email:</label><br>
-      <input type="email" class="form-control" [ngClass]="{'input-invalid': submitted && f.email.errors}" name="email" placeholder="Email" formControlName="email">
+      <label>E-mail:</label><br>
+      <input type="email" class="form-control" [ngClass]="{'input-invalid': submitted && f.email.errors}" name="email" placeholder="E-mail" formControlName="email">
       <div *ngIf="submitted && f.email.errors" class="form-validator-error">
         <div *ngIf="f.email.errors.required">O email é obrigatório</div>
         <div *ngIf="f.email.errors.email">Informe um email válido</div>
@@ -11,9 +11,11 @@
     </div>
     <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
       <label>Nome</label><br>
-      <input type="text"  class="form-control" [ngClass]="{'input-invalid': submitted && f.name.errors}" name="name" placeholder="Nome Completo" formControlName="name">
+      <input type="text" class="form-control" [ngClass]="{'input-invalid': submitted && f.name.errors}" name="name" placeholder="Nome Completo" formControlName="name" maxlength="50">
       <div *ngIf="submitted && f.name.errors" class="form-validator-error">
         <div *ngIf="f.name.errors.required">O nome é obrigatório</div>
+        <div *ngIf="f.name.errors.minlength">O nome é pequeno demais</div>
+        <div *ngIf="f.name.errors.pattern">O nome não deve possuir caracteres especiais</div>
       </div>
     </div>
     <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
@@ -22,6 +24,7 @@
       <div *ngIf="submitted && f.cpf.errors" class="form-validator-error">
         <div *ngIf="f.cpf.errors.required">O CPF é obrigatório</div>
         <div *ngIf="f.cpf.errors.minlength">Informe um cpf válido</div>
+        <div *ngIf="accessDataForm.get('cpf').getError('cpfNotValid')">O CPF é inválido!</div>
       </div>
     </div>
     <div class="col-12">

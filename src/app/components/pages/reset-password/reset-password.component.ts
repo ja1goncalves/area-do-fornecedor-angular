@@ -35,12 +35,12 @@ export class ResetPasswordComponent implements OnInit {
 
     this.submitted = true;
     
-    if(this.emailForm.valid) {
+    if (this.emailForm.valid) {
       this.loading = true;
 
       this.passwordService.resetPassword(email).subscribe(
         (response) => {
-          if(response.status === 404) {
+          if (response.status === 404) {
             this.notify.show('warning', 'Verifique o e-mail e tente novamente');
             this.loading = false;
           } else {
@@ -53,7 +53,6 @@ export class ResetPasswordComponent implements OnInit {
         }
       );
     }
-    
   }
 
 }

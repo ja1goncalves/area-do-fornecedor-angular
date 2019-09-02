@@ -19,6 +19,7 @@ export class ProfileComponent implements OnInit {
   public banks: any = [];
   public segments: any = [];
   public programs: any = [];
+  public startDate = new Date(1990, 0, 1);
 
   public initialValues: any = {};
   public updateForm: FormGroup;
@@ -32,12 +33,11 @@ export class ProfileComponent implements OnInit {
     private auth: AuthService,
     private notify: NotifyService) { }
 
-  ngOnInit() {
-    this.getUserData();
-    this.getProviderData();
-    this.initForm();
-    this.getBanks();
-    this.getPrograms();
+  async ngOnInit() {
+    await this.getUserData();
+    await this.getPrograms();
+    await this.getBanks();
+    await this.initForm();
   }
 
   get f() { return this.updateForm.controls; }
@@ -69,20 +69,27 @@ export class ProfileComponent implements OnInit {
       occupation: ['', []],
       phone: ['', []],
       provider_occupation_id: ['', []],
-    })
+      address_id: ['', []],
+      banks_id: ['', []],
+    });
   }
 
   public fillForm(providerData) {
     Object.keys(providerData).forEach(data => {
-      if(this.updateForm.controls[data]) {
+      if (this.updateForm.controls[data]) {
         this.updateForm.controls[data].setValue(providerData[data]);
+        if (!this.updateForm.controls[data].value || this.updateForm.controls[data].value === 'Invalid date') {
+          this.updateForm.controls[data].enable();
+        }
       }
     });
-  };
+  }
 
   public getBanks() {
     this.register.getBanks().subscribe(
-      (banks) => { this.banks = banks; },
+      (banks) => {
+        this.banks = banks;
+        },
       (error) => { }
     );
   }
@@ -97,12 +104,15 @@ export class ProfileComponent implements OnInit {
 
   public getPrograms() {
     this.register.getPrograms().subscribe(
-      (programs) => { this.programs = programs; },
+      (programs) => {
+          this.programs = programs;
+          this.getProviderData();
+        },
       (error) => { }
     );
   }
 
-  public getUserData():void {
+  public getUserData(): void {
     this.auth.getUserAuthenticated().subscribe(
       (userData) => {
         this.userData['name'] = userData['name'];
@@ -119,6 +129,8 @@ export class ProfileComponent implements OnInit {
         this.mountProgramsControls();
         this.providerData = {...providerData.address, ...providerData.bank, ...providerData.personal, ...this.userData };
         this.providerData['birthday'] = moment(this.providerData['birthday']).format('DD/MM/YYYY');
+        this.providerData['address_id'] = providerData.address ? providerData.address.id : null;
+        this.providerData['banks_id'] = providerData.bank ? providerData.bank.id : null;
         this.fillForm(this.providerData);
       },
       (error) => { console.log(error); }
@@ -127,9 +139,7 @@ export class ProfileComponent implements OnInit {
 
   public getProgramInfo(id: number): void {
     this.register.getProgramInfo(id).subscribe(
-      (program) => {
-        
-      },
+      (program) => {},
       (error) => { console.log(error); }
     );
   }
@@ -137,28 +147,24 @@ export class ProfileComponent implements OnInit {
   public mountProgramsControls(): void {
     this.programs.forEach((program) => {
       this.updateForm.addControl(`card_number_${program['code']}`, new FormControl('', []));
-      if(program['code'] === 'JJ') {
-        this.updateForm.addControl(`access_password_${program['code']}`, new FormControl('', []));
-      }
+      this.updateForm.addControl(`access_password_${program['code']}`, new FormControl('', []));
 
       this.initialValues.fidelities.forEach(fidelity => {
-        if(fidelity['program_id'] === program.id) {
+        if (fidelity['program_id'] === program.id) {
           this.f[`card_number_${program['code']}`].setValue(fidelity['card_number']);
-
-          if(program['code'] === 'JJ') {
-            this.f[`access_password_${program['code']}`].setValue(fidelity['access_password']);
-          }  
+          this.f[`access_password_${program['code']}`].setValue(fidelity['access_password']);
         }
-      });       
+      });
     });
   }
 
   public mountRequestData(): any {
-    const requestData = {}
+    const requestData = {};
     const controls = this.updateForm.controls;
     const fidelities = [];
-    
+
     requestData['address'] = {
+      id: controls.address_id.value,
       address: controls.address.value,
       city: controls.city.value,
       complement: controls.complement.value,
@@ -166,9 +172,10 @@ export class ProfileComponent implements OnInit {
       number: controls.number.value,
       state: controls.state.value,
       zip_code: controls.zip_code.value
-    }
+    };
 
     requestData['bank'] = {
+      id: controls.banks_id.value,
       account: controls.account.value,
       account_digit: controls.account_digit.value,
       agency: controls.agency.value,
@@ -177,7 +184,7 @@ export class ProfileComponent implements OnInit {
       operation: controls.operation.value,
       segment_id: controls.segment_id.value,
       type: controls.type.value
-    }
+    };
 
     requestData['personal'] = {
       birthday: controls.birthday.value,
@@ -188,47 +195,50 @@ export class ProfileComponent implements OnInit {
       occupation: controls.occupation.value,
       phone: controls.phone.value,
       provider_occupation_id: controls.provider_occupation_id.value
-    }
+    };
 
     requestData['personal']['birthday'] = moment(requestData['personal']['birthday'], 'DD/MM/YYYY').format('YYYY-MM-DD');
 
 
     this.programs.forEach((program, index) => {
-      if(controls[`card_number_${program.code}`].value) {
+      if (controls[`card_number_${program.code}`].value) {
         let fidelity = {};
         fidelity['card_number'] = controls[`card_number_${program.code}`].value;
         fidelity['access_password'] = null;
         fidelity['program_id'] = program.id;
 
         this.initialValues.fidelities.forEach((initial_fidelity) => {
-          if(initial_fidelity['program_id'] === program.id) {
+          if (initial_fidelity['program_id'] === program.id) {
             fidelity['id'] = initial_fidelity.id;
           }
         });
 
-        if(program.code === 'JJ') {
+        // if(program.code === 'JJ') {
           fidelity['access_password'] = controls[`access_password_${program.code}`].value;
-        }
+        // }
 
         fidelities.push(fidelity);
       }
-    }); 
-    
+    });
+
     requestData['fidelities'] = fidelities;
-    
+
     return requestData;
-    
+
   }
 
-  public submitForm():void {
+  public submitForm(): void {
     const requestData = this.mountRequestData();
     this.mountRequestData();
 
     this.register.updateRegister(requestData).subscribe(
-      (response) => { 
-        this.notify.show('success', 'Seus dados foram encaminhados para análise'); 
+      (response) => {
+        this.notify.show('success', 'Seus dados foram encaminhados para análise');
       },
-      (error) => { console.log(error); }
+      (error) => {
+        console.log(error);
+        this.notify.show('error', error.message);
+      }
     );
   }
 

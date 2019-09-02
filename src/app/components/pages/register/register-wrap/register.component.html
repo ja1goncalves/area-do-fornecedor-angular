@@ -1,14 +1,24 @@
 <div class="container-fornecedor">
 
-  <mat-horizontal-stepper linear=true #stepper>
+  <mat-vertical-stepper linear=true #stepper>
 
-    <mat-step [stepControl]="accessDataForm">
+    <mat-step [stepControl]="accessDataForm" [editable]="false">
       <ng-template matStepLabel> Dados de Acesso</ng-template>
       <app-register-access-data [accessDataForm]="accessDataForm" (submitData)="accessDataReceiver($event, stepper)"></app-register-access-data>
+      <form [formGroup]="accessDataForm" hidden>
+        <mat-form-field>
+          <input matInput formControlName="hiddenCtrl" required>
+        </mat-form-field>
+      </form>
     </mat-step>
 
-    <mat-step>
+    <mat-step [stepControl]="confirmForm" [editable]="false">
       <ng-template matStepLabel> Confirmar Cadastro</ng-template>
+      <form [formGroup]="confirmForm" hidden>
+        <mat-form-field>
+          <input matInput formControlName="confirmCtrl" required>
+        </mat-form-field>
+      </form>
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
           <h3 class="fieldset-title">Confirmar conta</h3>
@@ -20,27 +30,26 @@
       </div>
     </mat-step>
 
-    <mat-step [stepControl]="personalForm">
+    <mat-step [stepControl]="personalDataForm">
       <ng-template matStepLabel> Dados Pessoais</ng-template>
       <app-register-personal-data [personalDataForm]="personalDataForm" (submitData)="personalDataReceiver($event, stepper)"
         [userInfo]="userInfo"></app-register-personal-data>
     </mat-step>
 
-    <mat-step>
+    <mat-step [stepControl]="fidelitiesForm" >
       <ng-template matStepLabel>Programas de Fidelidade</ng-template>
-      <!-- [stepControl]="fidelitiesForm" -->
       <app-register-fidelity-programs (submitData)="fidelitiesDataReceiver($event, stepper)" [fidelityDataForm]="fidelitiesForm"
         [programs]="programs">
       </app-register-fidelity-programs>
     </mat-step>
 
 
-    <mat-step [stepControl]="bankForm">
+    <mat-step [stepControl]="bankDataForm">
       <ng-template matStepLabel>Dados Bancários</ng-template>
       <app-register-bank-data [bankDataForm]="bankDataForm" (submitData)="bankDataReceiver($event)" [banks]="banks"></app-register-bank-data>
     </mat-step>
 
 
-  </mat-horizontal-stepper>
+  </mat-vertical-stepper>
 
 </div>

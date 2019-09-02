@@ -31,11 +31,13 @@ import {
   MatStepperModule,
   MatInputModule,
   MatFormFieldModule,
-  MatButtonModule } from '@angular/material';
+  MatButtonModule, MatNativeDateModule
+} from '@angular/material';
 import { RegisterAccessDataComponent } from './components/pages/register/register-access-data/register-access-data.component';
 import { RegisterPersonalDataComponent } from './components/pages/register/register-personal-data/register-personal-data.component';
 import { RegisterFidelityProgramsComponent } from './components/pages/register/register-fidelity-programs/register-fidelity-programs.component';
 import { RegisterBankDataComponent } from './components/pages/register/register-bank-data/register-bank-data.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,10 @@ import { RegisterBankDataComponent } from './components/pages/register/register-
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    MatDatepickerModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     AuthGuardService,
@@ -75,6 +80,7 @@ import { RegisterBankDataComponent } from './components/pages/register/register-
       useClass: TokenInterceptor,
       multi: true
     },
+    MatDatepickerModule,
   ],
   bootstrap: [AppComponent]
 })

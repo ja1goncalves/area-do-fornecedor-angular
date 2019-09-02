@@ -5,6 +5,17 @@
     text-align: center;
 }
 
+.container-order {
+    max-width: 1140px;
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 .cotation-list-table .body{
     background: #0275d8;
     border: 1px solid #0275d8;

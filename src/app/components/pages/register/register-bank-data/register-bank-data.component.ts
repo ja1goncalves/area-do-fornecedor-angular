@@ -25,10 +25,10 @@ export class RegisterBankDataComponent implements OnInit {
       bank_id:            ['', [Validators.required]],
       bank_type:          ['', [Validators.required]],
       bank_segment_id:    ['', []],
-      bank_agency:        ['', [Validators.required]],
-      bank_agency_digit:  ['', [Validators.required]],
-      bank_account:       ['', [Validators.required]],
-      bank_account_digit: ['', [Validators.required]],
+      bank_agency:        ['', [Validators.required, Validators.maxLength(15)]],
+      bank_agency_digit:  ['', [Validators.required, Validators.maxLength(1)]],
+      bank_account:       ['', [Validators.required, Validators.maxLength(15)]],
+      bank_account_digit: ['', [Validators.required, Validators.maxLength(1)]],
       bank_operation:     ['', []]
     });
   }
@@ -53,7 +53,7 @@ export class RegisterBankDataComponent implements OnInit {
         account_digit: formControls.bank_account_digit.value,
         operation: formControls.bank_operation.value
       };
-      
+
       this.submitData.emit(this.bankData);
 
     }
