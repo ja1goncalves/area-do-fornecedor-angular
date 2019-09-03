@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit {
       agency_digit: ['', []],
       bank_id: ['', []],
       operation: ['', []],
-      segment_id: ['', []],
+      segment_id: [{ value: '', disabled: true }, []],
       type: ['', []],
       name: [{value:  '', disabled: true }, []],
       cpf: [{value:  '', disabled: true }, []],
@@ -97,7 +97,15 @@ export class ProfileComponent implements OnInit {
   public getSegments() {
     const bank_id = this.f.bank_id.value;
     this.register.getSegments(bank_id).subscribe(
-      (segments) => { this.segments = segments; },
+    (segments) => {
+        if (segments.length !== 0) {
+          this.updateForm.controls['segment_id'].enable();
+          this.segments = segments;
+        } else {
+          this.updateForm.controls['segment_id'].disable();
+          this.segments = [];
+        }
+      },
       (error) => { }
     );
   }

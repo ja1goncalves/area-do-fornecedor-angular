@@ -24,7 +24,7 @@ export class RegisterBankDataComponent implements OnInit {
     this.bankDataForm = this.formBuilder.group({
       bank_id:            ['', [Validators.required]],
       bank_type:          ['', [Validators.required]],
-      bank_segment_id:    ['', []],
+      bank_segment_id:    [{ value: '', disabled: true }, []],
       bank_agency:        ['', [Validators.required, Validators.maxLength(15)]],
       bank_agency_digit:  ['', [Validators.required, Validators.maxLength(1)]],
       bank_account:       ['', [Validators.required, Validators.maxLength(15)]],
@@ -61,11 +61,16 @@ export class RegisterBankDataComponent implements OnInit {
   }
 
   getSegments(): void {
-
     const bank_id = this.bankDataForm.controls.bank_id.value;
     this.register.getSegments(bank_id).subscribe(
       (segments) => {
-        this.segments = segments;
+        if (segments.length !== 0) {
+          this.bankDataForm.controls['bank_segment_id'].enable();
+          this.segments = segments;
+        } else {
+          this.bankDataForm.controls['bank_segment_id'].disable();
+          this.segments = [];
+        }
       },
       (err) => { }
     );
