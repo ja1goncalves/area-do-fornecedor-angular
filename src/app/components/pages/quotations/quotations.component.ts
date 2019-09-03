@@ -66,7 +66,9 @@ export class QuotationsComponent implements OnInit {
               for (const program of quotation.programs) {
                 this.fidelities[quotation.id][program.program_id] = {
                   id: program.program_id,
-                  number: ['JJ', 'TRB'].includes(program.program_code) ? this.authService.getDataUser().cpf : this.detailsFidelities[(program.program_id - 1)].card_number,
+                  number: ['JJ', 'TRB'].includes(program.program_code) ?
+                      this.authService.getDataUser().cpf :
+                      this.detailsFidelities[(program.program_id - 1)].card_number,
                   price: program.price,
                   value: program.value,
                   files: []
@@ -84,10 +86,10 @@ export class QuotationsComponent implements OnInit {
       (fidelities) => {
         programs.forEach((program) => {
           fidelities.forEach((fidelity) => {
-              if(fidelity.program_id === program.program_id) {
+              if (fidelity.program_id === program.program_id) {
                 this.detailsFidelities[(program.program_id - 1)].card_number = fidelity.card_number;
-              } 
-            });  
+              }
+            });
         });
       }
     );
@@ -113,13 +115,13 @@ export class QuotationsComponent implements OnInit {
     };
     console.log(data);
     this.quotationService.createOrder(data)
-    .subscribe(res => {
-      this.notify.show('success', 'Dados enviados com sucesso!');
-      this.getQuotations();
-      this.unsellQuotation(id);
-    }, err => {
-      this.notify.show('error', 'Ocorreu um erro ao tentar enviar seus dados!');
-    });
+      .subscribe(res => {
+        this.notify.show('success', 'Dados enviados com sucesso!');
+        this.getQuotations();
+        this.unsellQuotation(id);
+      }, err => {
+        this.notify.show('error', 'Ocorreu um erro ao tentar enviar seus dados!');
+      });
   }
 
   public uploadFile(event, quotation_id, program_id) {

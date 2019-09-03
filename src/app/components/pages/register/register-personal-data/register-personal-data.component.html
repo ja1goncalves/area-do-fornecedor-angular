@@ -15,7 +15,9 @@
         <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-3">
             <div class="row form-group">
                 <label>Data de Nascimento</label>
-                <input type="text" class="form-control col-12 col-sm-8 col-md-8 col-lg-8 mb-3" matInput [matDatepicker]="picker" formControlName="personal_birthday" [ngClass]="{'input-invalid': submitted && f.personal_birthday.errors}">
+                <input style="border: 1px solid #ced4da; padding: 0.375rem 0.75rem;" type="text" [min]="minDate" [max]="maxDate"
+                       class="form-control col-12 col-sm-8 col-md-8 col-lg-8 mb-3" matInput
+                       [matDatepicker]="picker" formControlName="personal_birthday" [ngClass]="{'input-invalid': submitted && f.personal_birthday.errors}">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
                 <div *ngIf="submitted && f.personal_birthday.errors" class="form-validator-error">

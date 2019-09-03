@@ -5,11 +5,31 @@ import * as moment from 'moment';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UFS, OCCUPATIONS, GENDERS } from 'src/app/config/consts';
 import { NotifyService } from 'src/app/services/notify/notify.service';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS}
+  ],
 })
 export class ProfileComponent implements OnInit {
 
@@ -20,6 +40,8 @@ export class ProfileComponent implements OnInit {
   public segments: any = [];
   public programs: any = [];
   public startDate = new Date(1990, 0, 1);
+  public maxDate = new Date();
+  public minDate = new Date(this.maxDate.getFullYear() - 150, this.maxDate.getMonth());
 
   public initialValues: any = {};
   public updateForm: FormGroup;
@@ -31,9 +53,11 @@ export class ProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
     private register: RegisterService,
     private auth: AuthService,
-    private notify: NotifyService) { }
+    private notify: NotifyService,
+    private _adapter: DateAdapter<any>) { }
 
   async ngOnInit() {
+    this._adapter.setLocale('pt');
     await this.getUserData();
     await this.getPrograms();
     await this.getBanks();
@@ -57,7 +81,7 @@ export class ProfileComponent implements OnInit {
       agency_digit: ['', []],
       bank_id: ['', []],
       operation: ['', []],
-      segment_id: ['', []],
+      segment_id: [{ value: '', disabled: true }, []],
       type: ['', []],
       name: [{value:  '', disabled: true }, []],
       cpf: [{value:  '', disabled: true }, []],
@@ -97,7 +121,15 @@ export class ProfileComponent implements OnInit {
   public getSegments() {
     const bank_id = this.f.bank_id.value;
     this.register.getSegments(bank_id).subscribe(
-      (segments) => { this.segments = segments; },
+    (segments) => {
+        if (segments.length !== 0) {
+          this.updateForm.controls['segment_id'].enable();
+          this.segments = segments;
+        } else {
+          this.updateForm.controls['segment_id'].disable();
+          this.segments = [];
+        }
+      },
       (error) => { }
     );
   }

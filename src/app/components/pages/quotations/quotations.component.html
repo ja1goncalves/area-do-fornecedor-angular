@@ -61,8 +61,8 @@
                     Nº do cartão {{detailsFidelities[program.program_id-1].title}}
                   </label>
                   <div class="input text">
-                    <input type="text" class="form-control" readonly="readonly" [(ngModel)]="fidelities[quotation.id][program.program_id].number"
-                      maxlength="11">
+                    <input type="text" class="form-control" readonly="{{detailsFidelities[(program.program_id - 1)].card_number ? 'readonly' : ''}}"
+                           [(ngModel)]="fidelities[quotation.id][program.program_id].number" maxlength="20">
                   </div>
                 </div>
               </div>
@@ -123,7 +123,7 @@
           <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.status_orders">Cancelar</button>
           <span *ngIf="quotation.status_orders" >
             <p *ngFor="let status of quotation.status_orders;" style="margin-bottom: 0rem">
-               <img [alt]="status.program" [src]="'assets/imgs/cias/'+status.program.toLowerCase()+'.png'" style="width: 30%"/>: {{status.status.toUpperCase()}}
+               <img [alt]="status.program" [src]="'assets/imgs/cias/'+status.program.toLowerCase()+'.png'" style="width: 30%"/> {{status.status.toUpperCase()}}
             </p>
           </span>
         </div>

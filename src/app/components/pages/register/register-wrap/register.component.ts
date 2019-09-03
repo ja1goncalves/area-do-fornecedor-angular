@@ -95,7 +95,8 @@ export class RegisterComponent implements OnInit {
       (createdUser: any) => {
         this.notify.show('success', 'Por favor, verifique seu email');
         this.accessDataForm.controls['hiddenCtrl'].setValue('Check');
-        stepper.next();
+        return this.checkConfirm(stepper);
+        // stepper.next();
      },
      (err) => {
        this.notify.show('error', err.message);
