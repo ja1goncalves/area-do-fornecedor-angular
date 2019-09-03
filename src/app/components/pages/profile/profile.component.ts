@@ -40,6 +40,8 @@ export class ProfileComponent implements OnInit {
   public segments: any = [];
   public programs: any = [];
   public startDate = new Date(1990, 0, 1);
+  public maxDate = new Date();
+  public minDate = new Date(this.maxDate.getFullYear() - 150, this.maxDate.getMonth());
 
   public initialValues: any = {};
   public updateForm: FormGroup;

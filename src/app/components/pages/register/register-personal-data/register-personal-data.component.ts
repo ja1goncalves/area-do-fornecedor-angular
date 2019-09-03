@@ -43,6 +43,8 @@ export class RegisterPersonalDataComponent implements OnInit {
   public occupations: any[] = OCCUPATIONS;
   public submitted: boolean;
   public startDate = new Date(1990, 0, 1);
+  public maxDate = new Date();
+  public minDate = new Date(this.maxDate.getFullYear() - 150, this.maxDate.getMonth());
 
   constructor(private formBuilder: FormBuilder, private _adapter: DateAdapter<any>) { }
 
