@@ -13,8 +13,8 @@ const routes: Routes = [
     {path: 'esqueci-minha-senha', component: ResetPasswordComponent},
     {path: 'recuperar-senha/:token', component: ConfirmResetPasswordComponent},
     {path: 'confirmar-cadastro/:token', component: ConfirmRegisterComponent},
-    {path: 'cadastro/:token', component: RegisterComponent, data: {fromQuotation: true}},
-    {path: 'cadastro', component: RegisterComponent, data: {fromQuotation: false}},
+    {path: 'acesso/:token', component: RegisterComponent, data: {fromQuotation: true}},
+    {path: 'acesso', component: RegisterComponent, data: {fromQuotation: false}},
 
     {path: '', redirectTo: 'minhas-cotacoes', pathMatch: 'full'},
     {path: 'minhas-cotacoes', component: QuotationsComponent, canActivate: [AuthGuardService]},
