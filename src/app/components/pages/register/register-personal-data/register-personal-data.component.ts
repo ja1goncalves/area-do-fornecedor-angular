@@ -3,11 +3,31 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GENDERS, UFS, OCCUPATIONS } from 'src/app/config/consts';
 import { Address, Personal } from 'src/app/models/register-data';
 import * as moment from 'moment';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-register-personal-data',
   templateUrl: './register-personal-data.component.html',
-  styleUrls: ['./register-personal-data.component.css']
+  styleUrls: ['./register-personal-data.component.css'],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS}
+  ],
 })
 export class RegisterPersonalDataComponent implements OnInit {
 
@@ -24,10 +44,11 @@ export class RegisterPersonalDataComponent implements OnInit {
   public submitted: boolean;
   public startDate = new Date(1990, 0, 1);
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private _adapter: DateAdapter<any>) { }
 
   ngOnInit() {
     this.initFormControls();
+    this._adapter.setLocale('pt');
   }
 
   get f(): any { return this.personalDataForm.controls; }
