@@ -61,8 +61,8 @@
                     Nº do cartão {{detailsFidelities[program.program_id-1].title}}
                   </label>
                   <div class="input text">
-                    <input type="text" class="form-control" readonly="readonly" [(ngModel)]="fidelities[quotation.id][program.program_id].number"
-                      maxlength="11">
+                    <input type="text" class="form-control" readonly="{{fidelities[quotation.id][program.program_id].number ? 'readonly' : ''}}"
+                           [(ngModel)]="fidelities[quotation.id][program.program_id].number" maxlength="11">
                   </div>
                 </div>
               </div>
