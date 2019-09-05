@@ -204,7 +204,7 @@
             <label>Nome do banco</label>
             <select type="text" name="bank_id" formControlName="bank_id" class="form-control"
               [ngClass]="{'input-invalid': submitted && f.bank_id.errors}" placeholder="Nome do Banco"
-              (change)="getSegments()">
+              (click)="getSegments()">
               <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
             </select>
           </div>
@@ -236,7 +236,8 @@
 
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
           <label>Segmento</label>
-          <select class="form-control" type="text" name="bank_segment_id" formControlName="segment_id">
+          <input *ngIf="segments.title" class="form-control" type="text" readonly="readonly" [value]="segments.title">
+          <select *ngIf="!segments.title" class="form-control"  name="bank_segment_id" formControlName="segment_id">
             <option *ngFor="let segment of segments" [value]="segment.id">{{segment.title}}</option>
           </select>
         </div>

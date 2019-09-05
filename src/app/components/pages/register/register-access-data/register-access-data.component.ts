@@ -35,7 +35,7 @@ export class RegisterAccessDataComponent implements OnInit {
       email: [{ value: '', disabled: this.fromQuotation }, [Validators.required, Validators.email]],
       name: ['', [
           Validators.required,
-          Validators.pattern(/^[a-z A-Z0-9]+$/),
+          Validators.pattern(/^[a-z çáâãàéêẽèóôõòíîĩìùûũúA-Z0-9]+$/),
           Validators.maxLength(50),
           Validators.minLength(7)]
       ],
