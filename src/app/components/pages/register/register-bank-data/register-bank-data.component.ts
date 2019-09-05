@@ -62,7 +62,7 @@ export class RegisterBankDataComponent implements OnInit {
 
   getSegments(): void {
     const bank_id = this.bankDataForm.controls.bank_id.value;
-    this.register.getSegments(bank_id).subscribe(
+    this.register.getSegmentsByBank(bank_id).subscribe(
       (segments) => {
         if (segments.length !== 0) {
           this.bankDataForm.controls['bank_segment_id'].enable();

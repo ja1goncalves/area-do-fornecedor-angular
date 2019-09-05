@@ -105,9 +105,9 @@ export class updateRegisterHelpers implements OnInit {
         (err) => { }
       )
     }
-  
-    getSegments(bank_id: number):void {
-      this.register.getSegments(bank_id).subscribe(
+
+    getSegmentsByBank(bank_id: number):void {
+      this.register.getSegmentsByBank(bank_id).subscribe(
         (segments) => {
           this.segments = segments;
         },

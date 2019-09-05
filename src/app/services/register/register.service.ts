@@ -79,10 +79,10 @@ export class RegisterService {
    * @param bankId
    * @returns {Observable<any>}
    */
-  public getSegments(bankId: number): Observable<any> {
+  public getSegmentsByBank(bankId: number): Observable<any> {
 
     return new Observable((observer) => {
-      this.http.get(`${environment.API_URL}/api/provider/segments/${bankId}`).subscribe(
+      this.http.get(`${environment.API_URL}/api/provider/bank/segments/${bankId}`).subscribe(
         (reponse: any) => { observer.next(reponse); },
         (error) => { observer.error(error.error); }
       );
@@ -91,6 +91,21 @@ export class RegisterService {
   }
 
   /**
+   * @param id
+   * @returns {Observable<any>}
+   */
+  public getSegment(id: number): Observable<any> {
+
+    return new Observable((observer) => {
+      this.http.get(`${environment.API_URL}/api/provider/segments/${id}`).subscribe(
+          (reponse: any) => { observer.next(reponse); },
+          (error) => { observer.error(error.error); }
+      );
+    });
+
+  }
+
+    /**
    * @returns {Observable<any>}
    */
   public getPrograms(): Observable<any> {

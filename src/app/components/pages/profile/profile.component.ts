@@ -118,24 +118,25 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  public getSegment(id) {
+    this.register.getSegment(id).subscribe(
+        (segment) => {
+          this.segments.title = segment.title;
+        },
+        (error) => { }
+    );
+  }
+
   public getSegments(id = 0) {
     const bank_id = this.f.bank_id.value;
-    this.register.getSegments(bank_id).subscribe(
+    this.register.getSegmentsByBank(bank_id).subscribe(
     (segments) => {
-        if (id !== 0) {
-          segments.forEach((segment) => {
-            if (segment.id === id) {
-              this.segments.title = segment.title;
-            }
-          });
+        if (segments.length !== 0) {
+          this.updateForm.controls['segment_id'].enable();
+          this.segments = segments;
         } else {
-          if (segments.length !== 0) {
-            this.updateForm.controls['segment_id'].enable();
-            this.segments = segments;
-          } else {
-            this.updateForm.controls['segment_id'].disable();
-            this.segments = [];
-          }
+          this.updateForm.controls['segment_id'].disable();
+          this.segments = [];
         }
       },
       (error) => { }
@@ -173,7 +174,7 @@ export class ProfileComponent implements OnInit {
         this.providerData['banks_id'] = providerData.bank ? providerData.bank.id : null;
         this.fillForm(this.providerData);
         if (providerData.bank && providerData.bank.segment_id) {
-          this.getSegments(providerData.bank.segment_id);
+          this.getSegment(providerData.bank.segment_id);
         }
       },
       (error) => { console.log(error); }
