@@ -38,7 +38,7 @@
               <div class="col col-4 col-programa">
                 <span class="programa-fidelidade">
                   <span class="logo">
-                    <img [alt]="program.program_title" [src]="'assets/imgs/cias/'+program.program_code.toLowerCase()+'.png'" />
+                    <img [alt]="program.program_title" [src]="'assets/imgs/cias/'+program.program_code.toLowerCase()+'.png'" style="width: 42px"/>
                     ({{detailsFidelities[program.program_id-1].title}})
                   </span>
                 </span>
@@ -123,7 +123,7 @@
           <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.status_orders">Cancelar</button>
           <span *ngIf="quotation.status_orders" >
             <p *ngFor="let status of quotation.status_orders;" style="margin-bottom: 0rem">
-               <img [alt]="status.program" [src]="'assets/imgs/cias/'+status.program.toLowerCase()+'.png'" style="width: 30%"/> {{status.status.toUpperCase()}}
+               <img style="width: 42px" [alt]="status.program" [src]="'assets/imgs/cias/'+status.program.toLowerCase()+'.png'" style="width: 30%"/> {{status.status.toUpperCase()}}
             </p>
           </span>
         </div>
