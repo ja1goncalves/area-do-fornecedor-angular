@@ -108,18 +108,21 @@ export class QuotationsComponent implements OnInit {
   }
 
   public saveFidelities(id) {
+    this.loading = true;
 
     const data = {
       quotation_id: id,
       orders_programs: this.fidelities[id].filter(f => f)
     };
-    console.log(data);
+
     this.quotationService.createOrder(data)
       .subscribe(res => {
         this.notify.show('success', 'Dados enviados com sucesso!');
         this.getQuotations();
         this.unsellQuotation(id);
+        this.loading = false;
       }, err => {
+        this.loading = false;
         this.notify.show('error', 'Ocorreu um erro ao tentar enviar seus dados!');
       });
   }
