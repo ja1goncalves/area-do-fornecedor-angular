@@ -39,6 +39,7 @@ export class ProfileComponent implements OnInit {
   public banks: any = [];
   public segments: any = [];
   public programs: any = [];
+  public loading: boolean;
   public startDate = new Date(1990, 0, 1);
   public maxDate = new Date();
   public minDate = new Date(this.maxDate.getFullYear() - 150, this.maxDate.getMonth());
@@ -164,6 +165,7 @@ export class ProfileComponent implements OnInit {
   }
 
   public getProviderData(): void {
+    this.loading = true;
     this.register.getProviderData().subscribe(
       (providerData) => {
         this.initialValues = providerData;
@@ -176,6 +178,7 @@ export class ProfileComponent implements OnInit {
         if (providerData.bank && providerData.bank.segment_id) {
           this.getSegment(providerData.bank.segment_id);
         }
+        this.loading = false;
       },
       (error) => { console.log(error); }
     );
@@ -272,12 +275,14 @@ export class ProfileComponent implements OnInit {
   }
 
   public submitForm(): void {
+    this.loading = true;
     const requestData = this.mountRequestData();
     this.mountRequestData();
 
     this.register.updateRegister(requestData).subscribe(
       (response) => {
         this.notify.show('success', 'Seus dados foram encaminhados para análise');
+        this.loading = false;
       },
       (error) => {
         console.log(error);
