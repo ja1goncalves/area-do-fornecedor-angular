@@ -1,3 +1,4 @@
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 <div class="container-fornecedor" *ngIf="updateForm">
   <form [formGroup]="updateForm" (submit)="submitForm()">
     <div class="row-fluid" id="formCadastroPt1">
@@ -268,6 +269,7 @@
         </div>
 
         <div class="col-12 col-sm-12 col-md-2 col-lg-2">
+          <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
           <button class="btn btn-primary btn-block" type="submit">Atualizar</button>
         </div>
       </div>

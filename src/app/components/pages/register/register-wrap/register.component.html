@@ -1,5 +1,6 @@
 <div class="container-fornecedor">
 
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
   <mat-vertical-stepper linear=true #stepper>
 
     <mat-step [stepControl]="accessDataForm" [editable]="false">

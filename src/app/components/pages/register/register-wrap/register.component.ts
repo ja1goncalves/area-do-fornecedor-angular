@@ -21,6 +21,7 @@ export class RegisterComponent implements OnInit {
   public bankDataForm: FormGroup;
   public fidelitiesForm: FormGroup;
   public personalDataForm: FormGroup;
+  public loading: boolean;
 
   ngOnInit() {
     this.accessDataForm = this._formBuilder.group({
@@ -91,9 +92,10 @@ export class RegisterComponent implements OnInit {
   }
 
   public createRegister(stepper: any, fromQuotation: boolean): void {
+    this.loading = true;
     this.register.createRegister(this.accessData, fromQuotation).subscribe(
       (createdUser: any) => {
-        this.notify.show('success', 'Por favor, verifique seu email');
+        // this.notify.show('success', 'Por favor, verifique seu email');
         this.accessDataForm.controls['hiddenCtrl'].setValue('Check');
         return this.checkConfirm(stepper);
         // stepper.next();
@@ -109,6 +111,7 @@ export class RegisterComponent implements OnInit {
       (tokenData: any) => {
         this.getUserAuthenticated();
         this.confirmForm.controls['confirmCtrl'].setValue('Check');
+        this.loading = false;
         stepper.next();
       },
       (err) => { }
@@ -136,10 +139,12 @@ export class RegisterComponent implements OnInit {
   }
 
   public updateRegister(): void {
+    this.loading = true;
     this.register.updateRegister(this.RequestData).subscribe(
       (updatedData: any) => {
         this.notify.show('success', 'Cadastro finalizado com sucesso');
         this.router.navigate(['/minhas-cotacoes']);
+        this.loading = false;
       },
       (err) => {
         this.notify.show('error', err.message);
