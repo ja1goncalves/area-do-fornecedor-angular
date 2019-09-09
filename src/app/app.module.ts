@@ -31,7 +31,7 @@ import {
   MatStepperModule,
   MatInputModule,
   MatFormFieldModule,
-  MatButtonModule, MatNativeDateModule
+  MatButtonModule, MatNativeDateModule, MatProgressBarModule
 } from '@angular/material';
 import { RegisterAccessDataComponent } from './components/pages/register/register-access-data/register-access-data.component';
 import { RegisterPersonalDataComponent } from './components/pages/register/register-personal-data/register-personal-data.component';
@@ -71,7 +71,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     NgxMaskModule.forRoot(),
     MatDatepickerModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatProgressBarModule
   ],
   providers: [
     AuthGuardService,
