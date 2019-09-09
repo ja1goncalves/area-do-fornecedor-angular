@@ -93,7 +93,7 @@ export class RegisterComponent implements OnInit {
   public createRegister(stepper: any, fromQuotation: boolean): void {
     this.register.createRegister(this.accessData, fromQuotation).subscribe(
       (createdUser: any) => {
-        this.notify.show('success', 'Por favor, verifique seu email');
+        // this.notify.show('success', 'Por favor, verifique seu email');
         this.accessDataForm.controls['hiddenCtrl'].setValue('Check');
         return this.checkConfirm(stepper);
         // stepper.next();
