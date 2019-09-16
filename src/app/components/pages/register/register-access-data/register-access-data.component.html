@@ -27,6 +27,18 @@
         <div *ngIf="accessDataForm.get('cpf').getError('cpfNotValid')">O CPF é inválido!</div>
       </div>
     </div>
+    <div class="col-12 col-sm-4 col-md-6 col-lg-6 mb-3">
+      <label>Telefone fixo</label>
+      <input type="text" formControlName="phone" class="form-control" placeholder="Telefone Fixo (opcional)" [dropSpecialCharacters]="false" mask="(00) 0000-0000">
+    </div>
+    <div class="col-12 col-sm-4 col-md-6 col-lg-6 mb-3">
+      <label>Celular</label>
+      <input type="text" formControlName="cellphone" class="form-control" [ngClass]="{'input-invalid': submitted && f.cellphone.errors}" placeholder="Celular" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
+      <div *ngIf="submitted && f.cellphone.errors" class="form-validator-error">
+        <div *ngIf="f.cellphone.errors.required">O celular é obrigatório</div>
+        <div *ngIf="f.cellphone.errors.minlength">Informe um número válido</div>
+      </div>
+    </div>
     <div class="col-12">
       <p><strong>Para continuar, crie uma senha de acesso:</strong></p>
     </div>

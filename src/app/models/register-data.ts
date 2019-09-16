@@ -4,6 +4,8 @@ export interface AccessData {
   name: string;
   cpf: string;
   password: string;
+  phone: string;
+  cellphone: string;
 }
 
 export interface RequestData {

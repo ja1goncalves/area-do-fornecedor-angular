@@ -41,7 +41,7 @@
         </div>
         <div class="col-12 col-sm-4 col-md-6 col-lg-6 mb-3">
             <label>Celular</label>
-            <input type="text" formControlName="personal_cellphone" class="form-control" [ngClass]="{'input-invalid': submitted && f.personal_cellphone.errors}" placeholder="Celular" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
+            <input type="text" formControlName="personal_cellphone" class="form-control" [value]="userInfo.cellphone" [ngClass]="{'input-invalid': submitted && f.personal_cellphone.errors}" placeholder="Celular" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
             <div *ngIf="submitted && f.personal_cellphone.errors" class="form-validator-error">
                 <div *ngIf="f.personal_cellphone.errors.required">O celular é obrigatório</div>
                 <div *ngIf="f.personal_cellphone.errors.minlength">Informe um número válido</div>
