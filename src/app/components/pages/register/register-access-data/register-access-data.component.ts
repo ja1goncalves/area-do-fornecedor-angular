@@ -42,6 +42,8 @@ export class RegisterAccessDataComponent implements OnInit {
       cpf: ['', [Validators.required, Validators.minLength(11), GenericValidator.isValidCpf()]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]],
+      phone: ['', [Validators.minLength(8)]],
+      cellphone: ['', [Validators.required]],
     }, { validator: PasswordValidation.MatchPassword });
 
     if (this.fromQuotation) {
@@ -73,6 +75,8 @@ export class RegisterAccessDataComponent implements OnInit {
         name: this.accessDataForm.controls.name.value,
         cpf: this.accessDataForm.controls.cpf.value,
         password: this.accessDataForm.controls.password.value,
+        phone: this.accessDataForm.controls.phone.value,
+        cellphone: this.accessDataForm.controls.cellphone.value,
       };
 
       this.submitData.emit({ accessData: this.accessData, fromQuotation: this.fromQuotation });
