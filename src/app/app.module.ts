@@ -38,6 +38,7 @@ import { RegisterPersonalDataComponent } from './components/pages/register/regis
 import { RegisterFidelityProgramsComponent } from './components/pages/register/register-fidelity-programs/register-fidelity-programs.component';
 import { RegisterBankDataComponent } from './components/pages/register/register-bank-data/register-bank-data.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     RegisterPersonalDataComponent,
     RegisterFidelityProgramsComponent,
     RegisterBankDataComponent,
+    LoadingComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,7 +74,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MatDatepickerModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   providers: [
     AuthGuardService,

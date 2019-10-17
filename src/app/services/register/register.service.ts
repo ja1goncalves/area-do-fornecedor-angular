@@ -3,6 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+
+interface IAddressData {
+  city: string;
+  district: string;
+  street: string;
+  street_view: string;
+  uf: string;
+  zip_code: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -161,6 +171,15 @@ export class RegisterService {
         (error) => { observer.error(error.error); }
       );
     });
+  }
+
+  public getAddressData(cep: string): Observable<IAddressData> {
+    return new Observable((observer) => 
+      this.http.get(`https://gateway.buscaaereo.com.br/vision/cep/${cep}`).subscribe(
+        (response: IAddressData) => { observer.next(response); },
+        (error) => { observer.error(error); }
+      )
+    )
   }
 
 }
