@@ -5,6 +5,7 @@ import { Address, Personal } from 'src/app/models/register-data';
 import * as moment from 'moment';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import { RegisterService } from '../../../../services/register/register.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -45,8 +46,13 @@ export class RegisterPersonalDataComponent implements OnInit {
   public startDate = new Date(1990, 0, 1);
   public maxDate = new Date();
   public minDate = new Date(this.maxDate.getFullYear() - 150, this.maxDate.getMonth());
+  public loadingCepData: boolean;
 
-  constructor(private formBuilder: FormBuilder, private _adapter: DateAdapter<any>) { }
+  constructor(
+    private formBuilder: FormBuilder, 
+    private _adapter: DateAdapter<any>,
+    private registerService: RegisterService,
+  ) { }
 
   ngOnInit() {
     this.initFormControls();
@@ -121,6 +127,22 @@ export class RegisterPersonalDataComponent implements OnInit {
 
       this.submitData.emit(completePersonalData);
 
+    }
+  }
+
+  public getAddress() {
+    const cepOnlyNumbers = this.f.residential_zip_code.value.replace(/\D/g, '');
+    if (cepOnlyNumbers.replace(/\D/g, '').length === 8) {
+      this.loadingCepData = true;
+      this.registerService.getAddressData(this.f.residential_zip_code.value).subscribe(res => {
+        this.f.residential_address.setValue(res.street);
+        this.f.residential_neighborhood.setValue(res.district);
+        this.f.residential_city.setValue(res.city);
+        this.f.residential_state.setValue(res.uf);
+        this.loadingCepData = false;
+      }, ({ message }) => {
+        this.loadingCepData = false;
+      })
     }
   }
 
