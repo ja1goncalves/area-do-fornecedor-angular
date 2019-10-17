@@ -277,16 +277,16 @@ export class ProfileComponent implements OnInit {
   public submitForm(): void {
     this.loading = true;
     const requestData = this.mountRequestData();
-    this.mountRequestData();
 
     this.register.updateRegister(requestData).subscribe(
-      (response) => {
+      (_) => {
         this.notify.show('success', 'Seus dados foram encaminhados para análise');
         this.loading = false;
       },
-      (error) => {
-        console.log(error);
-        this.notify.show('error', error.message);
+      ({ message }) => {
+        const errorMessage = message ? message : 'Aconteceu um erro no servidor. Por favor, tente mais tarde.';
+        this.notify.show('error', errorMessage);
+        this.loading = false;
       }
     );
   }
