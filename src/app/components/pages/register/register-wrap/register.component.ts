@@ -59,14 +59,14 @@ export class RegisterComponent implements OnInit {
     this.createRegister(stepper, $event.fromQuotation);
   }
 
-  public personalDataReceiver($event, stepper): void {
+  public personalDataReceiver($event, stepper: MatStepper): void {
     this.addressPersonalData = $event;
     this.RequestData.personal = this.addressPersonalData.personalData;
     this.RequestData.address = this.addressPersonalData.addressData;
     stepper.next();
   }
 
-  public fidelitiesDataReceiver($event, stepper): void {
+  public fidelitiesDataReceiver($event, stepper: MatStepper): void {
     this.fidelitiesData = $event;
     const fidelities = [];
 
@@ -93,7 +93,7 @@ export class RegisterComponent implements OnInit {
     this.updateRegister();
   }
 
-  public createRegister(stepper: any, fromQuotation: boolean): void {
+  public createRegister(stepper: MatStepper, fromQuotation: boolean): void {
     this.loading = true;
     this.register.createRegister(this.accessData, fromQuotation).subscribe(
       (_) => {
@@ -109,7 +109,7 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  public checkConfirm(stepper: any): void {
+  public checkConfirm(stepper: MatStepper): void {
     this.login.loginUser(this.accessData.email, this.accessData.password).subscribe(
       (_) => {
         this.getUserAuthenticated();
@@ -141,7 +141,7 @@ export class RegisterComponent implements OnInit {
     this.userInfo.cellphone = request['cellphone'].replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
   }
 
-  public nextStep(stepper: any): void {
+  public nextStep(stepper: MatStepper): void {
     stepper.next();
   }
 
