@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
 
   public isValidToken: boolean;
   public banks: any;
-  public userInfo: any = { name: '', cpf: '' };
+  public userInfo: any = { name: '', cpf: '', cellphone: '' };
   public fidelities: any = [];
   public programs: any[] = [];
 
@@ -130,6 +130,7 @@ export class RegisterComponent implements OnInit {
   }
 
   public setUserInfo(request: object): void {
+    this.userInfo = {};
     this.userInfo.name = request['name'];
     this.userInfo.cpf = request['cpf'].replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
     this.userInfo.cellphone = request['cellphone'].replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');

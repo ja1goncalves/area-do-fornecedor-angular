@@ -15,8 +15,8 @@
         <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-3">
             <div class="row form-group">
                 <label>Data de Nascimento</label>
-                <input style="border: 1px solid #ced4da; padding: 0.375rem 0.75rem;" type="text" [min]="minDate" [max]="maxDate"
-                       class="form-control col-12 col-sm-8 col-md-8 col-lg-8 mb-3" matInput
+                <input type="text" [min]="minDate" [max]="maxDate"
+                       class="birthday-input form-control col-12 col-sm-8 col-md-8 col-lg-8 mb-3" matInput
                        [matDatepicker]="picker" formControlName="personal_birthday" [ngClass]="{'input-invalid': submitted && f.personal_birthday.errors}">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
@@ -41,7 +41,7 @@
         </div>
         <div class="col-12 col-sm-4 col-md-6 col-lg-6 mb-3">
             <label>Celular</label>
-            <input type="text" formControlName="personal_cellphone" class="form-control" [value]="userInfo.cellphone" [ngClass]="{'input-invalid': submitted && f.personal_cellphone.errors}" placeholder="Celular" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
+            <input type="text" formControlName="personal_cellphone" class="form-control" [ngClass]="{'input-invalid': submitted && f.personal_cellphone.errors}" placeholder="Celular" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
             <div *ngIf="submitted && f.personal_cellphone.errors" class="form-validator-error">
                 <div *ngIf="f.personal_cellphone.errors.required">O celular é obrigatório</div>
                 <div *ngIf="f.personal_cellphone.errors.minlength">Informe um número válido</div>
@@ -114,15 +114,18 @@
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Profissão</label>
-            <input type="text" formControlName="personal_occupation" class="form-control" placeholder="Profissão" maxlength="20">
+            <input type="text" formControlName="personal_occupation" class="form-control" 
+                placeholder="Profissão" maxlength="20" [ngClass]="{'input-invalid': submitted && f.personal_occupation.invalid}" />
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Nome da Empresa</label>
-            <input type="text" formControlName="personal_company" class="form-control" placeholder="Nome da Empresa" maxlength="20">
+            <input type="text" formControlName="personal_company" class="form-control" 
+                placeholder="Nome da Empresa" maxlength="20" />
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Telefone</label>
-            <input type="text" formControlName="personal_company_phone" class="form-control" placeholder="Telefone da Empresa" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
+            <input type="text" formControlName="personal_company_phone" class="form-control" 
+                placeholder="Telefone da Empresa" [dropSpecialCharacters]="false" mask="(00) 00000-0000" />
         </div>
         <div class="col-12 col-sm-12 col-md-3 col-lg-3">
             <button class="btn btn-primary btn-block" type="submit">Continuar</button>
