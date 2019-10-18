@@ -48,3 +48,5 @@ export function cleanCookie(): void {
   location.reload(!0);
 
 }
+
+export const defaultReqErrMessage = 'Aconteceu um erro no servidor. Por favor, tente mais tarde.';
