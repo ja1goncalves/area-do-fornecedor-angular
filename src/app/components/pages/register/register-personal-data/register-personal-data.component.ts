@@ -5,7 +5,7 @@ import { Address, Personal } from 'src/app/models/register-data';
 import * as moment from 'moment';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import { RegisterService } from '../../../../services/register/register.service';
+import { RegisterService } from 'src/app/services/register/register.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -142,7 +142,7 @@ export class RegisterPersonalDataComponent implements OnInit {
         this.loadingCepData = false;
       }, ({ message }) => {
         this.loadingCepData = false;
-      })
+      });
     }
   }
 

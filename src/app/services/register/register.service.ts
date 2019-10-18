@@ -174,12 +174,12 @@ export class RegisterService {
   }
 
   public getAddressData(cep: string): Observable<IAddressData> {
-    return new Observable((observer) => 
+    return new Observable((observer) => {
       this.http.get(`https://gateway.buscaaereo.com.br/vision/cep/${cep}`).subscribe(
-        (response: IAddressData) => { observer.next(response); },
-        (error) => { observer.error(error); }
-      )
-    )
+          (response: IAddressData) => { observer.next(response); },
+          (error) => { observer.error(error); }
+      );
+    });
   }
 
 }
