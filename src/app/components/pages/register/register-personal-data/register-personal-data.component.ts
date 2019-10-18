@@ -77,7 +77,7 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
       residential_neighborhood: ['', [Validators.required, Validators.maxLength(50)]],
       residential_city:         ['', [Validators.required, Validators.maxLength(30)]],
       residential_state:        ['', [Validators.required]],
-      personal_occupation_id:   ['', [Validators.required]],
+      personal_occupation_id:   [''],
       personal_occupation:      ['', [Validators.maxLength(30)]],
       personal_company:         ['', [Validators.maxLength(30)]],
       personal_company_phone:   ['', [Validators.maxLength(30)]]
