@@ -46,14 +46,14 @@ export class ConfirmResetPasswordComponent implements OnInit {
       (response) => {
         
         if(response.status === 404) {
-          this.notify.show('error', 'O token não é válido');
+          this.notify.show('error', "Seu link de recuperação expirou, tente 'Esqueci minha senha' novamente");
           this.router.navigate(['/login']);
         }
 
         this.tokenInfo = response;
 
       }, (error) => {
-        this.notify.show('error', 'O token não é válido');
+        this.notify.show('error', "Seu link de recuperação expirou, tente 'Esqueci minha senha' novamente");
         this.router.navigate(['/login']);
       }
     );
