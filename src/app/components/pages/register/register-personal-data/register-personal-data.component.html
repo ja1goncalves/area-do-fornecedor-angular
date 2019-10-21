@@ -54,7 +54,8 @@
         </div>
         <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3">
             <label>CEP</label>
-            <input type="text" formControlName="residential_zip_code" class="form-control" [ngClass]="{'input-invalid': submitted && f.residential_zip_code.errors}" placeholder="CEP" [dropSpecialCharacters]="false" mask="00000-000">
+            <loading-icon class="ml-2" [loading]="loadingCepData"></loading-icon>
+            <input type="text" formControlName="residential_zip_code" class="form-control" (focusout)="getAddress()" [ngClass]="{'input-invalid': submitted && f.residential_zip_code.errors}" placeholder="CEP" [dropSpecialCharacters]="false" mask="00000-000">
             <div *ngIf="submitted && f.residential_zip_code.errors" class="form-validator-error">
                 <div *ngIf="f.residential_zip_code.errors.required">O nome é obrigatório</div>
                 <div *ngIf="f.residential_zip_code.errors.minlength">Informe um CEP válido</div>

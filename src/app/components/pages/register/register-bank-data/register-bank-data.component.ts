@@ -26,9 +26,9 @@ export class RegisterBankDataComponent implements OnInit {
       bank_type:          ['', [Validators.required]],
       bank_segment_id:    [{ value: '', disabled: true }, []],
       bank_agency:        ['', [Validators.required, Validators.maxLength(15)]],
-      bank_agency_digit:  ['', [Validators.required, Validators.maxLength(1)]],
+      bank_agency_digit:  ['', [Validators.maxLength(1)]],
       bank_account:       ['', [Validators.required, Validators.maxLength(15)]],
-      bank_account_digit: ['', [Validators.required, Validators.maxLength(1)]],
+      bank_account_digit: ['', [Validators.maxLength(1)]],
       bank_operation:     ['', []]
     });
 
