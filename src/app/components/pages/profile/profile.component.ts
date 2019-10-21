@@ -7,6 +7,7 @@ import { UFS, OCCUPATIONS, GENDERS } from 'src/app/config/consts';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import { defaultReqErrMessage } from 'src/app/app.utils';
 
 export const MY_FORMATS = {
   parse: {
@@ -49,6 +50,8 @@ export class ProfileComponent implements OnInit {
   public userData: any = {};
   public fidelitiesData: any = [];
   public providerData: any = {};
+
+  public loadingCepData: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -277,18 +280,33 @@ export class ProfileComponent implements OnInit {
   public submitForm(): void {
     this.loading = true;
     const requestData = this.mountRequestData();
-    this.mountRequestData();
 
     this.register.updateRegister(requestData).subscribe(
-      (response) => {
+      (_) => {
         this.notify.show('success', 'Seus dados foram encaminhados para análise');
         this.loading = false;
       },
-      (error) => {
-        console.log(error);
-        this.notify.show('error', error.message);
+      ({ message }) => {
+        this.notify.show('error', message ? message : defaultReqErrMessage);
+        this.loading = false;
       }
     );
+  }
+
+  public getAddress() {
+    const cepOnlyNumbers = this.f.zip_code.value.replace(/\D/g, '');
+    if (cepOnlyNumbers.replace(/\D/g, '').length === 8) {
+      this.loadingCepData = true;
+      this.register.getAddressData(this.f.zip_code.value).subscribe(res => {
+        this.f.address.setValue(res.street);
+        this.f.neighborhood.setValue(res.district);
+        this.f.city.setValue(res.city);
+        this.f.state.setValue(res.uf);
+        this.loadingCepData = false;
+      }, ({ message }) => {
+        this.loadingCepData = false;
+      })
+    }
   }
 
 }
