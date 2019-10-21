@@ -31,6 +31,41 @@ export class RegisterBankDataComponent implements OnInit {
       bank_account_digit: ['', [Validators.maxLength(1)]],
       bank_operation:     ['', []]
     });
+
+    this.f.bank_id.valueChanges.subscribe(_ => {
+      if (this.isCaixaEconomica()) {
+        // Torna Operação obrigatória
+        this.f.bank_operation.setValidators([Validators.required]);
+        this.f.bank_operation.updateValueAndValidity();
+        this.updateOperationNumber();
+      } else {
+        // Torna Operação opcional
+        this.f.bank_operation.clearValidators();
+        this.f.bank_operation.updateValueAndValidity();
+      }
+    });
+
+    this.f.bank_type.valueChanges.subscribe(_ => {
+      if(this.isCaixaEconomica())
+        this.updateOperationNumber();
+    })
+  }
+
+  /**
+   * @description Verifies if the bank is Caixa Economica or CEF
+   */
+  isCaixaEconomica(): boolean {
+    return this.f.bank_id.value == 103 || this.f.bank_id.value == 87;
+  }
+
+  /**
+   * @description Updates operation number based on bank type
+   */
+  updateOperationNumber() {
+    if (this.f.bank_type.value === 'CC')
+      this.f.bank_operation.setValue('001');
+    else if (this.f.bank_type.value === 'PP')
+      this.f.bank_operation.setValue('013');
   }
 
   get f() { return this.bankDataForm.controls; }

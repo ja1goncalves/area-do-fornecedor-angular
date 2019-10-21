@@ -1,4 +1,4 @@
-import {Component, Output, Input, EventEmitter, OnChanges, SimpleChanges, SimpleChange} from '@angular/core';
+import {Component, Output, Input, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { FidelitiesNumbers } from 'src/app/models/register-data';
 
@@ -21,6 +21,8 @@ export class RegisterFidelityProgramsComponent implements OnChanges {
 
     const allPrograms = change.programs.currentValue;
     const programFormGroup = [];
+
+    this.programs = this.programs.filter(program => program.code !== 'AV');
 
     if (allPrograms.length) {
       allPrograms.forEach((program, index) => {
