@@ -140,6 +140,7 @@ export class RegisterComponent implements OnInit {
     this.userInfo.name = request['name'];
     this.userInfo.cpf = request['cpf'].replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
     this.userInfo.cellphone = request['cellphone'].replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
+    this.userInfo.phone = request['cellphone'].replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
   }
 
   public nextStep(stepper: MatStepper): void {
