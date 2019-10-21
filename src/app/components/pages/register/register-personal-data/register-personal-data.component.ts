@@ -35,8 +35,8 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() personalDataForm: FormGroup;
   @Input() userInfo: any;
-
-  public personalData: Personal;
+  @Input() hasSteps = true;
+  @Input() personalData: Personal;
   public addressData: Address;
 
   public genders: any[] = GENDERS;
@@ -61,8 +61,25 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.userInfo.currentValue.cellphone) {
+    console.log('changes: ', changes)
+    if (changes.userInfo && changes.userInfo.currentValue.cellphone) {
       this.f.personal_cellphone.setValue(changes.userInfo.currentValue.cellphone);
+    } else if (changes.personalData) {
+      const { currentValue: {
+        birthday,
+        cellphone,
+        name,
+        cpf,
+        gender,
+        phone,
+      } } = changes.personalData;
+
+      this.f.personal_name.setValue(name);
+      this.f.personal_cpf.setValue(cpf);
+      this.f.personal_cellphone.setValue(cellphone);
+      this.f.personal_phone.setValue(phone);
+      this.f.personal_birthday.setValue(birthday);
+      this.f.personal_gender.setValue(gender);
     }
   }
 

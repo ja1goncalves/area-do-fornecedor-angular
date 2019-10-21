@@ -1,5 +1,5 @@
-import {Component, Output, Input, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {Component, Output, Input, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FidelitiesNumbers } from 'src/app/models/register-data';
 
 @Component({
@@ -7,34 +7,33 @@ import { FidelitiesNumbers } from 'src/app/models/register-data';
   templateUrl: './register-fidelity-programs.component.html',
   styleUrls: ['./register-fidelity-programs.component.css']
 })
-export class RegisterFidelityProgramsComponent implements OnChanges {
+export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
 
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() fidelityDataForm: FormGroup;
   @Input() programs;
+  @Input() hasSteps = true;
 
   public fidelitiesData: FidelitiesNumbers;
 
   constructor(private formBuilder: FormBuilder) { }
 
+  ngOnInit() {
+    this.fidelityDataForm = this.formBuilder.group({});
+  }
+
   ngOnChanges(change: SimpleChanges) {
-
     const allPrograms = change.programs.currentValue;
-    const programFormGroup = [];
-
     this.programs = this.programs.filter(program => program.code !== 'AV');
 
     if (allPrograms.length) {
-      allPrograms.forEach((program, index) => {
-        programFormGroup[`card_number_${program.code}`] = ['', [Validators.maxLength(20)]];
-        programFormGroup[`access_password_${program.code}`] = ['', [Validators.maxLength(20)]];
+      allPrograms.forEach(program => {
+        this.fidelityDataForm.addControl(`card_number_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]))
+        this.fidelityDataForm.addControl(`access_password_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]))
         if (program.code === 'JJ' || program.code === 'G3') {
-          programFormGroup[`type_${program.code}`] = ['', []];
+          this.fidelityDataForm.addControl(`type_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]))
         }
       });
-
-      this.fidelityDataForm = this.formBuilder.group(programFormGroup);
-
     }
   }
 

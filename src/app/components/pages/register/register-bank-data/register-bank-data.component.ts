@@ -13,6 +13,7 @@ export class RegisterBankDataComponent implements OnInit {
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() bankDataForm: FormGroup;
   @Input() banks: any;
+  @Input() hasSteps = true;
 
   public bankData: Bank;
   public segments: any;

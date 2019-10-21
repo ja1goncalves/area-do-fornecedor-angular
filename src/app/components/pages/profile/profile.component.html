@@ -1,7 +1,14 @@
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 <div class="container-fornecedor" *ngIf="updateForm">
   <form [formGroup]="updateForm" (submit)="submitForm()">
-    <div class="row-fluid" id="formCadastroPt1">
+    <app-register-personal-data [personalDataForm]="personalDataForm"
+      [userInfo]="userInfo" [hasSteps]="hasSteps" [personalData]="personalData"></app-register-personal-data>
+    <app-register-fidelity-programs [fidelityDataForm]="fidelitiesForm"
+      [programs]="programs" [hasSteps]="hasSteps"></app-register-fidelity-programs>
+    <app-register-bank-data [bankDataForm]="bankDataForm" [banks]="banks"
+      [hasSteps]="hasSteps"></app-register-bank-data>
+    <!-- <div class="row-fluid" id="formCadastroPt1">
+
       <div class="row">
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
@@ -253,9 +260,42 @@
 
         <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2">
           <div class="form-group">
-            <label>DV</label>
-            <input type="text" class="form-control" placeholder="DV" formControlName="account_digit" mask="0">
+            <label>DV
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <small class="legend">* Seus dados serão encaminhados para análise</small>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-2 col-lg-2">
+          <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+          <button class="btn btn-primary btn-block" type="submit">Atualizar</button>
+        </div>
+      </div>
+    </div></label>
+            <input ty
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <small class="legend">* Seus dados serão encaminhados para análise</small>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-2 col-lg-2">
+          <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+          <button class="btn btn-primary btn-block" type="submit">Atualizar</button>
+        </div>
+      </div>
+    </div>pe="text" class="form-control" placeholder="DV" formControlName="account_digit" mask="0">
           </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <small class="legend">* Seus dados serão encaminhados para análise</small>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-2 col-lg-2">
+          <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+          <button class="btn btn-primary btn-block" type="submit">Atualizar</button>
+        </div>
+      </div>
+    </div>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -269,11 +309,11 @@
           <small class="legend">* Seus dados serão encaminhados para análise</small>
         </div>
 
-        <div class="col-12 col-sm-12 col-md-2 col-lg-2">
-          <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-          <button class="btn btn-primary btn-block" type="submit">Atualizar</button>
-        </div>
       </div>
+    </div> -->
+    <div class="col-12 col-sm-12 col-md-2 col-lg-2">
+      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+      <button class="btn btn-primary btn-block" type="submit">Atualizar</button>
     </div>
   </form>
 </div>
