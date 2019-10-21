@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GENDERS, UFS, OCCUPATIONS } from 'src/app/config/consts';
 import { Address, Personal } from 'src/app/models/register-data';
@@ -30,7 +30,7 @@ export const MY_FORMATS = {
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS}
   ],
 })
-export class RegisterPersonalDataComponent implements OnInit {
+export class RegisterPersonalDataComponent implements OnInit, OnChanges {
 
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() personalDataForm: FormGroup;
@@ -49,14 +49,25 @@ export class RegisterPersonalDataComponent implements OnInit {
   public loadingCepData: boolean;
 
   constructor(
-    private formBuilder: FormBuilder, 
+    private formBuilder: FormBuilder,
     private _adapter: DateAdapter<any>,
     private registerService: RegisterService,
   ) { }
 
   ngOnInit() {
     this.initFormControls();
+    this.initControlsValueChanges();
     this._adapter.setLocale('pt');
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+    if (changes.userInfo.currentValue.cellphone) {
+      this.f.personal_cellphone.setValue(changes.userInfo.currentValue.cellphone);
+    }
+    if (changes.userInfo.currentValue.phone) {
+      this.f.personal_phone.setValue(changes.userInfo.currentValue.phone);
+    }
   }
 
   get f(): any { return this.personalDataForm.controls; }
@@ -76,10 +87,22 @@ export class RegisterPersonalDataComponent implements OnInit {
       residential_neighborhood: ['', [Validators.required, Validators.maxLength(50)]],
       residential_city:         ['', [Validators.required, Validators.maxLength(30)]],
       residential_state:        ['', [Validators.required]],
-      personal_occupation_id:   ['', []],
+      personal_occupation_id:   [''],
       personal_occupation:      ['', [Validators.maxLength(30)]],
       personal_company:         ['', [Validators.maxLength(30)]],
       personal_company_phone:   ['', [Validators.maxLength(30)]]
+    });
+  }
+
+  private initControlsValueChanges(): void {
+    this.f.personal_occupation_id.valueChanges.subscribe(value => {
+      if (value !== 4 && value !== 6 && value !== 7) {
+        this.f.personal_occupation.setValidators([Validators.required, Validators.maxLength(30)]);
+        this.f.personal_occupation.updateValueAndValidity();
+      } else {
+        this.f.personal_occupation.setValidators([Validators.maxLength(30)]);
+        this.f.personal_occupation.updateValueAndValidity();
+      }
     });
   }
 
