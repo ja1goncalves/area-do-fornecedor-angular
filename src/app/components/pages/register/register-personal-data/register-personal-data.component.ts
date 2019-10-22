@@ -50,7 +50,7 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   public loadingCepData: boolean;
 
   constructor(
-    private formBuilder: FormBuilder, 
+    private formBuilder: FormBuilder,
     private _adapter: DateAdapter<any>,
     private registerService: RegisterService,
   ) { }
@@ -62,8 +62,13 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.userInfo && changes.userInfo.currentValue.cellphone) {
-      this.f.personal_cellphone.setValue(changes.userInfo.currentValue.cellphone);
+    if (changes.userInfo) {
+      if (changes.userInfo.currentValue.cellphone) {
+        this.f.personal_cellphone.setValue(changes.userInfo.currentValue.cellphone);
+      }
+      if (changes.userInfo.currentValue.phone) {
+        this.f.personal_phone.setValue(changes.userInfo.currentValue.phone);
+      }
     }
   }
 
@@ -94,14 +99,14 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
 
   private initControlsValueChanges(): void {
     this.f.personal_occupation_id.valueChanges.subscribe(value => {
-      if (value != 4 && value != 6 && value != 7) {
+      if (value !== 4 && value !== 6 && value !== 7) {
         this.f.personal_occupation.setValidators([Validators.required, Validators.maxLength(30)]);
         this.f.personal_occupation.updateValueAndValidity();
       } else {
         this.f.personal_occupation.setValidators([Validators.maxLength(30)]);
         this.f.personal_occupation.updateValueAndValidity();
       }
-    })
+    });
   }
 
   private getPersonalData(): any {
