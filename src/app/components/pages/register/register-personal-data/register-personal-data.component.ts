@@ -36,8 +36,9 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   @Input() personalDataForm: FormGroup;
   @Input() userInfo: any;
   @Input() hasSteps = true;
-  @Input() personalData: Personal;
+
   public addressData: Address;
+  public personalData: Personal;
 
   public genders: any[] = GENDERS;
   public ufs: any[] = UFS;
@@ -61,25 +62,8 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes: ', changes)
     if (changes.userInfo && changes.userInfo.currentValue.cellphone) {
       this.f.personal_cellphone.setValue(changes.userInfo.currentValue.cellphone);
-    } else if (changes.personalData) {
-      const { currentValue: {
-        birthday,
-        cellphone,
-        name,
-        cpf,
-        gender,
-        phone,
-      } } = changes.personalData;
-
-      this.f.personal_name.setValue(name);
-      this.f.personal_cpf.setValue(cpf);
-      this.f.personal_cellphone.setValue(cellphone);
-      this.f.personal_phone.setValue(phone);
-      this.f.personal_birthday.setValue(birthday);
-      this.f.personal_gender.setValue(gender);
     }
   }
 
@@ -100,6 +84,7 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
       residential_neighborhood: ['', [Validators.required, Validators.maxLength(50)]],
       residential_city:         ['', [Validators.required, Validators.maxLength(30)]],
       residential_state:        ['', [Validators.required]],
+      residential_id:           [''],
       personal_occupation_id:   [''],
       personal_occupation:      ['', [Validators.maxLength(30)]],
       personal_company:         ['', [Validators.maxLength(30)]],

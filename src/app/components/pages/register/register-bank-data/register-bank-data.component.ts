@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Bank } from 'src/app/models/register-data';
 import { RegisterService } from 'src/app/services/register/register.service';
@@ -8,21 +8,22 @@ import { RegisterService } from 'src/app/services/register/register.service';
   templateUrl: './register-bank-data.component.html',
   styleUrls: ['./register-bank-data.component.css']
 })
-export class RegisterBankDataComponent implements OnInit {
+export class RegisterBankDataComponent implements OnInit, OnChanges {
 
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() bankDataForm: FormGroup;
   @Input() banks: any;
   @Input() hasSteps = true;
+  @Input() segments: any;
 
   public bankData: Bank;
-  public segments: any;
   public submitted: boolean;
 
   constructor(private formBuilder: FormBuilder, private register: RegisterService) { }
 
   ngOnInit() {
     this.bankDataForm = this.formBuilder.group({
+      id:                 [''],
       bank_id:            ['', [Validators.required]],
       bank_type:          ['', [Validators.required]],
       bank_segment_id:    [{ value: '', disabled: true }, []],
@@ -50,6 +51,11 @@ export class RegisterBankDataComponent implements OnInit {
       if(this.isCaixaEconomica())
         this.updateOperationNumber();
     })
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.segments)
+      this.segments = changes.segments.currentValue
   }
 
   /**
