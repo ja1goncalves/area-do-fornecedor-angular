@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { GENDERS, UFS, OCCUPATIONS } from 'src/app/config/consts';
 import { Address, Personal } from 'src/app/models/register-data';
 import * as moment from 'moment';
@@ -143,6 +143,9 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
 
   public personalDataSubmit(): void {
     this.submitted = true;
+    Object.values(this.personalDataForm.controls).forEach((control: FormControl) => {
+      control.markAsTouched();
+    })
 
     if (this.personalDataForm.valid) {
 

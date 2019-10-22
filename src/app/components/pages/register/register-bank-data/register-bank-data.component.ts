@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Bank } from 'src/app/models/register-data';
 import { RegisterService } from 'src/app/services/register/register.service';
 
@@ -78,8 +78,10 @@ export class RegisterBankDataComponent implements OnInit, OnChanges {
   get f() { return this.bankDataForm.controls; }
 
   bankDataSubmit(): void {
-
     this.submitted = true;
+    Object.values(this.bankDataForm.controls).forEach((control: FormControl) => {
+      control.markAsTouched();
+    })
 
     if (this.bankDataForm.valid) {
 
