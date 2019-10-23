@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PasswordService } from 'src/app/services/password/password.service';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 import { PasswordValidation } from 'src/app/helpers/validators';
+import { defaultReqErrMessage } from '../../../app.utils';
 
 @Component({
   selector: 'app-confirm-reset-password',
@@ -76,15 +77,16 @@ export class ConfirmResetPasswordComponent implements OnInit {
 
       this.passwordService.confirmPassword(requestData).subscribe(
         (response) => {
-          if(response.hasOwnProperty('errors')) {
-            this.notify.show('error', 'Verifique as informações e tente novamente');
+          if(response.error || response.errors) {
+            const { message } = response;
+            this.notify.show('error', message ? message : defaultReqErrMessage);
             this.loading = false;
           } else {
             this.notify.show('success', 'Sua senha foi alterada');
             this.router.navigate(['/login']);
           }
-        }, (error) => {
-          this.notify.show('error', 'tente novamente');
+        }, ({ message }) => {
+          this.notify.show('error', message ? message : defaultReqErrMessage);
           this.loading = false;
         }
       );
