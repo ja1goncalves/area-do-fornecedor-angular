@@ -10,6 +10,76 @@ import { NotifyService } from '../../../services/notify/notify.service';
 })
 export class QuotationsComponent implements OnInit {
 
+  public quot = [
+    {
+        "id": 138320,
+        "status_orders": null,
+        "created_at": "2019-10-23",
+        "updated_at": {
+            "date": "2019-10-23 14:44:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "total": 3715.5,
+        "programs": [
+            {
+                "id": 170592,
+                "value": 15,
+                "price": 225,
+                "program_title": "TAM",
+                "program_code": "JJ",
+                "program_id": 1,
+                "payment_form_id": 2
+            },
+            {
+                "id": 170593,
+                "value": 15,
+                "price": 247.5,
+                "program_title": "TAM",
+                "program_code": "JJ",
+                "program_id": 1,
+                "payment_form_id": 3
+            },
+            {
+                "id": 170594,
+                "value": 31,
+                "price": 620,
+                "program_title": "GOL",
+                "program_code": "G3",
+                "program_id": 2,
+                "payment_form_id": 2
+            },
+            {
+                "id": 170595,
+                "value": 31,
+                "price": 558,
+                "program_title": "GOL",
+                "program_code": "G3",
+                "program_id": 2,
+                "payment_form_id": 3
+            },
+            {
+                "id": 170596,
+                "value": 50,
+                "price": 1375,
+                "program_title": "AZUL",
+                "program_code": "AD",
+                "program_id": 3,
+                "payment_form_id": 2
+            },
+            {
+                "id": 170597,
+                "value": 23,
+                "price": 690,
+                "program_title": "TAM Red e Black",
+                "program_code": "TRB",
+                "program_id": 5,
+                "payment_form_id": 2
+            }
+        ]
+    }
+]
+
   public detailsFidelities = [
     {
       title: 'Latam',
@@ -57,7 +127,8 @@ export class QuotationsComponent implements OnInit {
     this.loading = true;
     this.quotationService.getQuotations()
     .subscribe(res => {
-      this.quotations = res.data;
+      // this.quotations = res.data;
+      this.quotations = this.quot;
       this.loading = false;
       for (const quotation of this.quotations) {
         this.fidelities[quotation.id] = [];
@@ -78,6 +149,7 @@ export class QuotationsComponent implements OnInit {
       }
     }, err => {
       this.loading = false;
+      this.quotations = this.quot;
     });
   }
 
