@@ -17,6 +17,10 @@ interface IPaymentInfo extends IPaymentMethods {
   } | any
 };
 
+interface IStatus {
+  [key: string]: boolean
+}
+
 @Component({
   selector: 'app-quotations',
   templateUrl: './quotations.component.html',
@@ -24,6 +28,9 @@ interface IPaymentInfo extends IPaymentMethods {
 })
 export class QuotationsComponent implements OnInit {
 
+  private isSelling: boolean;
+  public lockStatus: IStatus = {};
+  public showForm: IStatus = {}
   public quot = [
     {
       "id": 138320,
@@ -198,13 +205,11 @@ export class QuotationsComponent implements OnInit {
   fidelities: Array<any> = [];
   loading: any = true;
   paymentMethods: IPaymentMethods[];
-  programs: [key: string, value: IPaymentInfo][];
+  programs: Array<[string, IPaymentInfo]>;
 
   constructor(private quotationService: QuotationService, private authService: AuthService, private notify: NotifyService) { }
 
   ngOnInit() {
-    this.getQuotations();
-    // this.getPaymentsMethods();
     this.paymentMethods = [
       {
         title: 'Indefinido',
@@ -219,6 +224,8 @@ export class QuotationsComponent implements OnInit {
         "id": 3
       }
     ]
+    this.getQuotations();
+    // this.getPaymentsMethods();
   }
 
   private getPaymentsMethods() {
@@ -236,11 +243,12 @@ export class QuotationsComponent implements OnInit {
       // this.quotations = res.data;
       this.quotations = this.quot;
       this.programs = Object.entries(this.quotations[0].programs);
-      console.log('this.programs: ', this.programs);
+      this.programs.forEach((_, i) => this.showForm[i] = false);
+      // console.log('this.programs: ', this.programs);
       this.loading = false;
       for (const quotation of this.quotations) {
         this.fidelities[quotation.id] = [];
-        this.getProviderFidelities(quotation.programs) //gambi why return subscribe don't wait the function over
+        this.getProviderFidelities() //gambi why return subscribe don't wait the function over
             .then(() => {
               this.programs.forEach(([key, value]) => {
                 this.fidelities[quotation.id][value.id] = {
@@ -248,13 +256,11 @@ export class QuotationsComponent implements OnInit {
                   number: ['JJ', 'TRB'].includes(key) ?
                       this.authService.getDataUser().cpf :
                       this.detailsFidelities[(value.id - 1)].card_number,
-                  price: Object.entries(value).find(obj => obj.price).price,
-                  value: Object.entries(value).find(obj => obj.value).value,
+                  price: Object.values(value).find(obj => obj.price).price,
+                  value: Object.values(value).find(obj => obj.value).value,
                   files: []
                 };
-              })
-              for (const program of quotation.programs) {
-              }
+              });
             });
       }
     }, err => {
@@ -263,13 +269,13 @@ export class QuotationsComponent implements OnInit {
     });
   }
 
-  public getProviderFidelities(programs): Promise<any> {
+  private getProviderFidelities(): Promise<any> {
     return this.quotationService.getProviderFidelities().toPromise().then(
       (fidelities) => {
-        programs.forEach((program) => {
+        this.programs.forEach(([, value]) => {
           fidelities.forEach((fidelity) => {
-              if (fidelity.program_id === program.program_id) {
-                this.detailsFidelities[(program.program_id - 1)].card_number = fidelity.card_number;
+              if (fidelity.program_id === value.id) {
+                this.detailsFidelities[(value.id - 1)].card_number = fidelity.card_number;
               }
             });
         });
@@ -277,15 +283,19 @@ export class QuotationsComponent implements OnInit {
     );
   }
 
-  public sellQuotation(id) {
+  public sellQuotation(id): void {
+    this.isSelling = true;
+    Object.keys(this.showForm).forEach(key => this.showForm[key] = true);
     this.visibleForms.push(this.quotations.filter(quotation => quotation.id === id)[0]);
   }
 
-  public unsellQuotation(id) {
+  public unsellQuotation(id): void {
+    this.isSelling = false;
+    Object.keys(this.showForm).forEach(key => this.showForm[key] = false);
     this.visibleForms = this.visibleForms.filter(quotation => quotation.id !== id);
   }
 
-  public isVisibleForm(id) {
+  public isVisibleForm(id): boolean {
     return this.visibleForms.filter(quotation => quotation.id === id).length > 0;
   }
 
@@ -298,8 +308,8 @@ export class QuotationsComponent implements OnInit {
   }
 
   public getValue(programInfo: IPaymentInfo, quotation): number | string {
-    const paymentObj = programInfo[this.fidelities[quotation.id][programInfo.id]];
-    return paymentObj ? paymentObj.price : '';
+    return this.fidelities[quotation.id][programInfo.id] ? this.fidelities[quotation.id][programInfo.id].payment_method : '';
+    // return paymentObj ? paymentObj.price : '';
   }
 
   public saveFidelities(id) {
@@ -336,6 +346,37 @@ export class QuotationsComponent implements OnInit {
         });
       };
     }
+  }
+
+  public paymentMethodChange(event: any, index: number, quotationId: number, programId: number): void {
+    const { target: { value } } = event;
+    const programMethods = this.programs[index][1];
+    const method = this.paymentMethods.find(met => met.id == value).title;
+    const methodInfo = Object.values(programMethods).find(info => info && info.payment_form == method);
+    if (methodInfo)
+      this.fidelities[quotationId][programId].payment_method = methodInfo.price;
+    else
+      this.fidelities[quotationId][programId].payment_method = '';
+  }
+
+  /**
+   * @description Locks/unlocks password visualization
+   * @param index 
+   * @param unlock 
+   */
+  public lockUnlock(index: number, unlock: boolean): void {
+    const passwordInput = document.getElementById(`tam-senha-${index}`);
+    this.lockStatus[index] = unlock;
+    const inputType = passwordInput.getAttribute('type');
+    if (inputType === 'text') {
+      passwordInput.setAttribute('type', 'password');
+    } else
+      passwordInput.setAttribute('type', 'text');
+  }
+
+  public manageFormVisibility(index: number) {
+    if (this.isSelling)
+      this.showForm[index] = !this.showForm[index]
   }
 
 }
