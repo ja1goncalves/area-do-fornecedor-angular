@@ -93,12 +93,9 @@
                       class="form-control" 
                       id="tam-senha-{{ i }}" 
                       formControlName="access_password">
-                    <i *ngIf="!lockStatus[i]" class="material-icons password-lock" (click)="lockUnlock(i, true)">
-                      lock
-                    </i>
-                    <i *ngIf="lockStatus[i]" class="material-icons password-lock" (click)="lockUnlock(i, false)">
-                      lock_open
-                    </i>
+                    <app-password-lock
+                      class="password-lock-component"
+                      (lockUnlock)="lockUnlock(i, $event)"></app-password-lock>
                   </div>
                 </div>
               </div>

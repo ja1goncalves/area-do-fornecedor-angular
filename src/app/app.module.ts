@@ -39,6 +39,7 @@ import { RegisterFidelityProgramsComponent } from './components/pages/register/r
 import { RegisterBankDataComponent } from './components/pages/register/register-bank-data/register-bank-data.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { LoadingComponent } from './components/loading/loading.component';
+import { PasswordLockComponent } from './components/password-lock/password-lock.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { LoadingComponent } from './components/loading/loading.component';
     RegisterFidelityProgramsComponent,
     RegisterBankDataComponent,
     LoadingComponent,
+    PasswordLockComponent,
   ],
   imports: [
     BrowserModule,

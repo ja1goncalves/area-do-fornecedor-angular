@@ -138,8 +138,7 @@
     position: relative;
 }
 
-.password-box .password-lock {
-    cursor: pointer;
+.password-box .password-lock-component {
     position: absolute;
     top: 8px;
     right: 12px;

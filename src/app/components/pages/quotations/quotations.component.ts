@@ -3,36 +3,8 @@ import { QuotationService } from '../../../services/quotation/quotation.service'
 import { AuthService } from '../../../services/auth/auth.service';
 import { NotifyService } from '../../../services/notify/notify.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { IPaymentInfo, IPaymentMethods, IPaymentReq, IStatus } from './interfaces';
 
-interface IPaymentReq {
-  [key: number]: {
-    id: number;
-    number: string;
-    paymentMethod: number | '';
-    price: number | string;
-    sellThis: boolean;
-    value: number;
-    files: any[];
-  }
-}
-
-interface IPaymentMethods {
-  id: number;
-  title: string;
-};
-
-interface IPaymentInfo extends IPaymentMethods {
-  [key: string]: {
-    id: number;
-    value: number;
-    price: number;
-    payment_form: 'Antecipado' | 'Postecipado';
-  } | any
-};
-
-interface IStatus {
-  [key: string]: boolean
-}
 
 @Component({
   selector: 'app-quotations',
@@ -42,7 +14,6 @@ interface IStatus {
 export class QuotationsComponent implements OnInit {
 
   private isSelling: boolean;
-  public lockStatus: IStatus = {};
   public showForm: IStatus = {}
   public quot = [
     {
@@ -278,7 +249,7 @@ export class QuotationsComponent implements OnInit {
         this.programsForm.get(`program-form-${program.id}`).get('sellThis').valueChanges.subscribe(value => {
           const paymentMethod = this.programsForm.get(`program-form-${program.id}`).get('paymentMethod');
           if (value) {
-            paymentMethod.setValidators([Validators.required, Validators.pattern(/^[^1]$/g)]);
+            paymentMethod.setValidators([Validators.required, Validators.pattern(/^[^1]/)]);
             paymentMethod.updateValueAndValidity();
           } else {
             paymentMethod.clearValidators();
@@ -449,7 +420,6 @@ export class QuotationsComponent implements OnInit {
    */
   public lockUnlock(index: number, unlock: boolean): void {
     const passwordInput = document.getElementById(`tam-senha-${index}`);
-    this.lockStatus[index] = unlock;
     const inputType = passwordInput.getAttribute('type');
     if (inputType === 'text') {
       passwordInput.setAttribute('type', 'password');
