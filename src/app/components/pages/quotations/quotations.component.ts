@@ -3,6 +3,18 @@ import { QuotationService } from '../../../services/quotation/quotation.service'
 import { AuthService } from '../../../services/auth/auth.service';
 import { NotifyService } from '../../../services/notify/notify.service';
 
+interface IPaymentReq {
+  [key: number]: {
+    id: number;
+    number: string;
+    paymentMethod: number | '';
+    price: number | string;
+    sellThis: boolean;
+    value: number;
+    files: any[];
+  }
+}
+
 interface IPaymentMethods {
   id: number;
   title: string;
@@ -202,7 +214,7 @@ export class QuotationsComponent implements OnInit {
   ];
   quotations: Array<any> = [];
   visibleForms: Array<any> = [];
-  fidelities: Array<any> = [];
+  fidelities: IPaymentReq[] = [];
   loading: any = true;
   paymentMethods: IPaymentMethods[];
   programs: Array<[string, IPaymentInfo]>;
@@ -244,7 +256,6 @@ export class QuotationsComponent implements OnInit {
       this.quotations = this.quot;
       this.programs = Object.entries(this.quotations[0].programs);
       this.programs.forEach((_, i) => this.showForm[i] = false);
-      // console.log('this.programs: ', this.programs);
       this.loading = false;
       for (const quotation of this.quotations) {
         this.fidelities[quotation.id] = [];
@@ -256,8 +267,10 @@ export class QuotationsComponent implements OnInit {
                   number: ['JJ', 'TRB'].includes(key) ?
                       this.authService.getDataUser().cpf :
                       this.detailsFidelities[(value.id - 1)].card_number,
-                  price: Object.values(value).find(obj => obj.price).price,
+                  price: '',
                   value: Object.values(value).find(obj => obj.value).value,
+                  paymentMethod: 1,
+                  sellThis: false,
                   files: []
                 };
               });
@@ -307,24 +320,33 @@ export class QuotationsComponent implements OnInit {
       return paymentMethodInfo.value;
   }
 
-  public getValue(programInfo: IPaymentInfo, quotation): number | string {
-    return this.fidelities[quotation.id][programInfo.id] ? this.fidelities[quotation.id][programInfo.id].payment_method : '';
+  public getPrice(programInfo: IPaymentInfo, quotation): number | string {
+    return this.fidelities[quotation.id][programInfo.id] ? this.fidelities[quotation.id][programInfo.id].price : '';
     // return paymentObj ? paymentObj.price : '';
   }
 
-  public saveFidelities(id) {
+  public saveFidelities(quotId: number): void {
     this.loading = true;
 
+    const fidelities = {};
+    // Cria uma cópia do objeto global no local de forma segura
+    Object.assign(fidelities, this.fidelities[quotId]);
+
+    Object.entries(fidelities).forEach(([key, fidelity]: [string, any]) => {
+      if (!fidelity.sellThis)
+        delete fidelities[key];
+    });
+
     const data = {
-      quotation_id: id,
-      orders_programs: this.fidelities[id].filter(f => f)
+      quotation_id: quotId,
+      orders_programs: fidelities,
     };
 
     this.quotationService.createOrder(data)
       .subscribe(res => {
         this.notify.show('success', 'Dados enviados com sucesso!');
         this.getQuotations();
-        this.unsellQuotation(id);
+        this.unsellQuotation(quotId);
         this.loading = false;
       }, err => {
         this.loading = false;
@@ -338,11 +360,13 @@ export class QuotationsComponent implements OnInit {
       const file = event.target.files[0];
       reader.readAsDataURL(file);
 
+      const result = reader.result as string;
+
       reader.onload = () => {
         this.fidelities[quotation_id][program_id].files.push({
           filename: file.name,
           filetype: file.type,
-          value: reader.result.split(',')[1]
+          value: result.split(',')[1]
         });
       };
     }
@@ -354,9 +378,9 @@ export class QuotationsComponent implements OnInit {
     const method = this.paymentMethods.find(met => met.id == value).title;
     const methodInfo = Object.values(programMethods).find(info => info && info.payment_form == method);
     if (methodInfo)
-      this.fidelities[quotationId][programId].payment_method = methodInfo.price;
+      this.fidelities[quotationId][programId].price = methodInfo.price;
     else
-      this.fidelities[quotationId][programId].payment_method = '';
+      this.fidelities[quotationId][programId].price = '';
   }
 
   /**

@@ -30,7 +30,11 @@
 
         <div class="col col-8">
           <div *ngFor="let program of programs; let i = index">
-            <div class="col-row clearfix border-bottom" style="background-color: #edf0f2; cursor: pointer;" (click)="manageFormVisibility(i)">
+            <div 
+              (click)="manageFormVisibility(i)" 
+              class="col-row clearfix border-bottom" 
+              style="background-color: #edf0f2; cursor: pointer;" 
+              [ngStyle]="{ 'cursor': isSelling ? 'pointer' : 'default' }">
               <!-- /.col-milhas -->
               <div class="col col-4 col-valores text-center">
                 <span class="title">
@@ -49,7 +53,7 @@
               <div class="col col-valores col-4 text-center">
                 <span class="valor">
                     <!-- | currency:'R$' -->
-                  {{ getValue(program[1], quotation) ? (getValue(program[1], quotation) | currency:'R$') : 'A definir' }}
+                  {{ getPrice(program[1], quotation) ? (getPrice(program[1], quotation) | currency:'R$') : 'A definir' }}
                 </span>
               </div>
             </div><!-- /.col-row -->
@@ -120,7 +124,7 @@
                   <div class="form-group">
                     <label for="payment-select-{{ i }}">Forma de pagamento</label>
                     <select id="payment-select-{{ i }}" class="form-control" 
-                      [(ngModel)]="fidelities[quotation.id][program[1].id].payment_method" placeholder="Selecione uma form de pagamento"
+                      [(ngModel)]="fidelities[quotation.id][program[1].id].paymentMethod" placeholder="Selecione uma form de pagamento"
                       (change)="paymentMethodChange($event, i, quotation.id, program[1].id)">
                       <option *ngFor="let method of paymentMethods" [value]="method.id">{{ method.title }}</option>
                     </select>
