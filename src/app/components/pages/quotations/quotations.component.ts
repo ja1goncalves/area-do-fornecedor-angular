@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { QuotationService } from '../../../services/quotation/quotation.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { NotifyService } from '../../../services/notify/notify.service';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 interface IPaymentReq {
   [key: number]: {
@@ -219,7 +220,13 @@ export class QuotationsComponent implements OnInit {
   paymentMethods: IPaymentMethods[];
   programs: Array<[string, IPaymentInfo]>;
 
-  constructor(private quotationService: QuotationService, private authService: AuthService, private notify: NotifyService) { }
+  programsForm: FormGroup;
+
+  constructor(
+    private quotationService: QuotationService,
+    private authService: AuthService,
+    private notify: NotifyService,
+    private fb: FormBuilder) { }
 
   ngOnInit() {
     this.paymentMethods = [
@@ -236,6 +243,7 @@ export class QuotationsComponent implements OnInit {
         "id": 3
       }
     ]
+    this.programsForm = this.fb.group({});
     this.getQuotations();
     // this.getPaymentsMethods();
   }
@@ -255,8 +263,33 @@ export class QuotationsComponent implements OnInit {
       // this.quotations = res.data;
       this.quotations = this.quot;
       this.programs = Object.entries(this.quotations[0].programs);
-      this.programs.forEach((_, i) => this.showForm[i] = false);
+      this.programs.forEach(([key, program], i) => {
+        // console.log('program: ', program)
+        this.programsForm.addControl(`program-form-${program.id}`, this.fb.group({
+          id: [program.id],
+          sellThis: [false],
+          value: [''],
+          number: [''],
+          files: [[]],
+          access_password: [''],
+          price: [''],
+          paymentMethod: [1]
+        }));
+        this.programsForm.get(`program-form-${program.id}`).get('sellThis').valueChanges.subscribe(value => {
+          const paymentMethod = this.programsForm.get(`program-form-${program.id}`).get('paymentMethod');
+          if (value) {
+            paymentMethod.setValidators([Validators.required, Validators.pattern(/^[^1]$/g)]);
+            paymentMethod.updateValueAndValidity();
+          } else {
+            paymentMethod.clearValidators();
+            paymentMethod.updateValueAndValidity();
+          }
+        })
+        this.showForm[i] = false;
+      });
       this.loading = false;
+
+
       for (const quotation of this.quotations) {
         this.fidelities[quotation.id] = [];
         this.getProviderFidelities() //gambi why return subscribe don't wait the function over
@@ -320,38 +353,55 @@ export class QuotationsComponent implements OnInit {
       return paymentMethodInfo.value;
   }
 
-  public getPrice(programInfo: IPaymentInfo, quotation): number | string {
-    return this.fidelities[quotation.id][programInfo.id] ? this.fidelities[quotation.id][programInfo.id].price : '';
-    // return paymentObj ? paymentObj.price : '';
+  public getPrice(programId: number, quotation): number | string {
+    return this.fidelities[quotation.id][programId] ? this.fidelities[quotation.id][programId].price : '';
   }
 
   public saveFidelities(quotId: number): void {
+    if (this.programsForm.invalid) {
+      this.notify.show('error', 'Alguns campos estão com erro, por favor os verifique.');
+      Object.values(this.programsForm.controls).forEach((group: FormGroup) => {
+        Object.values(group.controls).forEach((control: FormControl) => {
+          control.markAsTouched();
+        })
+      })
+      return;
+    }
+
     this.loading = true;
 
     const fidelities = {};
-    // Cria uma cópia do objeto global no local de forma segura
-    Object.assign(fidelities, this.fidelities[quotId]);
 
-    Object.entries(fidelities).forEach(([key, fidelity]: [string, any]) => {
-      if (!fidelity.sellThis)
-        delete fidelities[key];
-    });
+    Object.values(this.programsForm.controls).forEach((group: FormGroup) => {
+      if (group.get('sellThis').value) {
+        const id = group.get('id').value;
+        fidelities[id] = {
+          id,
+          number: group.get('number').value,
+          paymentMethod: group.get('paymentMethod').value,
+          value: group.get('value').value,
+          price: this.getPrice(id, this.quotations[0]),
+        };
+        if (group.get('files').value.length >= 1)
+          fidelities[id].files = group.get('files').value;
+      }
+    })
 
     const data = {
       quotation_id: quotId,
       orders_programs: fidelities,
     };
 
-    this.quotationService.createOrder(data)
-      .subscribe(res => {
-        this.notify.show('success', 'Dados enviados com sucesso!');
-        this.getQuotations();
-        this.unsellQuotation(quotId);
-        this.loading = false;
-      }, err => {
-        this.loading = false;
-        this.notify.show('error', 'Ocorreu um erro ao tentar enviar seus dados!');
-      });
+    // this.quotationService.createOrder(data)
+    //   .subscribe(res => {
+    //     this.notify.show('success', 'Dados enviados com sucesso!');
+    //     this.getQuotations();
+    //     this.unsellQuotation(quotId);
+    //     this.loading = false;
+    //   }, err => {
+    //     this.loading = false;
+    //     this.notify.show('error', 'Ocorreu um erro ao tentar enviar seus dados!');
+    //   });
   }
 
   public uploadFile(event, quotation_id, program_id) {
@@ -378,15 +428,24 @@ export class QuotationsComponent implements OnInit {
     const method = this.paymentMethods.find(met => met.id == value).title;
     const methodInfo = Object.values(programMethods).find(info => info && info.payment_form == method);
     if (methodInfo)
-      this.fidelities[quotationId][programId].price = methodInfo.price;
+      this.programsForm.get(`program-form-${programId}`).get('price').setValue(methodInfo.price);
     else
-      this.fidelities[quotationId][programId].price = '';
+      this.programsForm.get(`program-form-${programId}`).get('price').setValue('');
+  }
+
+  public getTotalValue(): number | string {
+    let total = 0;
+    Object.values(this.programsForm.controls).forEach((group: FormGroup) => {
+      const onlyNum = group.get('price').value ? Number(group.get('price').value) : 0;
+      total += onlyNum;
+    })
+    return total;
   }
 
   /**
    * @description Locks/unlocks password visualization
-   * @param index 
-   * @param unlock 
+   * @param {number} index 
+   * @param {boolean} unlock 
    */
   public lockUnlock(index: number, unlock: boolean): void {
     const passwordInput = document.getElementById(`tam-senha-${index}`);
@@ -398,9 +457,13 @@ export class QuotationsComponent implements OnInit {
       passwordInput.setAttribute('type', 'text');
   }
 
-  public manageFormVisibility(index: number) {
+  public manageFormVisibility(index: number): void {
     if (this.isSelling)
       this.showForm[index] = !this.showForm[index]
+  }
+
+  public havePaymentMethod(method: IPaymentMethods, program): boolean {
+    return Object.keys(program).some(programId => Number(programId) == method.id) || method.id == 1
   }
 
 }

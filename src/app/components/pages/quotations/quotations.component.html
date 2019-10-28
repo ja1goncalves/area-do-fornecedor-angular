@@ -1,5 +1,5 @@
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-<div class="container-order">
+<form [formGroup]="programsForm" (ngSubmit)="saveFidelities(quotations[0].id)" class="container-order">
 
   <div *ngFor="let quotation of quotations; let i = index">
     <ul class="cotation-list-table">
@@ -29,7 +29,7 @@
         </div>
 
         <div class="col col-8">
-          <div *ngFor="let program of programs; let i = index">
+          <form [formGroup]="programsForm.get('program-form-' + program[1].id)" *ngFor="let program of programs; let i = index">
             <div 
               (click)="manageFormVisibility(i)" 
               class="col-row clearfix border-bottom" 
@@ -53,7 +53,10 @@
               <div class="col col-valores col-4 text-center">
                 <span class="valor">
                     <!-- | currency:'R$' -->
-                  {{ getPrice(program[1], quotation) ? (getPrice(program[1], quotation) | currency:'R$') : 'A definir' }}
+                  {{ programsForm.get('program-form-' + program[1].id).get('price').value ?
+                    (programsForm.get('program-form-' + program[1].id).get('price').value | currency:'R$') :
+                    'A definir'
+                  }}
                 </span>
               </div>
             </div><!-- /.col-row -->
@@ -69,8 +72,15 @@
                     Nº do cartão {{ detailsFidelities[program[1].id-1].title }}
                   </label>
                   <div class="input text">
-                    <input type="text" class="form-control" readonly="{{ detailsFidelities[(program[1].id - 1)].card_number ? 'readonly' : '' }}"
-                           [(ngModel)]="fidelities[quotation.id][program[1].id].number" maxlength="20">
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      readonly="{{ detailsFidelities[(program[1].id - 1)].card_number ? 'readonly' : '' }}"
+                      formControlName="number"
+                      [ngClass]="{'input-invalid': 
+                        programsForm.get('program-form-' + program[1].id).get('number').touched && 
+                        programsForm.get('program-form-' + program[1].id).get('number').invalid }"
+                      maxlength="20">
                   </div>
                 </div>
               </div>
@@ -78,7 +88,11 @@
                 <div class="form-group">
                   <label for="tamSenha">Senha de Acesso {{ detailsFidelities[program[1].id-1].password_type }}</label>
                   <div class="input text password-box">
-                    <input type="password" class="form-control" id="tam-senha-{{ i }}" [(ngModel)]="fidelities[quotation.id][program[1].id].access_password">
+                    <input 
+                      type="password" 
+                      class="form-control" 
+                      id="tam-senha-{{ i }}" 
+                      formControlName="access_password">
                     <i *ngIf="!lockStatus[i]" class="material-icons password-lock" (click)="lockUnlock(i, true)">
                       lock
                     </i>
@@ -124,33 +138,46 @@
                   <div class="form-group">
                     <label for="payment-select-{{ i }}">Forma de pagamento</label>
                     <select id="payment-select-{{ i }}" class="form-control" 
-                      [(ngModel)]="fidelities[quotation.id][program[1].id].paymentMethod" placeholder="Selecione uma form de pagamento"
+                      placeholder="Selecione uma form de pagamento"
+                      formControlName="paymentMethod"
+                      [ngClass]="{'input-invalid': 
+                        programsForm.get('program-form-' + program[1].id).get('paymentMethod').touched && 
+                        programsForm.get('program-form-' + program[1].id).get('paymentMethod').invalid }"
                       (change)="paymentMethodChange($event, i, quotation.id, program[1].id)">
-                      <option *ngFor="let method of paymentMethods" [value]="method.id">{{ method.title }}</option>
+                      <ng-container *ngFor="let method of paymentMethods">
+                        <option
+                          *ngIf="havePaymentMethod(method, program[1])"
+                          [value]="method.id">{{ method.title }}</option>
+                      </ng-container>
                     </select>
                   </div>
                 </div>
                 <div class="col col-6 mile-box">
                   <div>
-                    <input id="active-{{ i }}" [(ngModel)]="fidelities[quotation.id][program[1].id].sellThis" type="checkbox" class="form-control" checked>
+                    <input 
+                      id="active-{{ i }}" 
+                      type="checkbox"
+                      formControlName="sellThis"
+                      class="form-control"
+                      checked>
                     <label for="active-{{ i }}">Vender estas milhas</label>
                   </div>
                 </div>
               </div>
 
             </div>
-          </div>
+          </form>
           <div class="col-row-valor clearfix">
             <div class="col text-center" style="font-size: 15px;">
-              <span class="title">Valor Total: <strong>{{ quotation.total | currency:'R$' }}</strong></span>
+              <span class="title">Valor Total: <strong>{{ getTotalValue() | currency:'R$' }}</strong></span>
             </div>
           </div>
         </div>
 
         <div class="col col-2 clearfix" style="background: #0275d8; color: #fff">
-          <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isVisibleForm(quotation.id) && !quotation.status_orders && i == 0">Vender</button>
-          <button class="button button-select" (click)="saveFidelities(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.status_orders">Confirmar</button>
-          <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.status_orders">Cancelar</button>
+          <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isSelling">Vender</button>
+          <button class="button button-select" type="submit" *ngIf="isSelling">Confirmar</button>
+          <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isSelling">Cancelar</button>
           <span *ngIf="quotation.status_orders" >
             <p *ngFor="let status of quotation.status_orders;" style="margin-bottom: 0rem">
                <img style="width: 42px" [alt]="status.program" [src]="'assets/imgs/cias/'+status.program.toLowerCase()+'.png'" style="width: 30%"/> {{status.status.toUpperCase()}}
@@ -160,7 +187,7 @@
       </li>
     </ul>
   </div>
-</div>
+</form>
 
 <section class="wrapper" *ngIf="loading || (!loading && quotations.length == 0)">
   <div class="container-fornecedor">
