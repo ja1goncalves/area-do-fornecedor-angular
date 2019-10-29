@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { QuotationService } from '../../../services/quotation/quotation.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { NotifyService } from '../../../services/notify/notify.service';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { IPaymentInfo, IPaymentMethods, IPaymentReq, IStatus } from './interfaces';
-
+import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { IPaymentInfo, IPaymentMethods, IStatus } from './interfaces';
+import { validateCpf } from '../../../app.utils';
 
 @Component({
   selector: 'app-quotations',
@@ -15,181 +15,12 @@ export class QuotationsComponent implements OnInit {
 
   private isSelling: boolean;
   public showForm: IStatus = {}
-  public quot = [
-    {
-      "id": 138320,
-      "status_orders": null,
-      "created_at": "2019-10-23",
-      "updated_at": {
-        "date": "2019-10-23 14:44:00.000000",
-        "timezone_type": 3,
-        "timezone": "UTC"
-      },
-      "total": 3715.5,
-      "programs": {
-        "JJ": {
-          "2": {
-            "id": 170592,
-            "value": 15,
-            "price": 225,
-            "payment_form": "Antecipado"
-          },
-          "3": {
-            "id": 170593,
-            "value": 15,
-            "price": 247.5,
-            "payment_form": "Postecipado"
-          },
-          "title": "TAM",
-          "id": 1
-        },
-        "G3": {
-          "2": {
-            "id": 170595,
-            "value": 31,
-            "price": 558,
-            "payment_form": "Antecipado"
-          },
-          "3": {
-            "id": 170594,
-            "value": 31,
-            "price": 620,
-            "payment_form": "Postecipado"
-          },
-          "title": "GOL",
-          "id": 2
-        },
-        "AD": {
-          "2": {
-            "id": 170596,
-            "value": 50,
-            "price": 1375,
-            "payment_form": "Antecipado"
-          },
-          "title": "AZUL",
-          "id": 3
-        },
-        "TRB": {
-          "2": {
-            "id": 170597,
-            "value": 23,
-            "price": 690,
-            "payment_form": "Antecipado"
-          },
-          "title": "TAM Red e Black",
-          "id": 5
-        }
-      }
-    }
-  ]
-//   [
-//     {
-//         "id": 138320,
-//         "status_orders": null,
-//         "created_at": "2019-10-23",
-//         "updated_at": {
-//             "date": "2019-10-23 14:44:00.000000",
-//             "timezone_type": 3,
-//             "timezone": "UTC"
-//         },
-//         "total": 3715.5,
-//         "programs": [
-//             {
-//                 "id": 170592,
-//                 "value": 15,
-//                 "price": 225,
-//                 "program_title": "TAM",
-//                 "program_code": "JJ",
-//                 "program_id": 1,
-//                 "payment_form_id": 2
-//             },
-//             {
-//                 "id": 170593,
-//                 "value": 15,
-//                 "price": 247.5,
-//                 "program_title": "TAM",
-//                 "program_code": "JJ",
-//                 "program_id": 1,
-//                 "payment_form_id": 3
-//             },
-//             {
-//                 "id": 170594,
-//                 "value": 31,
-//                 "price": 620,
-//                 "program_title": "GOL",
-//                 "program_code": "G3",
-//                 "program_id": 2,
-//                 "payment_form_id": 2
-//             },
-//             {
-//                 "id": 170595,
-//                 "value": 31,
-//                 "price": 558,
-//                 "program_title": "GOL",
-//                 "program_code": "G3",
-//                 "program_id": 2,
-//                 "payment_form_id": 3
-//             },
-//             {
-//                 "id": 170596,
-//                 "value": 50,
-//                 "price": 1375,
-//                 "program_title": "AZUL",
-//                 "program_code": "AD",
-//                 "program_id": 3,
-//                 "payment_form_id": 2
-//             },
-//             {
-//                 "id": 170597,
-//                 "value": 23,
-//                 "price": 690,
-//                 "program_title": "TAM Red e Black",
-//                 "program_code": "TRB",
-//                 "program_id": 5,
-//                 "payment_form_id": 2
-//             }
-//         ]
-//     }
-// ]
 
-  public detailsFidelities = [
-    {
-      title: 'Latam',
-      password_type: 'Multiplus',
-      card_number: ''
-    },
-    {
-      title: 'Gol',
-      password_type: 'Smiles',
-      card_number: ''
-    },
-    {
-      title: 'Azul',
-      password_type: 'Azul',
-      card_number: ''
-    },
-    {
-      title: 'Avianca',
-      password_type: 'Avianca',
-      card_number: ''
-    },
-    {
-      title: 'LATAM Red e Black',
-      password_type: 'LATAM Red e Black',
-      card_number: ''
-    },
-    {
-      title: 'Gol Diamante',
-      password_type: 'Smiles Diamante',
-      card_number: ''
-    }
-  ];
+  detailsFidelities;
   quotations: Array<any> = [];
-  visibleForms: Array<any> = [];
-  fidelities: IPaymentReq[] = [];
   loading: any = true;
   paymentMethods: IPaymentMethods[];
-  programs: Array<[string, IPaymentInfo]>;
+  programs: Array<[string, IPaymentInfo]> = [];
 
   programsForm: FormGroup;
 
@@ -200,26 +31,12 @@ export class QuotationsComponent implements OnInit {
     private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.paymentMethods = [
-      {
-        title: 'Indefinido',
-        id: 1
-      },
-      {
-        "title": "Antecipado",
-        "id": 2
-      },
-      {
-        "title": "Postecipado",
-        "id": 3
-      }
-    ]
     this.programsForm = this.fb.group({});
     this.getQuotations();
-    // this.getPaymentsMethods();
+    this.getPaymentsMethods();
   }
 
-  private getPaymentsMethods() {
+  private getPaymentsMethods(): void {
     this.quotationService.getPaymentMethods().subscribe(res => {
       this.paymentMethods = res;
     }, err => {
@@ -227,64 +44,54 @@ export class QuotationsComponent implements OnInit {
     })
   }
 
-  public getQuotations() {
+  public getQuotations(): void {
     this.loading = true;
     this.quotationService.getQuotations()
     .subscribe(res => {
-      // this.quotations = res.data;
-      this.quotations = this.quot;
-      this.programs = Object.entries(this.quotations[0].programs);
-      this.programs.forEach(([key, program], i) => {
-        let miles = Object.values(program).find(programInfo => programInfo.value);
-        miles = miles ? miles.value : 0;
-        this.programsForm.addControl(`program-form-${program.id}`, this.fb.group({
-          id: [program.id],
-          sellThis: [false],
-          value: [miles],
-          number: [''],
-          files: [[]],
-          access_password: [''],
-          price: [''],
-          paymentMethod: [1]
-        }));
-        this.programsForm.get(`program-form-${program.id}`).get('sellThis').valueChanges.subscribe(value => 
-          this.updateValidation(value, program)
-        );
-        this.showForm[i] = false;
-      });
+      this.quotations = res.data;
+      if (this.quotations.length) {
+        this.programs = Object.entries(this.quotations[0].programs);
+        this.programs.forEach(([, program], i) => {
+          let miles = Object.values(program).find(programInfo => programInfo.value);
+          miles = miles ? miles.value : 0;
+          this.programsForm.addControl(`program-form-${program.id}`, this.fb.group({
+            id: [program.id],
+            sellThis: [true],
+            value: [miles],
+            number: ['', [Validators.required, Validators.pattern(validateCpf)]],
+            files: [[]],
+            access_password: [''],
+            price: [''],
+            paymentMethod: [1, [Validators.required, Validators.pattern(/^[^1]/)]]
+          }));
+          // Add a valuechanges changing the validation of the fields
+          this.programsForm.get(`program-form-${program.id}`).get('sellThis').valueChanges.subscribe(value => 
+            this.updateValidation(value, program)
+          );
+          this.showForm[i] = false;
+        });
+      }
       this.loading = false;
 
 
-      for (const quotation of this.quotations) {
-        this.fidelities[quotation.id] = [];
-        this.getProviderFidelities() //gambi why return subscribe don't wait the function over
-            .then(() => {
-              this.programs.forEach(([key, value]) => {
-                this.fidelities[quotation.id][value.id] = {
-                  id: value.id,
-                  number: ['JJ', 'TRB'].includes(key) ?
-                      this.authService.getDataUser().cpf :
-                      this.detailsFidelities[(value.id - 1)].card_number,
-                  price: '',
-                  value: Object.values(value).find(obj => obj.value).value,
-                  paymentMethod: 1,
-                  sellThis: false,
-                  files: []
-                };
-              });
-            });
+      for (const _ of this.quotations) {
+        this.getProviderFidelities();
       }
     }, err => {
       this.loading = false;
-      this.quotations = this.quot;
     });
   }
 
-  private updateValidation(value: boolean, program): void {
+  /**
+   * @description Activates the validation of the fields if the form will be sended
+   * @param {boolean} activate 
+   * @param program 
+   */
+  private updateValidation(activate: boolean, program): void {
     const group = this.programsForm.get(`program-form-${program.id}`);
-    if (value) {
+    if (activate) {
       group.get('paymentMethod').setValidators([Validators.required, Validators.pattern(/^[^1]/)]);
-      group.get('number').setValidators([Validators.required, Validators.minLength(11), Validators.maxLength(14)]);
+      group.get('number').setValidators([Validators.required, Validators.pattern(validateCpf)]);
       group.get('paymentMethod').updateValueAndValidity();
       group.get('number').updateValueAndValidity();
     } else {
@@ -309,20 +116,30 @@ export class QuotationsComponent implements OnInit {
     );
   }
 
-  public sellQuotation(id): void {
+  /**
+   * @description Shows all forms
+   * @param {number} id 
+   */
+  public sellQuotation(id: number): void {
     this.isSelling = true;
     Object.keys(this.showForm).forEach(key => this.showForm[key] = true);
-    this.visibleForms.push(this.quotations.filter(quotation => quotation.id === id)[0]);
   }
 
-  public unsellQuotation(id): void {
+  /**
+   * @description Hides all forms
+   * @param {number} id 
+   */
+  public unsellQuotation(id: number): void {
     this.isSelling = false;
     Object.keys(this.showForm).forEach(key => this.showForm[key] = false);
-    this.visibleForms = this.visibleForms.filter(quotation => quotation.id !== id);
   }
 
-  public isVisibleForm(id): boolean {
-    return this.visibleForms.filter(quotation => quotation.id === id).length > 0;
+  /**
+   * @description Verify if the form will be selled or not
+   * @param {number} programId 
+   */
+  public deactivateForm(programId: number): boolean {
+    return this.isSelling && !this.programsForm.get(`program-form-${programId}`).get('sellThis').value
   }
 
   public getMiles(program: IPaymentInfo): number {
@@ -331,10 +148,6 @@ export class QuotationsComponent implements OnInit {
       return 0;
     else
       return paymentMethodInfo.value;
-  }
-
-  public getPrice(programId: number, quotation): number | string {
-    return this.fidelities[quotation.id][programId] ? this.fidelities[quotation.id][programId].price : '';
   }
 
   public saveFidelities(quotId: number): void {
@@ -357,7 +170,7 @@ export class QuotationsComponent implements OnInit {
         const id = group.get('id').value;
         fidelities[id] = {
           id,
-          number: group.get('number').value,
+          number: group.get('number').value.replace(/\D/g),
           payment_form_id: group.get('paymentMethod').value,
           value: group.get('value').value,
           price: group.get('price').value,
@@ -380,13 +193,13 @@ export class QuotationsComponent implements OnInit {
     //     this.getQuotations();
     //     this.unsellQuotation(quotId);
     //     this.loading = false;
-    //   }, err => {
+    //   }, ({ message }) => {
     //     this.loading = false;
-    //     this.notify.show('error', 'Ocorreu um erro ao tentar enviar seus dados!');
+    //     this.notify.show('error', message ? message : 'Ocorreu um erro ao tentar enviar seus dados!');
     //   });
   }
 
-  public uploadFile(event, quotation_id, program_id) {
+  public uploadFile(event, program_id) {
     const reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -395,17 +208,17 @@ export class QuotationsComponent implements OnInit {
       const result = reader.result as string;
 
       reader.onload = () => {
-        this.programsForm.get(`program-form-${program_id}`)
-        this.fidelities[quotation_id][program_id].files.push({
+        const filesControl = this.programsForm.get(`program-form-${program_id}`).get('files');
+        filesControl.setValue([...filesControl.value, {
           filename: file.name,
           filetype: file.type,
           value: result.split(',')[1]
-        });
+        }]);
       };
     }
   }
 
-  public paymentMethodChange(event: any, index: number, quotationId: number, programId: number): void {
+  public paymentMethodChange(event: any, index: number, programId: number): void {
     const { target: { value } } = event;
     const programMethods = this.programs[index][1];
     const method = this.paymentMethods.find(met => met.id == value).title;
@@ -423,8 +236,10 @@ export class QuotationsComponent implements OnInit {
   public getTotalValue(): number | string {
     let total = 0;
     Object.values(this.programsForm.controls).forEach((group: FormGroup) => {
-      const onlyNum = group.get('price').value ? Number(group.get('price').value) : 0;
-      total += onlyNum;
+      if (group.get('sellThis').value) {
+        const onlyNum = group.get('price').value ? Number(group.get('price').value) : 0;
+        total += onlyNum;
+      }
     })
     return total;
   }
@@ -450,6 +265,15 @@ export class QuotationsComponent implements OnInit {
 
   public havePaymentMethod(method: IPaymentMethods, program): boolean {
     return Object.keys(program).some(programId => Number(programId) == method.id) || method.id == 1
+  }
+
+  public sellUnsellProgram(program): void {
+    const sellThisControl = this.getForm(program.id).get('sellThis');
+    sellThisControl.setValue(!sellThisControl.value);
+  }
+
+  public getForm(programId): AbstractControl {
+    return this.programsForm.get(`program-form-${programId}`);
   }
 
 }

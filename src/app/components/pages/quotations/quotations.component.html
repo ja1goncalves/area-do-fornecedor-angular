@@ -33,15 +33,23 @@
             <div 
               (click)="manageFormVisibility(i)" 
               class="col-row clearfix border-bottom" 
-              style="background-color: #edf0f2; cursor: pointer;" 
-              [ngStyle]="{ 'cursor': isSelling ? 'pointer' : 'default' }">
+              style="background-color: #edf0f2;"
+              [ngStyle]="{ 
+                'cursor': isSelling ? 'pointer' : 'default'
+               }">
               <!-- /.col-milhas -->
-              <div class="col col-4 col-valores text-center">
+              <div class="col col-4 col-valores text-center" 
+                [ngStyle]="{
+                  'opacity': deactivateForm(program[1].id) ? '.6' : '1'
+                }">
                 <span class="title">
                   {{ getMiles(program[1]) }} mil
                 </span>
               </div>
-              <div class="col col-4 col-programa">
+              <div class="col col-4 col-programa" 
+                [ngStyle]="{
+                  'opacity': deactivateForm(program[1].id) ? '.6' : '1'
+                }">
                 <span class="programa-fidelidade">
                   <span class="logo">
                     <img [alt]="program[1].title" [src]="'assets/imgs/cias/'+program[0].toLowerCase()+'.png'" style="width: 42px"/>
@@ -50,7 +58,10 @@
                 </span>
               </div>
               <!-- /.col-programa -->
-              <div class="col col-valores col-4 text-center">
+              <div class="col col-valores col-4 text-center" 
+                [ngStyle]="{
+                  'opacity': deactivateForm(program[1].id) ? '.6' : '1'
+                }">
                 <span class="valor">
                     <!-- | currency:'R$' -->
                   {{ programsForm.get('program-form-' + program[1].id).get('price').value ?
@@ -63,7 +74,7 @@
 
             <div class="col-row clearfix border-bottom pt-2 white-background" *ngIf="showForm[i]">
 
-              <div class="col col-6">
+              <!-- <div class="col col-6">
                 <div class="form-group">
                   <label *ngIf="['JJ', 'TRB'].includes(program[0])" for="tamCartao">
                     CPF
@@ -98,7 +109,7 @@
                       (lockUnlock)="lockUnlock(i, $event)"></app-password-lock>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="col-row">
                 <!-- <div class="col col-4">
                   <a style="cursor: pointer" class="register-box label-height"
@@ -122,25 +133,80 @@
                       <label for="{{program[1].title.toLowerCase()}}Print-2" class="btn btn-primary">Celular&hellip;</label>
                         <span class="upload mr-2">
                           <input name="cellphone-{{program[0]}}-{{quotation.id}}" id="{{program[1].title.toLowerCase()}}Print-2"
-                          type="file" style="display: none" (change)="uploadFile($event, quotation.id, program[0].id)">
+                          type="file" style="display: none" (change)="uploadFile($event, program[0].id)">
                         </span>
                       <label for="{{program[1].title.toLowerCase()}}Print-3" class="btn btn-primary">Endereço&hellip;</label>
                         <span class="upload">
                             <input name="address-{{program[0]}}-{{quotation.id}}" id="{{program[1].title.toLowerCase()}}Print-3"
-                            type="file" style="display: none" (change)="uploadFile($event, quotation.id, program[1].id)">
+                            type="file" style="display: none" (change)="uploadFile($event, program[1].id)">
                         </span>
                   </div>
                 </div> -->
-                <div class="col col-6">
+                <div class="col col-3">
                   <div class="form-group">
-                    <label for="payment-select-{{ i }}">Forma de pagamento</label>
-                    <select id="payment-select-{{ i }}" class="form-control" 
+                    <label *ngIf="['JJ', 'TRB'].includes(program[0])" for="tamCartao">
+                      CPF
+                    </label>
+                    <label 
+                      *ngIf="['AD', 'AV', 'G3', 'G3D'].includes(program[0])" 
+                      for="tamCartao"
+                      title="Nº do cartão {{ detailsFidelities[program[1].id-1].title }}">
+                      Nº do cartão {{ detailsFidelities[program[1].id-1].title }}
+                    </label>
+                    <div class="input text">
+                      <input 
+                        type="text" 
+                        class="form-control" 
+                        readonly="{{ detailsFidelities[(program[1].id - 1)].card_number ? 'readonly' : '' }}"
+                        formControlName="number"
+                        [ngClass]="{'input-invalid': 
+                          programsForm.get('program-form-' + program[1].id).get('number').touched && 
+                          programsForm.get('program-form-' + program[1].id).get('number').invalid }"
+                        maxlength="14">
+                    </div>
+                  </div>
+                </div>
+                <div class="col col-4">
+                  <div class="form-group">
+                    <marquee *ngIf="['G3D', 'TRB'].includes(program[0])" behavior="alternate" scrollamount="1">
+                      <label 
+                        for="tamSenha"
+                        class=""
+                        title="Senha de Acesso {{ detailsFidelities[program[1].id-1].password_type }}"
+                        >Senha de Acesso {{ detailsFidelities[program[1].id-1].password_type }}</label>
+                    </marquee>
+                    <label 
+                      for="tamSenha"
+                      *ngIf="!['G3D', 'TRB'].includes(program[0])"
+                      title="Senha de Acesso {{ detailsFidelities[program[1].id-1].password_type }}"
+                      >Senha de Acesso {{ detailsFidelities[program[1].id-1].password_type }}</label>
+                    <div class="input text password-box">
+                      <input 
+                        type="password" 
+                        class="form-control custom-pr-40" 
+                        id="tam-senha-{{ i }}" 
+                        formControlName="access_password">
+                      <app-password-lock
+                        class="password-lock-component"
+                        (lockUnlock)="lockUnlock(i, $event)"></app-password-lock>
+                    </div>
+                  </div>
+                </div>
+                <div class="col col-4">
+                  <div class="form-group">
+                    <label 
+                      for="payment-select-{{ i }}"
+                      title="Forma de pagamento"
+                      >Forma de pagamento</label>
+                    <select 
+                      id="payment-select-{{ i }}"
+                      class="form-control cursor-pointer" 
                       placeholder="Selecione uma form de pagamento"
                       formControlName="paymentMethod"
                       [ngClass]="{'input-invalid': 
                         programsForm.get('program-form-' + program[1].id).get('paymentMethod').touched && 
                         programsForm.get('program-form-' + program[1].id).get('paymentMethod').invalid }"
-                      (change)="paymentMethodChange($event, i, quotation.id, program[1].id)">
+                      (change)="paymentMethodChange($event, i, program[1].id)">
                       <ng-container *ngFor="let method of paymentMethods">
                         <option
                           *ngIf="havePaymentMethod(method, program[1])"
@@ -149,16 +215,23 @@
                     </select>
                   </div>
                 </div>
-                <div class="col col-6 mile-box">
-                  <div>
-                    <input 
-                      id="active-{{ i }}" 
-                      type="checkbox"
-                      formControlName="sellThis"
-                      class="form-control"
-                      checked>
-                    <label for="active-{{ i }}">Vender estas milhas</label>
-                  </div>
+                <div class="col col-1 mile-box">
+                  <label 
+                    for="active-{{ i }}"
+                    class="cursor-pointer mb-2 text-body"
+                    title="Vender estas milhas">Vender</label>
+                  <button
+                    id="active-{{ i }}"
+                    type="button"
+                    (click)="sellUnsellProgram(program[1])"
+                    [ngClass]="{
+                      'btn-danger': !getForm(program[1].id).get('sellThis').value,
+                      'btn-primary': getForm(program[1].id).get('sellThis').value
+                    }"
+                    class="cursor-pointer btn sell-button"
+                    title="Vender estas milhas">
+                    {{ getForm(program[1].id).get('sellThis').value ? 'O' : 'X' }}
+                  </button>
                 </div>
               </div>
 

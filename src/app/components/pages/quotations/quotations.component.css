@@ -146,16 +146,9 @@
 
 .mile-box {
     display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    height: 74px;
-}
-
-.mile-box div {
-    display: flex;
-    width: fit-content;
-    flex-flow: row nowrap;
+    flex-flow: column nowrap;
     align-items: center;
+    justify-content: center;
 }
 
 .mile-box input[type="checkbox"] {
@@ -164,4 +157,20 @@
 
 .mile-box div label {
     margin: 0 0 0 10px;
+}
+
+.col {
+    overflow: hidden;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.sell-button {
+    width: 50px;
+}
+
+.custom-pr-40 {
+    padding-right: 40px;
 }
