@@ -1,17 +1,16 @@
-import { Component, OnInit, AfterViewInit, ViewChild, Optional } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { RegisterService } from '../../../services/register/register.service';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { RegisterService } from 'src/app/services/register/register.service';
 import * as moment from 'moment';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { UFS, OCCUPATIONS, GENDERS } from 'src/app/config/consts';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import { defaultReqErrMessage } from 'src/app/app.utils';
-import { RegisterPersonalDataComponent } from '../../pages/register/register-personal-data/register-personal-data.component';
-import { RegisterFidelityProgramsComponent } from '../../pages/register/register-fidelity-programs/register-fidelity-programs.component';
-import { RegisterBankDataComponent } from '../../pages/register/register-bank-data/register-bank-data.component';
-import { IFidelity, IRequestData } from './interfaces';
+import { RegisterPersonalDataComponent } from 'src/app/components/pages/register/register-personal-data/register-personal-data.component';
+import { RegisterFidelityProgramsComponent } from 'src/app/components/pages/register/register-fidelity-programs/register-fidelity-programs.component';
+import { RegisterBankDataComponent } from 'src/app/components/pages/register/register-bank-data/register-bank-data.component';
+import { IRequestData } from './interfaces';
 
 export const MY_FORMATS = {
   parse: {
@@ -214,66 +213,53 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
     requestData.address = {
       id: this.personalForm.get('residential_id').value,
+      zip_code: this.personalForm.get('residential_zip_code').value,
       address: this.personalForm.get('residential_address').value,
-      city: this.personalForm.get('residential_city').value,
+      number: this.personalForm.get('residential_number').value,
       complement: this.personalForm.get('residential_complement').value,
       neighborhood: this.personalForm.get('residential_neighborhood').value,
-      number: this.personalForm.get('residential_number').value,
+      city: this.personalForm.get('residential_city').value,
       state: this.personalForm.get('residential_state').value,
-      zip_code: this.personalForm.get('residential_zip_code').value
     };
 
     requestData.bank = {
       id: this.bankForm.get('id').value,
-      account: this.bankForm.get('bank_account').value,
-      account_digit: this.bankForm.get('bank_account_digit').value,
+      bank_id: this.bankForm.get('bank_id').value,
+      type: this.bankForm.get('bank_type').value,
+      segment_id: this.bankForm.get('bank_segment_id').value,
       agency: this.bankForm.get('bank_agency').value,
       agency_digit: this.bankForm.get('bank_agency_digit').value,
-      bank_id: this.bankForm.get('bank_id').value,
+      account: this.bankForm.get('bank_account').value,
+      account_digit: this.bankForm.get('bank_account_digit').value,
       operation: this.bankForm.get('bank_operation').value,
-      segment_id: this.bankForm.get('bank_segment_id').value,
-      type: this.bankForm.get('bank_type').value
     };
 
     requestData.personal = {
       birthday: this.personalForm.get('personal_birthday').value,
+      gender: this.personalForm.get('personal_gender').value,
+      phone: this.personalForm.get('personal_phone').value,
       cellphone: this.personalForm.get('personal_cellphone').value,
+      occupation: this.personalForm.get('personal_occupation').value,
+      provider_occupation_id: this.personalForm.get('personal_occupation_id').value,
       company: this.personalForm.get('personal_company').value,
       company_phone: this.personalForm.get('personal_company_phone').value,
-      gender: this.personalForm.get('personal_gender').value,
-      occupation: this.personalForm.get('personal_occupation').value,
-      phone: this.personalForm.get('personal_phone').value,
-      provider_occupation_id: this.personalForm.get('personal_occupation_id').value
     };
 
     if (typeof requestData.personal.birthday !== 'string')
       requestData.personal.birthday = moment(requestData.personal.birthday).format('YYYY-MM-DD');
 
-    const { controls } = this.fidelityForm;
-    const fidelities: IFidelity[] = [];
-
-    this.programs.forEach(program => {
-      const { code } = program;
-
-      if (controls[`card_number_${code}`].value) {
-        let fidelity: IFidelity = {
-          id: null,
-          program_id: program.id,
-          card_number: controls[`card_number_${code}`].value,
-          access_password: controls[`access_password_${code}`].value || null,
-        };
-
-        // Sets the fidelity ids based on the program id
-        this.initialValues.fidelities.forEach((initial_fidelity) => {
-          if (initial_fidelity.program_id === program.id) {
-            fidelity.id = initial_fidelity.id;
-          }
-        });
-
-        fidelities.push(fidelity);
-      }
-    });
-    requestData.fidelities = fidelities;
+    requestData.fidelities = {
+      card_number_JJ: this.fidelityForm.get('card_number_JJ').value,
+      access_password_JJ: this.fidelityForm.get('access_password_JJ').value,
+      type_JJ: this.fidelityForm.get('type_JJ').value ? 'TRB' : '',
+      card_number_G3: this.fidelityForm.get('card_number_G3').value,
+      access_password_G3: this.fidelityForm.get('access_password_G3').value,
+      type_G3: this.fidelityForm.get('type_G3').value ? 'G3D' : '',
+      card_number_AD: this.fidelityForm.get('card_number_AD').value,
+      access_password_AD: this.fidelityForm.get('access_password_AD').value,
+      card_number_AV: this.fidelityForm.get('card_number_AV').value,
+      access_password_AV: this.fidelityForm.get('access_password_AV').value,
+    };
 
     return requestData;
   }

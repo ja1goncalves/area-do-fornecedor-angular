@@ -1,4 +1,5 @@
-import { IAddressData, IPersonalData } from '../../../services/register/interfaces';
+import { FidelitiesNumbers, IBankWithId, IAddressWithId, Personal} from 'src/app/models/register-data';
+
 
 export interface IFidelity {
     id: string | number;
@@ -8,18 +9,8 @@ export interface IFidelity {
 }
 
 export interface IRequestData {
-    address: IAddressData;
-    bank: {
-        id: string | number;
-        account: string | number;
-        account_digit: string | number;
-        agency: string | number;
-        agency_digit: string | number;
-        bank_id: string | number;
-        operation: string;
-        segment_id: string;
-        type: string;
-    };
-    personal: IPersonalData;
-    fidelities: IFidelity[];
+    address: IAddressWithId;
+    bank: IBankWithId;
+    personal: Personal;
+    fidelities: FidelitiesNumbers;
 }

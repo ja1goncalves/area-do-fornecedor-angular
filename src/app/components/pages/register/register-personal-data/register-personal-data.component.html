@@ -109,14 +109,14 @@
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Ocupação</label>
-            <select formControlName="personal_occupation_id" class="form-control">
+            <select formControlName="personal_occupation_id" class="form-control" placeholder="Escolha uma opção">
                 <option *ngFor="let occupation of occupations" [value]="occupation.value">{{occupation.label}}</option>
             </select>
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Profissão</label>
             <input type="text" formControlName="personal_occupation" class="form-control" 
-                placeholder="Profissão" maxlength="20" [ngClass]="{'input-invalid': f.personal_occupation.touched && f.personal_occupation.invalid}" />
+                placeholder="Profissão" maxlength="30" [ngClass]="{'input-invalid': f.personal_occupation.touched && f.personal_occupation.invalid}" />
         </div>
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <label>Nome da Empresa</label>

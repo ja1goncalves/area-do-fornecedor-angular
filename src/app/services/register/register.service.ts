@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { IProgramData } from './interfaces';
+import { IProgramData } from 'src/app/models/register-data';
 
 interface IAddressFromCep {
   city: string;
@@ -165,7 +165,6 @@ export class RegisterService {
    * @returns {Observable<any>}
    */
   public getProviderData(): Observable<IProgramData> {
-
     return new Observable((observer) => {
       this.http.get(`${environment.API_URL}/api/provider/data`).subscribe(
         (response: any) => { observer.next(response.data); },

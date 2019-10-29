@@ -24,7 +24,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
 
   ngOnChanges(change: SimpleChanges) {
     const allPrograms = change.programs.currentValue;
-    this.programs = this.programs.filter(program => program.code !== 'AV');
+    this.programs = this.programs.filter(({ code }) => !['AV', 'TRB', 'G3D'].includes(code));
 
     if (allPrograms.length) {
       allPrograms.forEach(program => {

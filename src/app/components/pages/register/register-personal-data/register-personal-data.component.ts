@@ -99,13 +99,11 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
 
   private initControlsValueChanges(): void {
     this.f.personal_occupation_id.valueChanges.subscribe(value => {
-      if (value !== 4 && value !== 6 && value !== 7) {
+      if (value && !['4', '6', '7'].includes(value))
         this.f.personal_occupation.setValidators([Validators.required, Validators.maxLength(30)]);
-        this.f.personal_occupation.updateValueAndValidity();
-      } else {
+      else
         this.f.personal_occupation.setValidators([Validators.maxLength(30)]);
-        this.f.personal_occupation.updateValueAndValidity();
-      }
+      this.f.personal_occupation.updateValueAndValidity();
     });
   }
 
