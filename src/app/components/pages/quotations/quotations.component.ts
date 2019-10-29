@@ -235,27 +235,21 @@ export class QuotationsComponent implements OnInit {
       this.quotations = this.quot;
       this.programs = Object.entries(this.quotations[0].programs);
       this.programs.forEach(([key, program], i) => {
-        // console.log('program: ', program)
+        let miles = Object.values(program).find(programInfo => programInfo.value);
+        miles = miles ? miles.value : 0;
         this.programsForm.addControl(`program-form-${program.id}`, this.fb.group({
           id: [program.id],
           sellThis: [false],
-          value: [''],
+          value: [miles],
           number: [''],
           files: [[]],
           access_password: [''],
           price: [''],
           paymentMethod: [1]
         }));
-        this.programsForm.get(`program-form-${program.id}`).get('sellThis').valueChanges.subscribe(value => {
-          const paymentMethod = this.programsForm.get(`program-form-${program.id}`).get('paymentMethod');
-          if (value) {
-            paymentMethod.setValidators([Validators.required, Validators.pattern(/^[^1]/)]);
-            paymentMethod.updateValueAndValidity();
-          } else {
-            paymentMethod.clearValidators();
-            paymentMethod.updateValueAndValidity();
-          }
-        })
+        this.programsForm.get(`program-form-${program.id}`).get('sellThis').valueChanges.subscribe(value => 
+          this.updateValidation(value, program)
+        );
         this.showForm[i] = false;
       });
       this.loading = false;
@@ -284,6 +278,21 @@ export class QuotationsComponent implements OnInit {
       this.loading = false;
       this.quotations = this.quot;
     });
+  }
+
+  private updateValidation(value: boolean, program): void {
+    const group = this.programsForm.get(`program-form-${program.id}`);
+    if (value) {
+      group.get('paymentMethod').setValidators([Validators.required, Validators.pattern(/^[^1]/)]);
+      group.get('number').setValidators([Validators.required, Validators.minLength(11), Validators.maxLength(14)]);
+      group.get('paymentMethod').updateValueAndValidity();
+      group.get('number').updateValueAndValidity();
+    } else {
+      group.get('paymentMethod').clearValidators();
+      group.get('number').clearValidators();
+      group.get('paymentMethod').updateValueAndValidity();
+      group.get('number').updateValueAndValidity();
+    }
   }
 
   private getProviderFidelities(): Promise<any> {
@@ -349,10 +358,12 @@ export class QuotationsComponent implements OnInit {
         fidelities[id] = {
           id,
           number: group.get('number').value,
-          paymentMethod: group.get('paymentMethod').value,
+          payment_form_id: group.get('paymentMethod').value,
           value: group.get('value').value,
-          price: this.getPrice(id, this.quotations[0]),
+          price: group.get('price').value,
         };
+        if (group.get('access_password').value)
+          fidelities[id].access_password = group.get('access_password').value;
         if (group.get('files').value.length >= 1)
           fidelities[id].files = group.get('files').value;
       }
@@ -384,6 +395,7 @@ export class QuotationsComponent implements OnInit {
       const result = reader.result as string;
 
       reader.onload = () => {
+        this.programsForm.get(`program-form-${program_id}`)
         this.fidelities[quotation_id][program_id].files.push({
           filename: file.name,
           filetype: file.type,
@@ -398,10 +410,14 @@ export class QuotationsComponent implements OnInit {
     const programMethods = this.programs[index][1];
     const method = this.paymentMethods.find(met => met.id == value).title;
     const methodInfo = Object.values(programMethods).find(info => info && info.payment_form == method);
-    if (methodInfo)
-      this.programsForm.get(`program-form-${programId}`).get('price').setValue(methodInfo.price);
-    else
-      this.programsForm.get(`program-form-${programId}`).get('price').setValue('');
+    const group = this.programsForm.get(`program-form-${programId}`);
+    if (methodInfo) {
+      group.get('price').setValue(methodInfo.price);
+    }
+    else {
+      group.get('price').setValue('');
+
+    }
   }
 
   public getTotalValue(): number | string {
