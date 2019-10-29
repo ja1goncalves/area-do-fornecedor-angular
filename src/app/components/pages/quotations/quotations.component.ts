@@ -14,9 +14,40 @@ import { validateCpf } from '../../../app.utils';
 export class QuotationsComponent implements OnInit {
 
   private isSelling: boolean;
-  public showForm: IStatus = {}
+  public showForm: IStatus = {};
 
-  detailsFidelities;
+  public detailsFidelities = [
+      {
+        title: 'Latam',
+        password_type: 'Multiplus',
+        card_number: ''
+      },
+      {
+        title: 'Gol',
+            password_type: 'Smiles',
+            card_number: ''
+      },
+      {
+        title: 'Azul',
+            password_type: 'Azul',
+            card_number: ''
+      },
+      {
+        title: 'Avianca',
+            password_type: 'Avianca',
+            card_number: ''
+      },
+      {
+        title: 'LATAM Red e Black',
+            password_type: 'LATAM Red e Black',
+            card_number: ''
+      },
+      {
+        title: 'Gol Diamante',
+            password_type: 'Smiles Diamante',
+            card_number: ''
+      }
+  ];
   quotations: Array<any> = [];
   loading: any = true;
   paymentMethods: IPaymentMethods[];
@@ -41,7 +72,7 @@ export class QuotationsComponent implements OnInit {
       this.paymentMethods = res;
     }, err => {
       console.log('err: ', err);
-    })
+    });
   }
 
   public getQuotations(): void {
@@ -65,7 +96,7 @@ export class QuotationsComponent implements OnInit {
             paymentMethod: [1, [Validators.required, Validators.pattern(/^[^1]/)]]
           }));
           // Add a valuechanges changing the validation of the fields
-          this.programsForm.get(`program-form-${program.id}`).get('sellThis').valueChanges.subscribe(value => 
+          this.programsForm.get(`program-form-${program.id}`).get('sellThis').valueChanges.subscribe(value =>
             this.updateValidation(value, program)
           );
           this.showForm[i] = false;
@@ -84,8 +115,8 @@ export class QuotationsComponent implements OnInit {
 
   /**
    * @description Activates the validation of the fields if the form will be sended
-   * @param {boolean} activate 
-   * @param program 
+   * @param {boolean} activate
+   * @param program
    */
   private updateValidation(activate: boolean, program): void {
     const group = this.programsForm.get(`program-form-${program.id}`);
@@ -102,13 +133,18 @@ export class QuotationsComponent implements OnInit {
     }
   }
 
-  private getProviderFidelities(): Promise<any> {
+  private getProviderFidelities(): any {
     return this.quotationService.getProviderFidelities().toPromise().then(
       (fidelities) => {
-        this.programs.forEach(([, value]) => {
+        this.programs.forEach(([code, value]) => {
+          console.log(code);
           fidelities.forEach((fidelity) => {
               if (fidelity.program_id === value.id) {
-                this.detailsFidelities[(value.id - 1)].card_number = fidelity.card_number;
+                if (['JJ', 'TRB'].includes(code)) {
+                  this.detailsFidelities[(value.id - 1)].card_number = this.authService.getDataUser().cpf;
+                } else {
+                  this.detailsFidelities[(value.id - 1)].card_number = fidelity.card_number;
+                }
               }
             });
         });
@@ -118,7 +154,7 @@ export class QuotationsComponent implements OnInit {
 
   /**
    * @description Shows all forms
-   * @param {number} id 
+   * @param {number} id
    */
   public sellQuotation(id: number): void {
     this.isSelling = true;
@@ -127,7 +163,7 @@ export class QuotationsComponent implements OnInit {
 
   /**
    * @description Hides all forms
-   * @param {number} id 
+   * @param {number} id
    */
   public unsellQuotation(id: number): void {
     this.isSelling = false;
@@ -136,18 +172,19 @@ export class QuotationsComponent implements OnInit {
 
   /**
    * @description Verify if the form will be selled or not
-   * @param {number} programId 
+   * @param {number} programId
    */
   public deactivateForm(programId: number): boolean {
-    return this.isSelling && !this.programsForm.get(`program-form-${programId}`).get('sellThis').value
+    return this.isSelling && !this.programsForm.get(`program-form-${programId}`).get('sellThis').value;
   }
 
   public getMiles(program: IPaymentInfo): number {
     const paymentMethodInfo = Object.values(program).find((method) => method.value);
-    if (typeof paymentMethodInfo == 'number')
+    if (typeof paymentMethodInfo === 'number') {
       return 0;
-    else
+    } else {
       return paymentMethodInfo.value;
+    }
   }
 
   public saveFidelities(quotId: number): void {
@@ -156,8 +193,8 @@ export class QuotationsComponent implements OnInit {
       Object.values(this.programsForm.controls).forEach((group: FormGroup) => {
         Object.values(group.controls).forEach((control: FormControl) => {
           control.markAsTouched();
-        })
-      })
+        });
+      });
       return;
     }
 
@@ -175,12 +212,14 @@ export class QuotationsComponent implements OnInit {
           value: group.get('value').value,
           price: group.get('price').value,
         };
-        if (group.get('access_password').value)
+        if (group.get('access_password').value) {
           fidelities[id].access_password = group.get('access_password').value;
-        if (group.get('files').value.length >= 1)
+        }
+        if (group.get('files').value.length >= 1) {
           fidelities[id].files = group.get('files').value;
+        }
       }
-    })
+    });
 
     const data = {
       quotation_id: quotId,
@@ -221,13 +260,12 @@ export class QuotationsComponent implements OnInit {
   public paymentMethodChange(event: any, index: number, programId: number): void {
     const { target: { value } } = event;
     const programMethods = this.programs[index][1];
-    const method = this.paymentMethods.find(met => met.id == value).title;
-    const methodInfo = Object.values(programMethods).find(info => info && info.payment_form == method);
+    const method = this.paymentMethods.find(met => met.id === value).title;
+    const methodInfo = Object.values(programMethods).find(info => info && info.payment_form === method);
     const group = this.programsForm.get(`program-form-${programId}`);
     if (methodInfo) {
       group.get('price').setValue(methodInfo.price);
-    }
-    else {
+    } else {
       group.get('price').setValue('');
 
     }
@@ -240,31 +278,33 @@ export class QuotationsComponent implements OnInit {
         const onlyNum = group.get('price').value ? Number(group.get('price').value) : 0;
         total += onlyNum;
       }
-    })
+    });
     return total;
   }
 
   /**
    * @description Locks/unlocks password visualization
-   * @param {number} index 
-   * @param {boolean} unlock 
+   * @param {number} index
+   * @param {boolean} unlock
    */
   public lockUnlock(index: number, unlock: boolean): void {
     const passwordInput = document.getElementById(`tam-senha-${index}`);
     const inputType = passwordInput.getAttribute('type');
     if (inputType === 'text') {
       passwordInput.setAttribute('type', 'password');
-    } else
+    } else {
       passwordInput.setAttribute('type', 'text');
+    }
   }
 
   public manageFormVisibility(index: number): void {
-    if (this.isSelling)
-      this.showForm[index] = !this.showForm[index]
+    if (this.isSelling) {
+      this.showForm[index] = !this.showForm[index];
+    }
   }
 
   public havePaymentMethod(method: IPaymentMethods, program): boolean {
-    return Object.keys(program).some(programId => Number(programId) == method.id) || method.id == 1
+    return Object.keys(program).some(programId => Number(programId) === method.id) || method.id === 1;
   }
 
   public sellUnsellProgram(program): void {

@@ -1,11 +1,11 @@
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 <form [formGroup]="programsForm" (ngSubmit)="saveFidelities(quotations[0].id)" class="container-order">
 
-  <div *ngFor="let quotation of quotations; let i = index">
+  <div *ngFor="let quotation of quotations; let j = index">
     <ul class="cotation-list-table">
       <li class="head clearfix">
         <div class="col-row clearfix" style="background: #444; color: #fff; font-size: 14px;padding: 8px;">
-          <div class="col col-2"></div>
+          <div class="col col-2">Cotação</div>
           <div class="col col-8">
             <div class="col col-4 text-center">Milhas</div>
             <div class="col col-4"> Programa de Fidelidade</div>
@@ -19,7 +19,6 @@
         <div class="col col-2" style="background: #0275d8; color: #fff">
           <div class="cotation-box-title">
             <span class="id">
-              <small>Cotação</small>
               {{quotation.id}}
             </span>
             <span class="date">
@@ -94,7 +93,7 @@
                         [ngClass]="{'input-invalid': 
                           programsForm.get('program-form-' + program[1].id).get('number').touched && 
                           programsForm.get('program-form-' + program[1].id).get('number').invalid }"
-                        maxlength="14">
+                        maxlength="14" [value]="detailsFidelities[(program[1].id - 1)].card_number || ''">
                     </div>
                   </div>
                 </div>
@@ -160,9 +159,10 @@
                       'btn-danger': !getForm(program[1].id).get('sellThis').value,
                       'btn-primary': getForm(program[1].id).get('sellThis').value
                     }"
-                    class="cursor-pointer btn sell-button"
+                    class="cursor-pointer btn sell-button btn-circle"
                     title="Vender estas milhas">
-                    {{ getForm(program[1].id).get('sellThis').value ? 'O' : 'X' }}
+                    <i *ngIf="getForm(program[1].id).get('sellThis').value" class="fa fa-check"></i>
+                    <i *ngIf="!getForm(program[1].id).get('sellThis').value" class="fa fa-times"></i>
                   </button>
                 </div>
               </div>
