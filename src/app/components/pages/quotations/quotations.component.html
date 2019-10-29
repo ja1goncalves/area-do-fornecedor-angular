@@ -73,75 +73,7 @@
             </div><!-- /.col-row -->
 
             <div class="col-row clearfix border-bottom pt-2 white-background" *ngIf="showForm[i]">
-
-              <!-- <div class="col col-6">
-                <div class="form-group">
-                  <label *ngIf="['JJ', 'TRB'].includes(program[0])" for="tamCartao">
-                    CPF
-                  </label>
-                  <label *ngIf="['AD', 'AV', 'G3', 'G3D'].includes(program[0])" for="tamCartao">
-                    Nº do cartão {{ detailsFidelities[program[1].id-1].title }}
-                  </label>
-                  <div class="input text">
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      readonly="{{ detailsFidelities[(program[1].id - 1)].card_number ? 'readonly' : '' }}"
-                      formControlName="number"
-                      [ngClass]="{'input-invalid': 
-                        programsForm.get('program-form-' + program[1].id).get('number').touched && 
-                        programsForm.get('program-form-' + program[1].id).get('number').invalid }"
-                      maxlength="14">
-                  </div>
-                </div>
-              </div>
-              <div class="col col-6">
-                <div class="form-group">
-                  <label for="tamSenha">Senha de Acesso {{ detailsFidelities[program[1].id-1].password_type }}</label>
-                  <div class="input text password-box">
-                    <input 
-                      type="password" 
-                      class="form-control" 
-                      id="tam-senha-{{ i }}" 
-                      formControlName="access_password">
-                    <app-password-lock
-                      class="password-lock-component"
-                      (lockUnlock)="lockUnlock(i, $event)"></app-password-lock>
-                  </div>
-                </div>
-              </div> -->
               <div class="col-row">
-                <!-- <div class="col col-4">
-                  <a style="cursor: pointer" class="register-box label-height"
-                    onclick="window.open('https://www.techtudo.com.br/dicas-e-tutoriais/noticia/2013/09/como-tirar-screenshots-no-windows-e-salvar-capturas-de-tela-no-computador.html')"> Não sabe capturar tela? Aprenda a "printar"...</a> 
-                  <div class="form-group button-box">
-                    <label for="{{program[1].value.toLowerCase()}}Print-0" class="btn btn-primary">Inicial&hellip;</label>
-                    <span class="upload mr-2">
-                      <input name="inicial-{{program[0]}}-{{quotation.id}}" id="{{program[1].title.quotationtoLowerCase()}}Print-0"
-                      type="file" style="display: none" (change)="uploadFile($event, quotation.id, quotationprogram.[1].id)">
-                    </span>quotation
-                    <label for="{{program[1].title.toLowerCase()}}Print-1" class="btn btn-primary">Extrato&hellip;</label>
-                      <span class="upload">
-                          <input name="extract-{{program[0]}}-{{quotation.id}}" id="{{program[1].title.toLowerCase()}}Print-1"
-                          type="file" style="display: none" (change)="uploadFile($event, quotation.id, program[1].id)">
-                      </span>
-                    </div>
-                </div>
-                <div class="col col-4"> 
-                  <label for="" class="register-box label-height">Dados cadastrais</label>
-                  <div class="form-group button-box">
-                      <label for="{{program[1].title.toLowerCase()}}Print-2" class="btn btn-primary">Celular&hellip;</label>
-                        <span class="upload mr-2">
-                          <input name="cellphone-{{program[0]}}-{{quotation.id}}" id="{{program[1].title.toLowerCase()}}Print-2"
-                          type="file" style="display: none" (change)="uploadFile($event, program[0].id)">
-                        </span>
-                      <label for="{{program[1].title.toLowerCase()}}Print-3" class="btn btn-primary">Endereço&hellip;</label>
-                        <span class="upload">
-                            <input name="address-{{program[0]}}-{{quotation.id}}" id="{{program[1].title.toLowerCase()}}Print-3"
-                            type="file" style="display: none" (change)="uploadFile($event, program[1].id)">
-                        </span>
-                  </div>
-                </div> -->
                 <div class="col col-3">
                   <div class="form-group">
                     <label *ngIf="['JJ', 'TRB'].includes(program[0])" for="tamCartao">
