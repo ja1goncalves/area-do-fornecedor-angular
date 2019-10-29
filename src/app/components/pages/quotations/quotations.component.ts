@@ -260,8 +260,8 @@ export class QuotationsComponent implements OnInit {
   public paymentMethodChange(event: any, index: number, programId: number): void {
     const { target: { value } } = event;
     const programMethods = this.programs[index][1];
-    const method = this.paymentMethods.find(met => met.id === value).title;
-    const methodInfo = Object.values(programMethods).find(info => info && info.payment_form === method);
+    const method = this.paymentMethods.find(met => met.id == value).title;
+    const methodInfo = Object.values(programMethods).find(info => info && info.payment_form == method);
     const group = this.programsForm.get(`program-form-${programId}`);
     if (methodInfo) {
       group.get('price').setValue(methodInfo.price);
