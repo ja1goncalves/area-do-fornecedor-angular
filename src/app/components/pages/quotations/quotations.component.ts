@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { QuotationService } from '../../../services/quotation/quotation.service';
-import { AuthService } from '../../../services/auth/auth.service';
-import { NotifyService } from '../../../services/notify/notify.service';
+import { QuotationService } from 'src/app/services/quotation/quotation.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { NotifyService } from 'src/app/services/notify/notify.service';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { IPaymentInfo, IPaymentMethods, IStatus } from './interfaces';
-import { validateCpf } from '../../../app.utils';
+import { validateCpf } from 'src/app/app.utils';
 
 @Component({
   selector: 'app-quotations',
@@ -48,7 +48,73 @@ export class QuotationsComponent implements OnInit {
         card_number: ''
       }
   ];
-  quotations: Array<any> = [];
+  quotations: Array<any> = [
+    {
+      "id": 138320,
+      "status_orders": null,
+      "created_at": "2019-10-23",
+      "updated_at": {
+        "date": "2019-10-23 14:44:00.000000",
+        "timezone_type": 3,
+        "timezone": "UTC"
+      },
+      "total": 3715.5,
+      "programs": {
+        "JJ": {
+          "2": {
+            "id": 170592,
+            "value": 15,
+            "price": 225,
+            "payment_form": "Antecipado"
+          },
+          "3": {
+            "id": 170593,
+            "value": 15,
+            "price": 247.5,
+            "payment_form": "Postecipado"
+          },
+          "title": "TAM",
+          "id": 1
+        },
+        "G3": {
+          "2": {
+            "id": 170595,
+            "value": 31,
+            "price": 558,
+            "payment_form": "Antecipado"
+          },
+          "3": {
+            "id": 170594,
+            "value": 31,
+            "price": 620,
+            "payment_form": "Postecipado"
+          },
+          "title": "GOL",
+          "id": 2
+        },
+        "AD": {
+          "2": {
+            "id": 170596,
+            "value": 50,
+            "price": 1375,
+            "payment_form": "Antecipado"
+          },
+          "title": "AZUL",
+          "id": 3
+        },
+        "TRB": {
+          "2": {
+            "id": 170597,
+            "value": 23,
+            "price": 690,
+            "payment_form": "Antecipado"
+          },
+          "title": "TAM Red e Black",
+          "id": 5
+        }
+      }
+    }
+  ];
   loading: any = true;
   paymentMethods: IPaymentMethods[];
   programs: Array<[string, IPaymentInfo]> = [];
@@ -79,7 +145,7 @@ export class QuotationsComponent implements OnInit {
     this.loading = true;
     this.quotationService.getQuotations()
     .subscribe(res => {
-      this.quotations = res.data;
+      // this.quotations = res.data;
       if (this.quotations.length) {
         this.programs = Object.entries(this.quotations[0].programs);
         this.programs.forEach(([, program], i) => {
@@ -233,7 +299,7 @@ export class QuotationsComponent implements OnInit {
     };
 
     this.quotationService.createOrder(data)
-      .subscribe(res => {
+      .subscribe(_ => {
         this.notify.show('success', 'Dados enviados com sucesso!');
         this.getQuotations();
         this.unsellQuotation(quotId);
@@ -273,7 +339,6 @@ export class QuotationsComponent implements OnInit {
       group.get('price').setValue(methodInfo.price);
     } else {
       group.get('price').setValue('');
-
     }
   }
 
@@ -316,6 +381,13 @@ export class QuotationsComponent implements OnInit {
   public sellUnsellProgram(program): void {
     const sellThisControl = this.getForm(program.id).get('sellThis');
     sellThisControl.setValue(!sellThisControl.value);
+  }
+
+  public emptyPrice(quotation): string {
+    if (quotation.status_orders)
+      return 'Não vendido';
+    else
+      return 'A definir'
   }
 
   public getForm(programId): AbstractControl {

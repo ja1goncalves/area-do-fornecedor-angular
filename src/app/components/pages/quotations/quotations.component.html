@@ -65,7 +65,7 @@
                     <!-- | currency:'R$' -->
                   {{ programsForm.get('program-form-' + program[1].id).get('price').value ?
                     (programsForm.get('program-form-' + program[1].id).get('price').value | currency:'R$') :
-                    'A definir'
+                    emptyPrice(quotation)
                   }}
                 </span>
               </div>
@@ -177,9 +177,11 @@
         </div>
 
         <div class="col col-2 clearfix" style="background: #0275d8; color: #fff">
-          <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isSelling">Vender</button>
-          <button class="button button-select" type="submit" *ngIf="isSelling">Confirmar</button>
-          <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isSelling">Cancelar</button>
+          <ng-container *ngIf="!quotation.status_orders">
+            <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isSelling">Vender</button>
+            <button class="button button-select" type="submit" *ngIf="isSelling">Confirmar</button>
+            <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isSelling">Cancelar</button>
+          </ng-container>
           <span *ngIf="quotation.status_orders" >
             <p *ngFor="let status of quotation.status_orders;" style="margin-bottom: 0rem">
                <img style="width: 42px" [alt]="status.program" [src]="'assets/imgs/cias/'+status.program.toLowerCase()+'.png'" style="width: 30%"/> {{status.status.toUpperCase()}}
