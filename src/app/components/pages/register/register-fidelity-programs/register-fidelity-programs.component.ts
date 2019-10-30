@@ -24,17 +24,23 @@ export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
 
   ngOnChanges(change: SimpleChanges) {
     const allPrograms = change.programs.currentValue;
-    this.programs = this.programs.filter(({ code }) => !['AV', 'TRB', 'G3D'].includes(code));
+    const hiddenFidelities = this.submitData ? ['AV'] : ['AV', 'TRB', 'G3D'];
+    this.programs = this.programs.filter(({ code }) => !hiddenFidelities.includes(code));
 
     if (allPrograms.length) {
       allPrograms.forEach(program => {
-        this.fidelityDataForm.addControl(`card_number_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]))
-        this.fidelityDataForm.addControl(`access_password_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]))
+        this.fidelityDataForm.addControl(`edit`, this.formBuilder.control(false, [Validators.maxLength(1)]));
+        this.fidelityDataForm.addControl(`card_number_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
+        this.fidelityDataForm.addControl(`access_password_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
         if (program.code === 'JJ' || program.code === 'G3') {
-          this.fidelityDataForm.addControl(`type_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]))
+          this.fidelityDataForm.addControl(`type_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
         }
       });
     }
+  }
+
+  public isEdit(): boolean {
+    return !!this.fidelityDataForm.get('edit').value;
   }
 
   public fidelityDataSubmit(): void {

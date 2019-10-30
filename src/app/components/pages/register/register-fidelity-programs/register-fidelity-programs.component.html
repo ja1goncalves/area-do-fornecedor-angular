@@ -5,22 +5,22 @@
     </div>
   </div>
   <div *ngFor="let control of programs; let i = index" class="row">
-    <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code != 'TRB' || control.code != 'G3D'">
+    <div class="col-12 col-sm-{{!this.isEdit() ? 'col-sm-4 col-md-4 col-lg-4' : 'col-sm-6 col-md-6 col-lg-6'}} mb-3">
       <label>
         <img [alt]="control.title" [src]="'assets/imgs/cias/'+control.code.toLowerCase()+'.png'" style="width: 23px"/>
         Nº Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}
       </label>
       <input type="text" mask="0*" min="0" [dropSpecialCharacters]="false" formControlName="card_number_{{control.code}}" class="form-control" placeholder="N° Fidelidade" maxlength="20">
     </div>
-    <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3">
+    <div class="col-12 col-sm-{{!this.isEdit() ? 'col-sm-4 col-md-4 col-lg-4' : 'col-sm-6 col-md-6 col-lg-6'}} mb-3">
       <label>Senha Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}</label>
       <input type="password" formControlName="access_password_{{control.code}}" class="form-control" placeholder="N° Fidelidade" maxlength="20">
     </div>
-      <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'JJ'">
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'JJ' && !this.isEdit()">
           <label>Latam Red & Black</label>
           <input type="checkbox" formControlName="type_{{control.code}}" class="form-control" style="width: 10%">
       </div>
-      <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'G3'">
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'G3' && !this.isEdit()">
           <label>Gol Diamante</label>
           <input type="checkbox" formControlName="type_{{control.code}}" class="form-control" style="width: 10%">
       </div>

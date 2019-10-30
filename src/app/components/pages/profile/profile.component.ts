@@ -10,7 +10,7 @@ import { defaultReqErrMessage } from 'src/app/app.utils';
 import { RegisterPersonalDataComponent } from 'src/app/components/pages/register/register-personal-data/register-personal-data.component';
 import { RegisterFidelityProgramsComponent } from 'src/app/components/pages/register/register-fidelity-programs/register-fidelity-programs.component';
 import { RegisterBankDataComponent } from 'src/app/components/pages/register/register-bank-data/register-bank-data.component';
-import { IRequestData } from './interfaces';
+import {IFidelity, IRequestData} from './interfaces';
 
 export const MY_FORMATS = {
   parse: {
@@ -185,11 +185,15 @@ export class ProfileComponent implements OnInit, AfterViewInit {
           this.personalForm.get('personal_company_phone').setValue(personal.company_phone);
         }
         if (fidelities) {
+          const codes = fidelities.map(f => f.code);
+          this.programs = this.programs.filter(({ code }) => codes.includes(code));
+
           fidelities.forEach((fidelity) => {
             const { code } = fidelity;
+            this.fidelityForm.get(`edit`).setValue(true);
             this.fidelityForm.get(`access_password_${code}`).setValue(fidelity.access_password);
             this.fidelityForm.get(`card_number_${code}`).setValue(fidelity.card_number);
-          })
+          });
         }
 
         this.initialValues = providerData;
@@ -245,21 +249,34 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       company_phone: this.personalForm.get('personal_company_phone').value,
     };
 
-    if (typeof requestData.personal.birthday !== 'string')
+    if (typeof requestData.personal.birthday !== 'string') {
       requestData.personal.birthday = moment(requestData.personal.birthday).format('YYYY-MM-DD');
+    }
 
-    requestData.fidelities = {
-      card_number_JJ: this.fidelityForm.get('card_number_JJ').value,
-      access_password_JJ: this.fidelityForm.get('access_password_JJ').value,
-      type_JJ: this.fidelityForm.get('type_JJ').value ? 'TRB' : '',
-      card_number_G3: this.fidelityForm.get('card_number_G3').value,
-      access_password_G3: this.fidelityForm.get('access_password_G3').value,
-      type_G3: this.fidelityForm.get('type_G3').value ? 'G3D' : '',
-      card_number_AD: this.fidelityForm.get('card_number_AD').value,
-      access_password_AD: this.fidelityForm.get('access_password_AD').value,
-      card_number_AV: this.fidelityForm.get('card_number_AV').value,
-      access_password_AV: this.fidelityForm.get('access_password_AV').value,
-    };
+    const { controls } = this.fidelityForm;
+    const fidelities: IFidelity[] = [];
+
+       this.programs.forEach(program => {
+        const { code } = program;
+          if (controls[`card_number_${code}`].value) {
+          const fidelity: IFidelity = {
+            id: null,
+            program_id: program.id,
+            card_number: controls[`card_number_${code}`].value,
+            access_password: controls[`access_password_${code}`].value || null,
+            type: '',
+           };
+           // Sets the fidelity ids based on the program id
+           this.initialValues.fidelities.forEach((initial_fidelity) => {
+               if (initial_fidelity.program_id === program.id) {
+                   fidelity.id = initial_fidelity.id;
+                 }
+             });
+           fidelities.push(fidelity);
+          }
+        });
+
+    requestData.fidelities = fidelities;
 
     return requestData;
   }
