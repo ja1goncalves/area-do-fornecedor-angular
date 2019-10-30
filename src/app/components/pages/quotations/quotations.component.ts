@@ -24,28 +24,28 @@ export class QuotationsComponent implements OnInit {
       },
       {
         title: 'Gol',
-            password_type: 'Smiles',
-            card_number: ''
+        password_type: 'Smiles',
+        card_number: ''
       },
       {
         title: 'Azul',
-            password_type: 'Azul',
-            card_number: ''
+        password_type: 'Azul',
+        card_number: ''
       },
       {
         title: 'Avianca',
-            password_type: 'Avianca',
-            card_number: ''
+        password_type: 'Avianca',
+        card_number: ''
       },
       {
         title: 'LATAM Red e Black',
-            password_type: 'LATAM Red e Black',
-            card_number: ''
+        password_type: 'LATAM Red e Black',
+        card_number: ''
       },
       {
         title: 'Gol Diamante',
-            password_type: 'Smiles Diamante',
-            card_number: ''
+        password_type: 'Smiles Diamante',
+        card_number: ''
       }
   ];
   quotations: Array<any> = [];
@@ -96,9 +96,11 @@ export class QuotationsComponent implements OnInit {
             paymentMethod: [1, [Validators.required, Validators.pattern(/^[^1]/)]]
           }));
           // Add a valuechanges changing the validation of the fields
-          this.programsForm.get(`program-form-${program.id}`).get('sellThis').valueChanges.subscribe(value =>
-            this.updateValidation(value, program)
-          );
+          this.programsForm.get(`program-form-${program.id}`)
+              .get('sellThis').valueChanges
+              .subscribe(value =>
+                this.updateValidation(value, program.id)
+              );
           this.showForm[i] = false;
         });
       }
@@ -116,10 +118,10 @@ export class QuotationsComponent implements OnInit {
   /**
    * @description Activates the validation of the fields if the form will be sended
    * @param {boolean} activate
-   * @param program
+   * @param programId
    */
-  private updateValidation(activate: boolean, program): void {
-    const group = this.programsForm.get(`program-form-${program.id}`);
+  private updateValidation(activate: boolean, programId): void {
+    const group = this.programsForm.get(`program-form-${programId}`);
     if (activate) {
       group.get('paymentMethod').setValidators([Validators.required, Validators.pattern(/^[^1]/)]);
       group.get('number').setValidators([Validators.required, Validators.pattern(validateCpf)]);
@@ -141,9 +143,12 @@ export class QuotationsComponent implements OnInit {
           fidelities.forEach((fidelity) => {
               if (fidelity.program_id === value.id) {
                 if (['JJ', 'TRB'].includes(code)) {
-                  this.detailsFidelities[(value.id - 1)].card_number = this.authService.getDataUser().cpf;
+                  this.programsForm.get(`program-form-${value.id}`)
+                      .get('number')
+                      .setValue(this.authService.getDataUser().cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'));
                 } else {
-                  this.detailsFidelities[(value.id - 1)].card_number = fidelity.card_number;
+                  this.programsForm.get(`program-form-${value.id}`).get('number').setValue(fidelity.card_number);
+                  this.programsForm.get(`program-form-${value.id}`).get('number').clearValidators();
                 }
               }
             });
@@ -211,6 +216,7 @@ export class QuotationsComponent implements OnInit {
           payment_form_id: group.get('paymentMethod').value,
           value: group.get('value').value,
           price: group.get('price').value,
+          files: []
         };
         if (group.get('access_password').value) {
           fidelities[id].access_password = group.get('access_password').value;
@@ -226,16 +232,16 @@ export class QuotationsComponent implements OnInit {
       orders_programs: fidelities,
     };
 
-    // this.quotationService.createOrder(data)
-    //   .subscribe(res => {
-    //     this.notify.show('success', 'Dados enviados com sucesso!');
-    //     this.getQuotations();
-    //     this.unsellQuotation(quotId);
-    //     this.loading = false;
-    //   }, ({ message }) => {
-    //     this.loading = false;
-    //     this.notify.show('error', message ? message : 'Ocorreu um erro ao tentar enviar seus dados!');
-    //   });
+    this.quotationService.createOrder(data)
+      .subscribe(res => {
+        this.notify.show('success', 'Dados enviados com sucesso!');
+        this.getQuotations();
+        this.unsellQuotation(quotId);
+        this.loading = false;
+      }, ({ message }) => {
+        this.loading = false;
+        this.notify.show('error', message ? message : 'Ocorreu um erro ao tentar enviar seus dados!');
+      });
   }
 
   public uploadFile(event, program_id) {
