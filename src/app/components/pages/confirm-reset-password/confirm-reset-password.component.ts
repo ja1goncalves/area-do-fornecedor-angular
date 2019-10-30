@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PasswordService } from 'src/app/services/password/password.service';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 import { PasswordValidation } from 'src/app/helpers/validators';
-import { defaultReqErrMessage } from '../../../app.utils';
+import { defaultReqErrMessage } from 'src/app/app.utils';
 
 @Component({
   selector: 'app-confirm-reset-password',
