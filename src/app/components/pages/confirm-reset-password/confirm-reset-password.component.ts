@@ -42,11 +42,10 @@ export class ConfirmResetPasswordComponent implements OnInit {
   get f(){ return this.passwordForm.controls; }
 
   private checkToken(token: string): void {
-    
     this.passwordService.checkResetToken(token).subscribe(
       (response) => {
-        
-        if(response.status === 404) {
+
+        if (response.status === 404) {
           this.notify.show('error', "Seu link de recuperação expirou, tente 'Esqueci minha senha' novamente");
           this.router.navigate(['/login']);
         }
@@ -58,11 +57,10 @@ export class ConfirmResetPasswordComponent implements OnInit {
         this.router.navigate(['/login']);
       }
     );
-  
+
   }
 
   public reset(): void {
-
     const requestData = {
       email: this.tokenInfo.email,
       password: this.f.password.value,
@@ -71,13 +69,13 @@ export class ConfirmResetPasswordComponent implements OnInit {
     };
 
     this.submitted = true;
-    
-    if(this.passwordForm.valid){
+
+    if (this.passwordForm.valid) {
       this.loading = true;
 
       this.passwordService.confirmPassword(requestData).subscribe(
         (response) => {
-          if(response.error || response.errors) {
+          if (response.error || response.errors) {
             const { message } = response;
             this.notify.show('error', message ? message : defaultReqErrMessage);
             this.loading = false;
