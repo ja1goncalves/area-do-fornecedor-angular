@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { GENDERS, UFS, OCCUPATIONS } from 'src/app/config/consts';
 import { Address, Personal } from 'src/app/models/register-data';
 import * as moment from 'moment';
@@ -35,9 +35,10 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() personalDataForm: FormGroup;
   @Input() userInfo: any;
+  @Input() hasSteps = true;
 
-  public personalData: Personal;
   public addressData: Address;
+  public personalData: Personal;
 
   public genders: any[] = GENDERS;
   public ufs: any[] = UFS;
@@ -61,12 +62,13 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-    if (changes.userInfo.currentValue.cellphone) {
-      this.f.personal_cellphone.setValue(changes.userInfo.currentValue.cellphone);
-    }
-    if (changes.userInfo.currentValue.phone) {
-      this.f.personal_phone.setValue(changes.userInfo.currentValue.phone);
+    if (changes.userInfo) {
+      if (changes.userInfo.currentValue.cellphone) {
+        this.f.personal_cellphone.setValue(changes.userInfo.currentValue.cellphone);
+      }
+      if (changes.userInfo.currentValue.phone) {
+        this.f.personal_phone.setValue(changes.userInfo.currentValue.phone);
+      }
     }
   }
 
@@ -87,6 +89,7 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
       residential_neighborhood: ['', [Validators.required, Validators.maxLength(50)]],
       residential_city:         ['', [Validators.required, Validators.maxLength(30)]],
       residential_state:        ['', [Validators.required]],
+      residential_id:           [''],
       personal_occupation_id:   [''],
       personal_occupation:      ['', [Validators.maxLength(30)]],
       personal_company:         ['', [Validators.maxLength(30)]],
@@ -96,13 +99,11 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
 
   private initControlsValueChanges(): void {
     this.f.personal_occupation_id.valueChanges.subscribe(value => {
-      if (value !== 4 && value !== 6 && value !== 7) {
+      if (value && !['4', '6', '7'].includes(value))
         this.f.personal_occupation.setValidators([Validators.required, Validators.maxLength(30)]);
-        this.f.personal_occupation.updateValueAndValidity();
-      } else {
+      else
         this.f.personal_occupation.setValidators([Validators.maxLength(30)]);
-        this.f.personal_occupation.updateValueAndValidity();
-      }
+      this.f.personal_occupation.updateValueAndValidity();
     });
   }
 
@@ -140,6 +141,9 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
 
   public personalDataSubmit(): void {
     this.submitted = true;
+    Object.values(this.personalDataForm.controls).forEach((control: FormControl) => {
+      control.markAsTouched();
+    })
 
     if (this.personalDataForm.valid) {
 
