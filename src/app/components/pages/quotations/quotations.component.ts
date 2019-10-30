@@ -48,73 +48,7 @@ export class QuotationsComponent implements OnInit {
         card_number: ''
       }
   ];
-  quotations: Array<any> = [
-    {
-      "id": 138320,
-      "status_orders": null,
-      "created_at": "2019-10-23",
-      "updated_at": {
-        "date": "2019-10-23 14:44:00.000000",
-        "timezone_type": 3,
-        "timezone": "UTC"
-      },
-      "total": 3715.5,
-      "programs": {
-        "JJ": {
-          "2": {
-            "id": 170592,
-            "value": 15,
-            "price": 225,
-            "payment_form": "Antecipado"
-          },
-          "3": {
-            "id": 170593,
-            "value": 15,
-            "price": 247.5,
-            "payment_form": "Postecipado"
-          },
-          "title": "TAM",
-          "id": 1
-        },
-        "G3": {
-          "2": {
-            "id": 170595,
-            "value": 31,
-            "price": 558,
-            "payment_form": "Antecipado"
-          },
-          "3": {
-            "id": 170594,
-            "value": 31,
-            "price": 620,
-            "payment_form": "Postecipado"
-          },
-          "title": "GOL",
-          "id": 2
-        },
-        "AD": {
-          "2": {
-            "id": 170596,
-            "value": 50,
-            "price": 1375,
-            "payment_form": "Antecipado"
-          },
-          "title": "AZUL",
-          "id": 3
-        },
-        "TRB": {
-          "2": {
-            "id": 170597,
-            "value": 23,
-            "price": 690,
-            "payment_form": "Antecipado"
-          },
-          "title": "TAM Red e Black",
-          "id": 5
-        }
-      }
-    }
-  ];
+  quotations: Array<any> = [];
   loading: any = true;
   paymentMethods: IPaymentMethods[];
   programs: Array<[string, IPaymentInfo]> = [];
@@ -145,7 +79,7 @@ export class QuotationsComponent implements OnInit {
     this.loading = true;
     this.quotationService.getQuotations()
     .subscribe(res => {
-      // this.quotations = res.data;
+      this.quotations = res.data;
       if (this.quotations.length) {
         this.programs = Object.entries(this.quotations[0].programs);
         this.programs.forEach(([, program], i) => {

@@ -184,7 +184,7 @@
           </ng-container>
           <span *ngIf="quotation.status_orders" >
             <p *ngFor="let status of quotation.status_orders;" style="margin-bottom: 0rem">
-               <img style="width: 42px" [alt]="status.program" [src]="'assets/imgs/cias/'+status.program.toLowerCase()+'.png'" style="width: 30%"/> {{status.status.toUpperCase()}}
+                <img style="width: 42px" [alt]="status.program" [src]="'assets/imgs/cias/'+'status.program.toLowerCase()'+'.png'" style="width: 30%"/> {{status.status.toUpperCase()}}
             </p>
           </span>
         </div>
