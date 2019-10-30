@@ -88,6 +88,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.personalComponent.personalDataForm.setParent(this.updateForm);
     this.programsComponent.fidelityDataForm.setParent(this.updateForm);
     this.registerComponent.bankDataForm.setParent(this.updateForm);
+
+    this.personalForm.get('personal_birthday').disable();
   }
 
   get personalForm(): FormGroup {
