@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from
 import { IPaymentInfo, IPaymentMethods, IStatus, IQuotation } from './interfaces';
 import { validateCpf } from 'src/app/app.utils';
 
-const validatePaymentMethod = /^[^1]/;
+const validatePaymentMethod = /^[^1]$/;
 const validateFlyNumber = /^\d{1,20}$/;
 
 @Component({
