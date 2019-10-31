@@ -182,10 +182,19 @@
             <button class="button button-select" type="submit" *ngIf="isSelling">Confirmar</button>
             <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isSelling">Cancelar</button>
           </ng-container>
-          <span *ngIf="quotation.status_orders" >
-            <p *ngFor="let status of quotation.status_orders;" style="margin-bottom: 0rem">
+          <span *ngIf="quotation.status_orders" style="display: flex; flex-flow: column nowrap; flex: 1;">
+            <span *ngFor="let program of programs" style="width: 100%; height: 43px; display: flex; flex-direction: row; justify-content: center; align-items: center; border-bottom: thin solid #b5b5b5; font-size: .8rem;">
+              <ng-container *ngIf="getStatusOrders(quotation, program[0])">
+                <!-- <img
+                    [alt]="getStatusOrders(quotation, program[0]).program"
+                    [src]="'../../../../assets/imgs/cias/'+getStatusOrders(quotation, program[0]).program.toLowerCase()+'.png'"
+                    style="width: 30%; margin-right: 10px;" />  -->
+                {{ getStatusOrders(quotation, program[0]).status.toUpperCase() }}
+              </ng-container>  
+            </span>
+            <!-- <p *ngFor="let status of quotation.status_orders;" style="margin-bottom: 0rem">
                 <img style="width: 42px" [alt]="status.program" [src]="'assets/imgs/cias/'+'status.program.toLowerCase()'+'.png'" style="width: 30%"/> {{status.status.toUpperCase()}}
-            </p>
+            </p> -->
           </span>
         </div>
       </li>

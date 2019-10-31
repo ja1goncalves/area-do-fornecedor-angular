@@ -81,10 +81,18 @@ export class QuotationsComponent implements OnInit {
     .subscribe(res => {
       this.quotations = res.data;
       if (this.quotations.length) {
+        const { status_orders } = this.quotations[0];
         this.programs = Object.entries(this.quotations[0].programs);
-        this.programs.forEach(([, program], i) => {
+        this.programs.forEach(([key, program], i) => {
           let miles = Object.values(program).find(programInfo => programInfo.value);
           miles = miles ? miles.value : 0;
+
+          let price = '';
+          // Verifies if there's a status order to display on screen
+          if (status_orders) {
+            const orderPrice = status_orders.find(ord => ord.program.toLowerCase() === key.toLowerCase());
+            price = orderPrice ? orderPrice.price : price;
+          }
           this.programsForm.addControl(`program-form-${program.id}`, this.fb.group({
             id: [program.id],
             sellThis: [true],
@@ -92,7 +100,7 @@ export class QuotationsComponent implements OnInit {
             number: ['', [Validators.required, Validators.pattern(validateCpf)]],
             files: [[]],
             access_password: [''],
-            price: [''],
+            price: [price],
             paymentMethod: [1, [Validators.required, Validators.pattern(/^[^1]/)]]
           }));
           // Add a valuechanges changing the validation of the fields
@@ -326,6 +334,10 @@ export class QuotationsComponent implements OnInit {
 
   public getForm(programId): AbstractControl {
     return this.programsForm.get(`program-form-${programId}`);
+  }
+
+  public getStatusOrders(quotation, programCode: string) {
+    return quotation.status_orders.find(ord => ord.program == programCode);
   }
 
 }
