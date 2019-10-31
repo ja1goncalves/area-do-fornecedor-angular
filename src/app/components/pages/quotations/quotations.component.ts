@@ -56,6 +56,15 @@ export class QuotationsComponent implements OnInit {
   paymentMethods: IPaymentMethods[];
   programs: { [key:string]: Array<[string, IPaymentInfo]> } = {};
 
+  /**
+   * @description Formulário pai de todos
+   * Dentro dele há formulário criados dinamicamente seguindo o padrâo:
+   * programsForm {
+   *    quotationGroup {
+   *        programForm // Este é o formulário de cada campo
+   *    }
+   * }
+   */
   programsForm: FormGroup;
 
   constructor(
@@ -344,6 +353,11 @@ export class QuotationsComponent implements OnInit {
       return 'A definir'
   }
 
+  /**
+   * @description Gets a form of a program of a quotation
+   * @param programId 
+   * @param quotId 
+   */
   public getForm(programId: number, quotId: number): AbstractControl {
     return this.programsForm.get(`quot-group-${quotId}`).get(`program-form-${programId}`);
   }
