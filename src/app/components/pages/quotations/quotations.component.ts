@@ -3,8 +3,10 @@ import { QuotationService } from 'src/app/services/quotation/quotation.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { IPaymentInfo, IPaymentMethods, IStatus } from './interfaces';
+import { IPaymentInfo, IPaymentMethods, IStatus, IQuotation } from './interfaces';
 import { validateCpf } from 'src/app/app.utils';
+
+const validatePaymentMethod = /^[^1]/;
 
 @Component({
   selector: 'app-quotations',
@@ -13,8 +15,8 @@ import { validateCpf } from 'src/app/app.utils';
 })
 export class QuotationsComponent implements OnInit {
 
-  private isSelling: boolean;
-  public showForm: IStatus = {};
+  private isSelling: { [key:string]: boolean } = {};
+  public showForm: { [key:string]: IStatus } = {};
 
   public detailsFidelities = [
       {
@@ -48,7 +50,7 @@ export class QuotationsComponent implements OnInit {
         card_number: ''
       }
   ];
-  quotations: Array<any> = [];
+  quotations: IQuotation[] = [];
   loading: any = true;
   paymentMethods: IPaymentMethods[];
   programs: Array<[string, IPaymentInfo]> = [];
@@ -78,22 +80,28 @@ export class QuotationsComponent implements OnInit {
   public getQuotations(): void {
     this.loading = true;
     this.quotationService.getQuotations()
-    .subscribe(res => {
+    .subscribe((res) => {
       this.quotations = res.data;
-      if (this.quotations.length) {
-        const { status_orders } = this.quotations[0];
-        this.programs = Object.entries(this.quotations[0].programs);
+      for (const quotation of this.quotations) {
+        this.isSelling[quotation.id] = false;
+        this.showForm[quotation.id] = {};
+        // Adds the quotation group
+        this.programsForm.addControl(`quot-group-${quotation.id}`, this.fb.group({}));
+        const { status_orders } = quotation;
+        this.programs = Object.entries(quotation.programs);
         this.programs.forEach(([key, program], i) => {
           let miles = Object.values(program).find(programInfo => programInfo.value);
           miles = miles ? miles.value : 0;
-
-          let price = '';
+  
+          let price: string | number = '';
           // Verifies if there's a status order to display on screen
           if (status_orders) {
             const orderPrice = status_orders.find(ord => ord.program.toLowerCase() === key.toLowerCase());
             price = orderPrice ? orderPrice.price : price;
           }
-          this.programsForm.addControl(`program-form-${program.id}`, this.fb.group({
+          // Adds the program group inside the quotation group
+          const quotGroup = this.programsForm.get(`quot-group-${quotation.id}`) as FormGroup;
+          quotGroup.addControl(`program-form-${program.id}`, this.fb.group({
             id: [program.id],
             sellThis: [true],
             value: [miles],
@@ -101,23 +109,19 @@ export class QuotationsComponent implements OnInit {
             files: [[]],
             access_password: [''],
             price: [price],
-            paymentMethod: [1, [Validators.required, Validators.pattern(/^[^1]/)]]
+            paymentMethod: ['1', [Validators.required, Validators.pattern(validatePaymentMethod)]]
           }));
           // Add a valuechanges changing the validation of the fields
-          this.programsForm.get(`program-form-${program.id}`)
+          this.getForm(program.id, quotation.id)
               .get('sellThis').valueChanges
-              .subscribe(value =>
-                this.updateValidation(value, program.id)
+              .subscribe(value => 
+                this.updateValidation(value, program.id, quotation.id)
               );
-          this.showForm[i] = false;
+          this.showForm[quotation.id][i] = false;
         });
+        this.getProviderFidelities(quotation);
       }
       this.loading = false;
-
-
-      for (const _ of this.quotations) {
-        this.getProviderFidelities();
-      }
     }, err => {
       this.loading = false;
     });
@@ -126,12 +130,13 @@ export class QuotationsComponent implements OnInit {
   /**
    * @description Activates the validation of the fields if the form will be sended
    * @param {boolean} activate
-   * @param programId
+   * @param {number} programId
+   * @param {number} quotId
    */
-  private updateValidation(activate: boolean, programId): void {
-    const group = this.programsForm.get(`program-form-${programId}`);
+  private updateValidation(activate: boolean, programId: number, quotId: number): void {
+    const group = this.getForm(programId, quotId);
     if (activate) {
-      group.get('paymentMethod').setValidators([Validators.required, Validators.pattern(/^[^1]/)]);
+      group.get('paymentMethod').setValidators([Validators.required, Validators.pattern(validatePaymentMethod)]);
       group.get('number').setValidators([Validators.required, Validators.pattern(validateCpf)]);
       group.get('paymentMethod').updateValueAndValidity();
       group.get('number').updateValueAndValidity();
@@ -143,20 +148,19 @@ export class QuotationsComponent implements OnInit {
     }
   }
 
-  private getProviderFidelities(): any {
+  private getProviderFidelities(quotation: IQuotation): any {
     return this.quotationService.getProviderFidelities().toPromise().then(
       (fidelities) => {
         this.programs.forEach(([code, value]) => {
-          console.log(code);
           fidelities.forEach((fidelity) => {
               if (fidelity.program_id === value.id) {
                 if (['JJ', 'TRB'].includes(code)) {
-                  this.programsForm.get(`program-form-${value.id}`)
+                  this.getForm(value.id, quotation.id)
                       .get('number')
                       .setValue(this.authService.getDataUser().cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'));
                 } else {
-                  this.programsForm.get(`program-form-${value.id}`).get('number').setValue(fidelity.card_number);
-                  this.programsForm.get(`program-form-${value.id}`).get('number').clearValidators();
+                  this.getForm(value.id, quotation.id).get('number').setValue(fidelity.card_number);
+                  this.getForm(value.id, quotation.id).get('number').clearValidators();
                 }
               }
             });
@@ -167,31 +171,32 @@ export class QuotationsComponent implements OnInit {
 
   /**
    * @description Shows all forms
-   * @param {number} id
+   * @param {number} quotId
    */
-  public sellQuotation(id: number): void {
-    this.isSelling = true;
-    Object.keys(this.showForm).forEach(key => this.showForm[key] = true);
+  public sellQuotation(quotId: number): void {
+    this.isSelling[quotId] = true;
+    Object.keys(this.showForm[quotId]).forEach(key => this.showForm[quotId][key] = true);
   }
 
   /**
    * @description Hides all forms
-   * @param {number} id
+   * @param {number} quotId
    */
-  public unsellQuotation(id: number): void {
-    this.isSelling = false;
-    Object.keys(this.showForm).forEach(key => this.showForm[key] = false);
+  public unsellQuotation(quotId: number): void {
+    this.isSelling[quotId] = false;
+    Object.keys(this.showForm[quotId]).forEach(key => this.showForm[quotId][key] = false);
   }
 
   /**
    * @description Verify if the form will be selled or not
    * @param {number} programId
    */
-  public deactivateForm(programId: number): boolean {
-    return this.isSelling && !this.programsForm.get(`program-form-${programId}`).get('sellThis').value;
+  public deactivateForm(programId: number, quotId: number): boolean {
+    return this.isSelling[quotId] && !this.getForm(programId, quotId).get('sellThis').value;
   }
 
-  public getMiles(program: IPaymentInfo): number {
+  public getMiles(program: IPaymentInfo, quotation: IQuotation): number {
+    console.log('program: ', quotation.id, ' ', program);
     const paymentMethodInfo = Object.values(program).find((method) => method.value);
     if (typeof paymentMethodInfo === 'number') {
       return 0;
@@ -201,9 +206,11 @@ export class QuotationsComponent implements OnInit {
   }
 
   public saveFidelities(quotId: number): void {
-    if (this.programsForm.invalid) {
+    const quotGroup = this.programsForm.get(`quot-group-${quotId}`) as FormGroup;
+    console.log('quotGroup: ', quotGroup);
+    if (quotGroup.invalid) {
       this.notify.show('error', 'Alguns campos estão com erro, por favor os verifique.');
-      Object.values(this.programsForm.controls).forEach((group: FormGroup) => {
+      Object.values(quotGroup.controls).forEach((group: FormGroup) => {
         Object.values(group.controls).forEach((control: FormControl) => {
           control.markAsTouched();
         });
@@ -215,7 +222,7 @@ export class QuotationsComponent implements OnInit {
 
     const fidelities = {};
 
-    Object.values(this.programsForm.controls).forEach((group: FormGroup) => {
+    Object.values(quotGroup.controls).forEach((group: FormGroup) => {
       if (group.get('sellThis').value) {
         const id = group.get('id').value;
         fidelities[id] = {
@@ -252,31 +259,31 @@ export class QuotationsComponent implements OnInit {
       });
   }
 
-  public uploadFile(event, program_id) {
-    const reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      reader.readAsDataURL(file);
+  // public uploadFile(event, program_id: number, quotId: number): void {
+  //   const reader = new FileReader();
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     const file = event.target.files[0];
+  //     reader.readAsDataURL(file);
 
-      const result = reader.result as string;
+  //     const result = reader.result as string;
 
-      reader.onload = () => {
-        const filesControl = this.programsForm.get(`program-form-${program_id}`).get('files');
-        filesControl.setValue([...filesControl.value, {
-          filename: file.name,
-          filetype: file.type,
-          value: result.split(',')[1]
-        }]);
-      };
-    }
-  }
+  //     reader.onload = () => {
+  //       const filesControl = this.getForm(program_id, quotId).get('files');
+  //       filesControl.setValue([...filesControl.value, {
+  //         filename: file.name,
+  //         filetype: file.type,
+  //         value: result.split(',')[1]
+  //       }]);
+  //     };
+  //   }
+  // }
 
-  public paymentMethodChange(event: any, index: number, programId: number): void {
+  public paymentMethodChange(event: any, index: number, programId: number, quotId: number): void {
     const { target: { value } } = event;
     const programMethods = this.programs[index][1];
     const method = this.paymentMethods.find(met => met.id == value).title;
     const methodInfo = Object.values(programMethods).find(info => info && info.payment_form == method);
-    const group = this.programsForm.get(`program-form-${programId}`);
+    const group = this.getForm(programId, quotId);
     if (methodInfo) {
       group.get('price').setValue(methodInfo.price);
     } else {
@@ -284,9 +291,10 @@ export class QuotationsComponent implements OnInit {
     }
   }
 
-  public getTotalValue(): number | string {
+  public getTotalValue(quotation: IQuotation): number | string {
     let total = 0;
-    Object.values(this.programsForm.controls).forEach((group: FormGroup) => {
+    const programGroup = this.programsForm.get(`quot-group-${quotation.id}`) as FormGroup;
+    Object.values(programGroup.controls).forEach((group: FormGroup) => {
       if (group.get('sellThis').value) {
         const onlyNum = group.get('price').value ? Number(group.get('price').value) : 0;
         total += onlyNum;
@@ -310,9 +318,9 @@ export class QuotationsComponent implements OnInit {
     }
   }
 
-  public manageFormVisibility(index: number): void {
-    if (this.isSelling) {
-      this.showForm[index] = !this.showForm[index];
+  public manageFormVisibility(index: number, quotId: number): void {
+    if (this.isSelling[quotId]) {
+      this.showForm[quotId][index] = !this.showForm[quotId][index];
     }
   }
 
@@ -320,20 +328,20 @@ export class QuotationsComponent implements OnInit {
     return Object.keys(program).some(programId => Number(programId) === method.id) || method.id === 1;
   }
 
-  public sellUnsellProgram(program): void {
-    const sellThisControl = this.getForm(program.id).get('sellThis');
+  public sellUnsellProgram(program, quotation): void {
+    const sellThisControl = this.getForm(program.id, quotation.id).get('sellThis');
     sellThisControl.setValue(!sellThisControl.value);
   }
 
-  public emptyPrice(quotation): string {
+  public emptyPrice(quotation: IQuotation): string {
     if (quotation.status_orders)
       return 'Não vendido';
     else
       return 'A definir'
   }
 
-  public getForm(programId): AbstractControl {
-    return this.programsForm.get(`program-form-${programId}`);
+  public getForm(programId: number, quotId: number): AbstractControl {
+    return this.programsForm.get(`quot-group-${quotId}`).get(`program-form-${programId}`);
   }
 
   public getStatusOrders(quotation, programCode: string) {

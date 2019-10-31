@@ -1,7 +1,9 @@
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-<form [formGroup]="programsForm" (ngSubmit)="saveFidelities(quotations[0].id)" class="container-order">
-
-  <div *ngFor="let quotation of quotations; let j = index">
+<form [formGroup]="programsForm">
+  <form 
+    *ngFor="let quotation of quotations; let j = index"
+    (ngSubmit)="saveFidelities(quotation.id)" 
+    class="container-order">
     <ul class="cotation-list-table">
       <li class="head clearfix">
         <div class="col-row clearfix" style="background: #444; color: #fff; font-size: 14px;padding: 8px;">
@@ -14,7 +16,7 @@
           <div *ngIf="quotation.status_orders" class="col col-2 text-center">Status</div>
         </div>
       </li>
-
+  
       <li class="body clearfix">
         <div class="col col-2" style="background: #0275d8; color: #fff">
           <div class="cotation-box-title">
@@ -26,29 +28,29 @@
             </span>
           </div>
         </div>
-
+  
         <div class="col col-8">
-          <form [formGroup]="programsForm.get('program-form-' + program[1].id)" *ngFor="let program of programs; let i = index">
+          <form [formGroup]="getForm(program[1].id, quotation.id)" *ngFor="let program of programs; let i = index">
             <div 
-              (click)="manageFormVisibility(i)" 
+              (click)="manageFormVisibility(i, quotation.id)" 
               class="col-row clearfix border-bottom" 
               style="background-color: #edf0f2;"
               [ngStyle]="{ 
-                'cursor': isSelling ? 'pointer' : 'default'
-               }">
+                'cursor': isSelling[quotation.id] ? 'pointer' : 'default'
+                }">
               <!-- /.col-milhas -->
               <div class="col col-4 col-valores text-center" 
                 [ngStyle]="{
-                  'opacity': deactivateForm(program[1].id) ? '.6' : '1'
+                  'opacity': deactivateForm(program[1].id, quotation.id) ? '.6' : '1'
                 }">
                 <span class="title">
-                  {{ getMiles(program[1]) }} mil
+                  {{ getMiles(program[1], quotation) }} mil
                 </span>
               </div>
               <div class="col col-4 col-programa" 
-                [ngStyle]="{
-                  'opacity': deactivateForm(program[1].id) ? '.6' : '1'
-                }">
+                
+              
+                >
                 <span class="programa-fidelidade">
                   <span class="logo">
                     <img [alt]="program[1].title" [src]="'assets/imgs/cias/'+program[0].toLowerCase()+'.png'" style="width: 42px"/>
@@ -59,19 +61,19 @@
               <!-- /.col-programa -->
               <div class="col col-valores col-4 text-center" 
                 [ngStyle]="{
-                  'opacity': deactivateForm(program[1].id) ? '.6' : '1'
+                  'opacity': deactivateForm(program[1].id, quotation.id) ? '.6' : '1'
                 }">
                 <span class="valor">
                     <!-- | currency:'R$' -->
-                  {{ programsForm.get('program-form-' + program[1].id).get('price').value ?
-                    (programsForm.get('program-form-' + program[1].id).get('price').value | currency:'R$') :
+                  {{ getForm(program[1].id, quotation.id).get('price').value ?
+                    (getForm(program[1].id, quotation.id).get('price').value | currency:'R$') :
                     emptyPrice(quotation)
                   }}
                 </span>
               </div>
             </div><!-- /.col-row -->
-
-            <div class="col-row clearfix border-bottom pt-2 white-background" *ngIf="showForm[i]">
+  
+            <div class="col-row clearfix border-bottom pt-2 white-background" *ngIf="showForm[quotation.id][i]">
               <div class="col-row">
                 <div class="col col-3">
                   <div class="form-group">
@@ -91,8 +93,8 @@
                         readonly="{{ detailsFidelities[(program[1].id - 1)].card_number ? 'readonly' : '' }}"
                         formControlName="number"
                         [ngClass]="{'input-invalid': 
-                          programsForm.get('program-form-' + program[1].id).get('number').touched && 
-                          programsForm.get('program-form-' + program[1].id).get('number').invalid }"
+                          getForm(program[1].id, quotation.id).get('number').touched && 
+                          getForm(program[1].id, quotation.id).get('number').invalid }"
                         maxlength="14">
                     </div>
                   </div>
@@ -135,9 +137,9 @@
                       placeholder="Selecione uma form de pagamento"
                       formControlName="paymentMethod"
                       [ngClass]="{'input-invalid': 
-                        programsForm.get('program-form-' + program[1].id).get('paymentMethod').touched && 
-                        programsForm.get('program-form-' + program[1].id).get('paymentMethod').invalid }"
-                      (change)="paymentMethodChange($event, i, program[1].id)">
+                        getForm(program[1].id, quotation.id).get('paymentMethod').touched && 
+                        getForm(program[1].id, quotation.id).get('paymentMethod').invalid }"
+                      (change)="paymentMethodChange($event, i, program[1].id, quotation.id)">
                       <ng-container *ngFor="let method of paymentMethods">
                         <option
                           *ngIf="havePaymentMethod(method, program[1])"
@@ -154,36 +156,36 @@
                   <button
                     id="active-{{ i }}"
                     type="button"
-                    (click)="sellUnsellProgram(program[1])"
+                    (click)="sellUnsellProgram(program[1], quotation)"
                     [ngClass]="{
-                      'btn-danger': !getForm(program[1].id).get('sellThis').value,
-                      'btn-primary': getForm(program[1].id).get('sellThis').value
+                      'btn-danger': !getForm(program[1].id, quotation.id).get('sellThis').value,
+                      'btn-primary': getForm(program[1].id, quotation.id).get('sellThis').value
                     }"
                     class="cursor-pointer btn sell-button btn-circle"
                     title="Vender estas milhas">
-                    <i *ngIf="getForm(program[1].id).get('sellThis').value" class="fa fa-check"></i>
-                    <i *ngIf="!getForm(program[1].id).get('sellThis').value" class="fa fa-times"></i>
+                    <i *ngIf="!getForm(program[1].id, quotation.id).get('sellThis').value" class="fa fa-times"></i>
+                    <i *ngIf="getForm(program[1].id, quotation.id).get('sellThis').value" class="fa fa-check"></i>
                   </button>
                 </div>
               </div>
-
+  
             </div>
           </form>
           <div class="col-row-valor clearfix">
             <div class="col text-center" style="font-size: 15px;">
-              <span class="title">Valor Total: <strong>{{ getTotalValue() | currency:'R$' }}</strong></span>
+              <span class="title">Valor Total: <strong>{{ getTotalValue(quotation) | currency:'R$' }}</strong></span>
             </div>
           </div>
         </div>
-
+  
         <div class="col col-2 clearfix" style="background: #0275d8; color: #fff">
           <ng-container *ngIf="!quotation.status_orders">
-            <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isSelling">Vender</button>
-            <button class="button button-select" type="submit" *ngIf="isSelling">Confirmar</button>
-            <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isSelling">Cancelar</button>
+            <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isSelling[quotation.id]">Vender</button>
+            <button class="button button-select" type="submit" *ngIf="isSelling[quotation.id]">Confirmar</button>
+            <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isSelling[quotation.id]">Cancelar</button>
           </ng-container>
-          <span *ngIf="quotation.status_orders" style="display: flex; flex-flow: column nowrap; flex: 1;">
-            <span *ngFor="let program of programs" style="width: 100%; height: 43px; display: flex; flex-direction: row; justify-content: center; align-items: center; border-bottom: thin solid #b5b5b5; font-size: .8rem;">
+          <span *ngIf="quotation.status_orders" class="status-orders-box">
+            <span *ngFor="let program of programs" class="status-orders">
               <ng-container *ngIf="getStatusOrders(quotation, program[0])">
                 <!-- <img
                     [alt]="getStatusOrders(quotation, program[0]).program"
@@ -192,14 +194,11 @@
                 {{ getStatusOrders(quotation, program[0]).status.toUpperCase() }}
               </ng-container>  
             </span>
-            <!-- <p *ngFor="let status of quotation.status_orders;" style="margin-bottom: 0rem">
-                <img style="width: 42px" [alt]="status.program" [src]="'assets/imgs/cias/'+'status.program.toLowerCase()'+'.png'" style="width: 30%"/> {{status.status.toUpperCase()}}
-            </p> -->
           </span>
         </div>
       </li>
     </ul>
-  </div>
+  </form>
 </form>
 
 <section class="wrapper" *ngIf="loading || (!loading && quotations.length == 0)">
