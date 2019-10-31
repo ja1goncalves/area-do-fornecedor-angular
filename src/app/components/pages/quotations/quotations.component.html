@@ -30,7 +30,7 @@
         </div>
   
         <div class="col col-8">
-          <form [formGroup]="getForm(program[1].id, quotation.id)" *ngFor="let program of programs; let i = index">
+          <form [formGroup]="getForm(program[1].id, quotation.id)" *ngFor="let program of programs[quotation.id]; let i = index">
             <div 
               (click)="manageFormVisibility(i, quotation.id)" 
               class="col-row clearfix border-bottom" 
@@ -88,6 +88,7 @@
                     </label>
                     <div class="input text">
                       <input 
+                        *ngIf="['JJ', 'TRB'].includes(program[0])"
                         type="text" 
                         class="form-control" 
                         readonly="{{ detailsFidelities[(program[1].id - 1)].card_number ? 'readonly' : '' }}"
@@ -96,6 +97,16 @@
                           getForm(program[1].id, quotation.id).get('number').touched && 
                           getForm(program[1].id, quotation.id).get('number').invalid }"
                         maxlength="14">
+                      <input
+                        *ngIf="['AD', 'AV', 'G3', 'G3D'].includes(program[0])"
+                        type="text" 
+                        class="form-control" 
+                        readonly="{{ detailsFidelities[(program[1].id - 1)].card_number ? 'readonly' : '' }}"
+                        formControlName="number"
+                        [ngClass]="{'input-invalid': 
+                          getForm(program[1].id, quotation.id).get('number').touched && 
+                          getForm(program[1].id, quotation.id).get('number').invalid }"
+                        maxlength="40">
                     </div>
                   </div>
                 </div>
@@ -185,7 +196,7 @@
             <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isSelling[quotation.id]">Cancelar</button>
           </ng-container>
           <span *ngIf="quotation.status_orders" class="status-orders-box">
-            <span *ngFor="let program of programs" class="status-orders">
+            <span *ngFor="let program of programs[quotation.id]" class="status-orders">
               <ng-container *ngIf="getStatusOrders(quotation, program[0])">
                 <!-- <img
                     [alt]="getStatusOrders(quotation, program[0]).program"

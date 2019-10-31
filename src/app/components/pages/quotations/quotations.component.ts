@@ -53,7 +53,7 @@ export class QuotationsComponent implements OnInit {
   quotations: IQuotation[] = [];
   loading: any = true;
   paymentMethods: IPaymentMethods[];
-  programs: Array<[string, IPaymentInfo]> = [];
+  programs: { [key:string]: Array<[string, IPaymentInfo]> } = {};
 
   programsForm: FormGroup;
 
@@ -80,16 +80,16 @@ export class QuotationsComponent implements OnInit {
   public getQuotations(): void {
     this.loading = true;
     this.quotationService.getQuotations()
-    .subscribe((res) => {
-      this.quotations = res.data;
+    .subscribe(({ data }) => {
+      this.quotations = data;
       for (const quotation of this.quotations) {
         this.isSelling[quotation.id] = false;
         this.showForm[quotation.id] = {};
         // Adds the quotation group
         this.programsForm.addControl(`quot-group-${quotation.id}`, this.fb.group({}));
         const { status_orders } = quotation;
-        this.programs = Object.entries(quotation.programs);
-        this.programs.forEach(([key, program], i) => {
+        this.programs[quotation.id] = Object.entries(quotation.programs);
+        this.programs[quotation.id].forEach(([key, program], i) => {
           let miles = Object.values(program).find(programInfo => programInfo.value);
           miles = miles ? miles.value : 0;
   
@@ -99,13 +99,16 @@ export class QuotationsComponent implements OnInit {
             const orderPrice = status_orders.find(ord => ord.program.toLowerCase() === key.toLowerCase());
             price = orderPrice ? orderPrice.price : price;
           }
+
+          const cpfPattern = ['JJ', 'TRB'].includes(key);
+
           // Adds the program group inside the quotation group
           const quotGroup = this.programsForm.get(`quot-group-${quotation.id}`) as FormGroup;
           quotGroup.addControl(`program-form-${program.id}`, this.fb.group({
             id: [program.id],
             sellThis: [true],
             value: [miles],
-            number: ['', [Validators.required, Validators.pattern(validateCpf)]],
+            number: ['', [Validators.required, Validators.pattern(cpfPattern ? validateCpf : /^\d{1,20}$/)]],
             files: [[]],
             access_password: [''],
             price: [price],
@@ -151,7 +154,7 @@ export class QuotationsComponent implements OnInit {
   private getProviderFidelities(quotation: IQuotation): any {
     return this.quotationService.getProviderFidelities().toPromise().then(
       (fidelities) => {
-        this.programs.forEach(([code, value]) => {
+        this.programs[quotation.id].forEach(([code, value]) => {
           fidelities.forEach((fidelity) => {
               if (fidelity.program_id === value.id) {
                 if (['JJ', 'TRB'].includes(code)) {
@@ -196,7 +199,6 @@ export class QuotationsComponent implements OnInit {
   }
 
   public getMiles(program: IPaymentInfo, quotation: IQuotation): number {
-    console.log('program: ', quotation.id, ' ', program);
     const paymentMethodInfo = Object.values(program).find((method) => method.value);
     if (typeof paymentMethodInfo === 'number') {
       return 0;
@@ -207,7 +209,6 @@ export class QuotationsComponent implements OnInit {
 
   public saveFidelities(quotId: number): void {
     const quotGroup = this.programsForm.get(`quot-group-${quotId}`) as FormGroup;
-    console.log('quotGroup: ', quotGroup);
     if (quotGroup.invalid) {
       this.notify.show('error', 'Alguns campos estão com erro, por favor os verifique.');
       Object.values(quotGroup.controls).forEach((group: FormGroup) => {
@@ -280,7 +281,7 @@ export class QuotationsComponent implements OnInit {
 
   public paymentMethodChange(event: any, index: number, programId: number, quotId: number): void {
     const { target: { value } } = event;
-    const programMethods = this.programs[index][1];
+    const programMethods = this.programs[quotId][index][1];
     const method = this.paymentMethods.find(met => met.id == value).title;
     const methodInfo = Object.values(programMethods).find(info => info && info.payment_form == method);
     const group = this.getForm(programId, quotId);
