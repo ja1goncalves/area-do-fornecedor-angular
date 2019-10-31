@@ -7,6 +7,7 @@ import { IPaymentInfo, IPaymentMethods, IStatus, IQuotation } from './interfaces
 import { validateCpf } from 'src/app/app.utils';
 
 const validatePaymentMethod = /^[^1]/;
+const validateFlyNumber = /^\d{1,20}$/;
 
 @Component({
   selector: 'app-quotations',
@@ -89,18 +90,19 @@ export class QuotationsComponent implements OnInit {
         this.programsForm.addControl(`quot-group-${quotation.id}`, this.fb.group({}));
         const { status_orders } = quotation;
         this.programs[quotation.id] = Object.entries(quotation.programs);
-        this.programs[quotation.id].forEach(([key, program], i) => {
+
+        this.programs[quotation.id].forEach(([code, program], i) => {
           let miles = Object.values(program).find(programInfo => programInfo.value);
           miles = miles ? miles.value : 0;
   
           let price: string | number = '';
           // Verifies if there's a status order to display on screen
           if (status_orders) {
-            const orderPrice = status_orders.find(ord => ord.program.toLowerCase() === key.toLowerCase());
+            const orderPrice = status_orders.find(ord => ord.program.toLowerCase() === code.toLowerCase());
             price = orderPrice ? orderPrice.price : price;
           }
 
-          const cpfPattern = ['JJ', 'TRB'].includes(key);
+          const cpfPattern = ['JJ', 'TRB'].includes(code);
 
           // Adds the program group inside the quotation group
           const quotGroup = this.programsForm.get(`quot-group-${quotation.id}`) as FormGroup;
@@ -108,7 +110,7 @@ export class QuotationsComponent implements OnInit {
             id: [program.id],
             sellThis: [true],
             value: [miles],
-            number: ['', [Validators.required, Validators.pattern(cpfPattern ? validateCpf : /^\d{1,20}$/)]],
+            number: ['', [Validators.required, Validators.pattern(cpfPattern ? validateCpf : validateFlyNumber)]],
             files: [[]],
             access_password: [''],
             price: [price],
@@ -118,7 +120,7 @@ export class QuotationsComponent implements OnInit {
           this.getForm(program.id, quotation.id)
               .get('sellThis').valueChanges
               .subscribe(value => 
-                this.updateValidation(value, program.id, quotation.id)
+                this.updateValidation(value, program.id, quotation.id, code)
               );
           this.showForm[quotation.id][i] = false;
         });
@@ -136,11 +138,12 @@ export class QuotationsComponent implements OnInit {
    * @param {number} programId
    * @param {number} quotId
    */
-  private updateValidation(activate: boolean, programId: number, quotId: number): void {
+  private updateValidation(activate: boolean, programId: number, quotId: number, code: string): void {
     const group = this.getForm(programId, quotId);
+    const cpfPattern = ['JJ', 'TRB'].includes(code);
     if (activate) {
       group.get('paymentMethod').setValidators([Validators.required, Validators.pattern(validatePaymentMethod)]);
-      group.get('number').setValidators([Validators.required, Validators.pattern(validateCpf)]);
+      group.get('number').setValidators([Validators.required, Validators.pattern(cpfPattern ? validateCpf : validateFlyNumber)]);
       group.get('paymentMethod').updateValueAndValidity();
       group.get('number').updateValueAndValidity();
     } else {
