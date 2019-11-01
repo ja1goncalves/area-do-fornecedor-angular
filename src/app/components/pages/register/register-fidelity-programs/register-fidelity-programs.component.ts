@@ -2,6 +2,19 @@ import {Component, Output, Input, EventEmitter, OnChanges, SimpleChanges, OnInit
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FidelitiesNumbers } from 'src/app/models/register-data';
 
+interface IProgram {
+  id: number;
+  code: string;
+  created: string;
+  created_by: null | string;
+  deleted: null | boolean
+  miles_in_stock: null | number;
+  modified: string;
+  modified_by: number;
+  program_quotation_count: number;
+  title: string;
+}
+
 @Component({
   selector: 'app-register-fidelity-programs',
   templateUrl: './register-fidelity-programs.component.html',
@@ -11,8 +24,9 @@ export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
 
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() fidelityDataForm: FormGroup;
-  @Input() programs;
+  @Input() programs: IProgram[];
   @Input() hasSteps = true;
+  @Input() showCheckbox: boolean;
 
   public fidelitiesData: FidelitiesNumbers;
 
@@ -23,24 +37,27 @@ export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(change: SimpleChanges) {
-    const allPrograms = change.programs.currentValue;
-    const hiddenFidelities = this.submitData ? ['AV'] : ['AV', 'TRB', 'G3D'];
-    this.programs = this.programs.filter(({ code }) => !hiddenFidelities.includes(code));
-
-    if (allPrograms.length) {
-      allPrograms.forEach(program => {
-        this.fidelityDataForm.addControl(`edit`, this.formBuilder.control(false, [Validators.maxLength(1)]));
-        this.fidelityDataForm.addControl(`card_number_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
-        this.fidelityDataForm.addControl(`access_password_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
-        if (program.code === 'JJ' || program.code === 'G3') {
-          this.fidelityDataForm.addControl(`type_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
-        }
-      });
+    if (change.programs) {
+      const allPrograms = change.programs.currentValue || [];
+      
+      if (allPrograms.length) {
+        const hiddenFidelities = this.submitData ? ['AV'] : ['AV', 'TRB', 'G3D'];
+        this.programs = allPrograms.filter(({ code }) => !hiddenFidelities.includes(code));
+  
+        allPrograms.forEach(program => {
+          this.fidelityDataForm.addControl(`edit`, this.formBuilder.control(false, [Validators.maxLength(1)]));
+          this.fidelityDataForm.addControl(`card_number_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
+          this.fidelityDataForm.addControl(`access_password_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
+          if (program.code === 'JJ' || program.code === 'G3') {
+            this.fidelityDataForm.addControl(`type_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
+          }
+        });
+      }
     }
   }
 
   public isEdit(): boolean {
-    return !!this.fidelityDataForm.get('edit').value;
+    return this.fidelityDataForm.get('edit').value;
   }
 
   public fidelityDataSubmit(): void {

@@ -16,6 +16,7 @@ import { defaultReqErrMessage } from 'src/app/app.utils';
 export class RegisterComponent implements OnInit {
 
   public RequestData: RequestData = {} as RequestData;
+  showFidelityCheckbox = true;
 
   // Form
   public accessDataForm: FormGroup;
