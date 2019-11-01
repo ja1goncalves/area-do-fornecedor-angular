@@ -16,14 +16,14 @@
       <label>Senha Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}</label>
       <input type="password" formControlName="access_password_{{control.code}}" class="form-control" placeholder="N° Fidelidade" maxlength="20">
     </div>
-      <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'JJ' && !this.isEdit()">
-          <label>Latam Red & Black</label>
-          <input type="checkbox" formControlName="type_{{control.code}}" class="form-control" style="width: 10%">
-      </div>
-      <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'G3' && !this.isEdit()">
-          <label>Gol Diamante</label>
-          <input type="checkbox" formControlName="type_{{control.code}}" class="form-control" style="width: 10%">
-      </div>
+    <!-- <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'JJ' && !this.isEdit()">
+        <label>Latam Red & Black</label>
+        <input type="checkbox" formControlName="type_{{control.code}}" class="form-control" style="width: 10%">
+    </div>
+    <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'G3' && !this.isEdit()">
+        <label>Gol Diamante</label>
+        <input type="checkbox" formControlName="type_{{control.code}}" class="form-control" style="width: 10%">
+    </div> -->
   </div>
   <div class="row" *ngIf="hasSteps">
     <div class="col-12 col-sm-12 col-md-3 col-lg-3">

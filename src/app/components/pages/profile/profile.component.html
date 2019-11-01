@@ -7,7 +7,7 @@
       [programs]="programs" [hasSteps]="hasSteps"></app-register-fidelity-programs>
     <app-register-bank-data [bankDataForm]="bankDataForm" [banks]="banks"
       [hasSteps]="hasSteps" [segments]="segments"></app-register-bank-data>
-    <div class="col-12 col-sm-12 col-md-2 col-lg-2">
+    <div class="col-12 col-sm-12 col-md-2 col-lg-2 pl-0">
       <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
       <button class="btn btn-primary btn-block" type="submit">Atualizar</button>
     </div>
