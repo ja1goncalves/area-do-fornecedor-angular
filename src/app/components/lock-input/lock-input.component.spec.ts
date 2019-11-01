@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PasswordLockComponent } from './password-lock.component';
+import { LockInputComponent } from './lock-input.component';
 
-describe('PasswordLockComponent', () => {
-  let component: PasswordLockComponent;
-  let fixture: ComponentFixture<PasswordLockComponent>;
+describe('LockInputComponent', () => {
+  let component: LockInputComponent;
+  let fixture: ComponentFixture<LockInputComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PasswordLockComponent ]
+      declarations: [ LockInputComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PasswordLockComponent);
+    fixture = TestBed.createComponent(LockInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

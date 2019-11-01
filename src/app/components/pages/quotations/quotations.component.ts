@@ -89,6 +89,7 @@ export class QuotationsComponent implements OnInit {
 
   public getQuotations(): void {
     this.loading = true;
+
     this.quotationService.getQuotations()
     .subscribe(({ data }) => {
       this.quotations = data;
@@ -125,7 +126,7 @@ export class QuotationsComponent implements OnInit {
             price: [price],
             paymentMethod: ['1', [Validators.required, Validators.pattern(validatePaymentMethod)]]
           }));
-          // Add a valuechanges changing the validation of the fields
+          // Adds a valuechanges changing the validation of the fields
           this.getForm(program.id, quotation.id)
               .get('sellThis').valueChanges
               .subscribe(value => 
@@ -316,20 +317,6 @@ export class QuotationsComponent implements OnInit {
     return total;
   }
 
-  /**
-   * @description Locks/unlocks password visualization
-   * @param {number} index
-   * @param {boolean} unlock
-   */
-  public lockUnlock(index: number, unlock: boolean): void {
-    const passwordInput = document.getElementById(`tam-senha-${index}`);
-    const inputType = passwordInput.getAttribute('type');
-    if (inputType === 'text') {
-      passwordInput.setAttribute('type', 'password');
-    } else {
-      passwordInput.setAttribute('type', 'text');
-    }
-  }
 
   public manageFormVisibility(index: number, quotId: number): void {
     if (this.isSelling[quotId]) {

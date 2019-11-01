@@ -1,0 +1,28 @@
+<fieldset>
+  <label 
+    #label 
+    for="password-input-{{ id }}"></label>
+  <div class="input-box w-100">
+    <input 
+      #input 
+      id="password-input-{{ id }}" 
+      class="form-control" 
+      [value]="value"
+      [disabled]="disabled"
+      (input)="onChange($event.target.value)"
+      (blur)="onTouch()"
+      type="password" />
+    <i 
+      *ngIf="lock" 
+      class="material-icons lock-icon"
+      (click)="lockInputText(false)">
+      lock
+    </i>
+    <i 
+      *ngIf="!lock"
+      class="material-icons lock-icon"
+      (click)="lockInputText(true)">
+      lock_open
+    </i>
+  </div>
+</fieldset>

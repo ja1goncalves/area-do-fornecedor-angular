@@ -45,9 +45,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   registerComponent: RegisterBankDataComponent;
   
   public updateForm: FormGroup;
-
-  public userInfo: any = { name: '', cpf: '', cellphone: '' };
-  public hasSteps: boolean = false;
+  
+  public userInfo = { name: '', cpf: '', cellphone: '' };
+  public hasSteps = false;
+  public showFidelityCheckbox = false;
 
   public banks: any = [];
   public segments: any = [];
@@ -187,9 +188,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
           this.personalForm.get('personal_company_phone').setValue(personal.company_phone);
         }
         if (fidelities) {
-          const codes = fidelities.map(f => f.code);
-          this.programs = this.programs.filter(({ code }) => codes.includes(code));
-
           fidelities.forEach((fidelity) => {
             const { code } = fidelity;
             this.fidelityForm.get(`edit`).setValue(true);

@@ -112,28 +112,12 @@
                 </div>
                 <div class="col col-4">
                   <div class="form-group">
-                    <marquee *ngIf="['G3D', 'TRB'].includes(program[0])" behavior="alternate" scrollamount="1">
-                      <label 
-                        for="tamSenha"
-                        class=""
-                        title="Senha de Acesso {{ detailsFidelities[program[1].id-1].password_type }}"
-                        >Senha de Acesso {{ detailsFidelities[program[1].id-1].password_type }}</label>
-                    </marquee>
-                    <label 
-                      for="tamSenha"
-                      *ngIf="!['G3D', 'TRB'].includes(program[0])"
-                      title="Senha de Acesso {{ detailsFidelities[program[1].id-1].password_type }}"
-                      >Senha de Acesso {{ detailsFidelities[program[1].id-1].password_type }}</label>
-                    <div class="input text password-box">
-                      <input 
-                        type="password" 
-                        class="form-control custom-pr-40" 
-                        id="tam-senha-{{ i }}" 
-                        formControlName="access_password">
-                      <app-password-lock
-                        class="password-lock-component"
-                        (lockUnlock)="lockUnlock(i, $event)"></app-password-lock>
-                    </div>
+                    <app-lock-input 
+                      [id]="i"
+                      [label]="'Senha de Acesso ' + detailsFidelities[program[1].id-1].password_type"
+                      [addMarqueeOnLabel]="['G3D', 'TRB'].includes(program[0])"
+                      formControlName="access_password"
+                    ></app-lock-input>
                   </div>
                 </div>
                 <div class="col col-4">
