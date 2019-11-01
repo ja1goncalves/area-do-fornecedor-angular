@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { IProgramData } from 'src/app/models/register-data';
 
-interface IAddressData {
+interface IAddressFromCep {
   city: string;
   district: string;
   street: string;
@@ -163,8 +164,7 @@ export class RegisterService {
   /**
    * @returns {Observable<any>}
    */
-  public getProviderData(): Observable<any> {
-
+  public getProviderData(): Observable<IProgramData> {
     return new Observable((observer) => {
       this.http.get(`${environment.API_URL}/api/provider/data`).subscribe(
         (response: any) => { observer.next(response.data); },
@@ -173,10 +173,10 @@ export class RegisterService {
     });
   }
 
-  public getAddressData(cep: string): Observable<IAddressData> {
+  public getAddressData(cep: string): Observable<IAddressFromCep> {
     return new Observable((observer) => {
       this.http.get(`https://gateway.buscaaereo.com.br/vision/cep/${cep}`).subscribe(
-          (response: IAddressData) => { observer.next(response); },
+          (response: IAddressFromCep) => { observer.next(response); },
           (error) => { observer.error(error); }
       );
     });
