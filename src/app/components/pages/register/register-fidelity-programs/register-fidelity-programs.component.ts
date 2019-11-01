@@ -26,6 +26,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
   @Input() fidelityDataForm: FormGroup;
   @Input() programs: IProgram[];
   @Input() hasSteps = true;
+  @Input() showCheckbox: boolean;
 
   public fidelitiesData: FidelitiesNumbers;
 
@@ -36,25 +37,27 @@ export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(change: SimpleChanges) {
-    const allPrograms = change.programs.currentValue || [];
-    const hiddenFidelities = this.submitData ? ['AV'] : ['AV', 'TRB', 'G3D'];
-    
-    if (allPrograms.length) {
-      this.programs = allPrograms.filter(({ code }) => !hiddenFidelities.includes(code));
+    if (change.programs) {
+      const allPrograms = change.programs.currentValue || [];
       
-      allPrograms.forEach(program => {
-        this.fidelityDataForm.addControl(`edit`, this.formBuilder.control(false, [Validators.maxLength(1)]));
-        this.fidelityDataForm.addControl(`card_number_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
-        this.fidelityDataForm.addControl(`access_password_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
-        if (program.code === 'JJ' || program.code === 'G3') {
-          this.fidelityDataForm.addControl(`type_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
-        }
-      });
+      if (allPrograms.length) {
+        const hiddenFidelities = this.submitData ? ['AV'] : ['AV', 'TRB', 'G3D'];
+        this.programs = allPrograms.filter(({ code }) => !hiddenFidelities.includes(code));
+  
+        allPrograms.forEach(program => {
+          this.fidelityDataForm.addControl(`edit`, this.formBuilder.control(false, [Validators.maxLength(1)]));
+          this.fidelityDataForm.addControl(`card_number_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
+          this.fidelityDataForm.addControl(`access_password_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
+          if (program.code === 'JJ' || program.code === 'G3') {
+            this.fidelityDataForm.addControl(`type_${program.code}`, this.formBuilder.control('', [Validators.maxLength(20)]));
+          }
+        });
+      }
     }
   }
 
   public isEdit(): boolean {
-    return !!this.fidelityDataForm.get('edit').value;
+    return this.fidelityDataForm.get('edit').value;
   }
 
   public fidelityDataSubmit(): void {

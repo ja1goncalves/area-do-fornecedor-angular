@@ -45,9 +45,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   registerComponent: RegisterBankDataComponent;
   
   public updateForm: FormGroup;
-
-  public userInfo: any = { name: '', cpf: '', cellphone: '' };
-  public hasSteps: boolean = false;
+  
+  public userInfo = { name: '', cpf: '', cellphone: '' };
+  public hasSteps = false;
+  public showFidelityCheckbox = false;
 
   public banks: any = [];
   public segments: any = [];
