@@ -197,13 +197,11 @@
           </ng-container>
           <span *ngIf="quotation.status_orders" class="status-orders-box">
             <span *ngFor="let program of programs[quotation.id]" class="status-orders">
-              <ng-container *ngIf="getStatusOrders(quotation, program[0])">
-                <!-- <img
-                    [alt]="getStatusOrders(quotation, program[0]).program"
-                    [src]="'../../../../assets/imgs/cias/'+getStatusOrders(quotation, program[0]).program.toLowerCase()+'.png'"
-                    style="width: 30%; margin-right: 10px;" />  -->
-                {{ getStatusOrders(quotation, program[0]).status.toUpperCase() }}
-              </ng-container>  
+              {{ 
+                getStatusOrders(quotation, program[0]) ? 
+                getStatusOrders(quotation, program[0]).status.toUpperCase() :
+                'NÃO VENDIDO' 
+              }}
             </span>
           </span>
         </div>

@@ -348,7 +348,7 @@ export class QuotationsComponent implements OnInit {
 
   public emptyPrice(quotation: IQuotation): string {
     if (quotation.status_orders)
-      return 'Não vendido';
+      return '-';
     else
       return 'A definir'
   }
