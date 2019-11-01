@@ -1,0 +1,17 @@
+.input-box {
+    position: relative;
+}
+
+fieldset {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.input-box .lock-icon {
+    cursor: pointer;
+    user-select: none;
+    position: absolute;
+    top: 7px;
+    right: 7px;
+}

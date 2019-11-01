@@ -13,8 +13,12 @@
       <input type="text" mask="0*" min="0" [dropSpecialCharacters]="false" formControlName="card_number_{{control.code}}" class="form-control" placeholder="N° Fidelidade" maxlength="20">
     </div>
     <div class="col-12 {{ showCheckbox ? 'col-sm-4 col-md-4 col-lg-4' : 'col-sm-6 col-md-6 col-lg-6' }} mb-3">
-      <label>Senha Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}</label>
-      <input type="password" formControlName="access_password_{{control.code}}" class="form-control" placeholder="N° Fidelidade" maxlength="20">
+      <app-lock-input 
+        label="Senha Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}"
+        formControlName="access_password_{{control.code}}"
+        [id]="i"></app-lock-input>
+      <!-- <label>Senha Fidelidade &mdash; {{control.title.replace('TAM', 'LATAM')}}</label> -->
+      <!-- <input type="password" formControlName="access_password_{{control.code}}" class="form-control" placeholder="N° Fidelidade" maxlength="20"> -->
     </div>
     <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-3" *ngIf="control.code == 'JJ' && showCheckbox">
         <label>Latam Red & Black</label>
