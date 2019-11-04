@@ -14,9 +14,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class LockInputComponent implements OnInit, ControlValueAccessor {
+  @ViewChild('label') labelRef: ElementRef;
   @ViewChild('input') inputRef: ElementRef;
   @Input() label: string;
   @Input() id = 0;
+  @Input() addMarqueeOnLabel: boolean;
 
   lock = true;
   value: string;
@@ -26,7 +28,22 @@ export class LockInputComponent implements OnInit, ControlValueAccessor {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const labelNative = this.labelRef.nativeElement;
+    labelNative.innerHTML = this.label;
+    labelNative.setAttribute('title', this.label);
+
+    if (this.addMarqueeOnLabel) {
+      // Creates the marquee element, so the label will be sliding
+      const marquee = document.createElement('marquee');
+      marquee.setAttribute('behavior', 'alternate');
+      marquee.setAttribute('scrollamount', '1');
+
+      // Wraps the label with the marquee tag
+      labelNative.parentNode.insertBefore(marquee, labelNative);
+      marquee.appendChild(labelNative);
+    }
+  }
 
   writeValue(value = ''): void {
     this.value = value;

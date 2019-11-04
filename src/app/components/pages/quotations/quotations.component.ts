@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { QuotationService } from '../../../services/quotation/quotation.service';
-import { AuthService } from '../../../services/auth/auth.service';
-import { NotifyService } from '../../../services/notify/notify.service';
+import { QuotationService } from 'src/app/services/quotation/quotation.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { NotifyService } from 'src/app/services/notify/notify.service';
+import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { IPaymentInfo, IPaymentMethods, IStatus, IQuotation } from './interfaces';
+import { validateCpf } from 'src/app/app.utils';
+
+const validatePaymentMethod = /^[^1]$/;
+const validateFlyNumber = /^\d{1,20}$/;
 
 @Component({
   selector: 'app-quotations',
@@ -10,84 +16,168 @@ import { NotifyService } from '../../../services/notify/notify.service';
 })
 export class QuotationsComponent implements OnInit {
 
-  public detailsFidelities = [
-    {
-      title: 'Latam',
-      password_type: 'Multiplus',
-      card_number: ''
-    },
-    {
-      title: 'Gol',
-      password_type: 'Smiles',
-      card_number: ''
-    },
-    {
-      title: 'Azul',
-      password_type: 'Azul',
-      card_number: ''
-    },
-    {
-      title: 'Avianca',
-      password_type: 'Avianca',
-      card_number: ''
-    },
-    {
-      title: 'LATAM Red e Black',
-      password_type: 'LATAM Red e Black',
-      card_number: ''
-    },
-    {
-      title: 'Gol Diamante',
-      password_type: 'Smiles Diamante',
-      card_number: ''
-    }
-  ];
-  quotations: Array<any> = [];
-  visibleForms: Array<any> = [];
-  fidelities: Array<any> = [];
-  loading: any = true;
+  private isSelling: { [key:string]: boolean } = {};
+  public showForm: { [key:string]: IStatus } = {};
 
-  constructor(private quotationService: QuotationService, private authService: AuthService, private notify: NotifyService) { }
+  public detailsFidelities = [
+      {
+        title: 'Latam',
+        password_type: 'Multiplus',
+        card_number: ''
+      },
+      {
+        title: 'Gol',
+        password_type: 'Smiles',
+        card_number: ''
+      },
+      {
+        title: 'Azul',
+        password_type: 'Azul',
+        card_number: ''
+      },
+      {
+        title: 'Avianca',
+        password_type: 'Avianca',
+        card_number: ''
+      },
+      {
+        title: 'LATAM Red e Black',
+        password_type: 'LATAM Red e Black',
+        card_number: ''
+      },
+      {
+        title: 'Gol Diamante',
+        password_type: 'Smiles Diamante',
+        card_number: ''
+      }
+  ];
+  quotations: IQuotation[] = [];
+  loading: any = true;
+  paymentMethods: IPaymentMethods[];
+  programs: { [key:string]: Array<[string, IPaymentInfo]> } = {};
+
+  /**
+   * @description Formulário pai de todos
+   * Dentro dele há formulário criados dinamicamente seguindo o padrâo:
+   * programsForm {
+   *    quotationGroup {
+   *        programForm // Este é o formulário de cada campo
+   *    }
+   * }
+   */
+  programsForm: FormGroup;
+
+  constructor(
+    private quotationService: QuotationService,
+    private authService: AuthService,
+    private notify: NotifyService,
+    private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.programsForm = this.fb.group({});
     this.getQuotations();
+    this.getPaymentsMethods();
   }
 
-  public getQuotations() {
+  private getPaymentsMethods(): void {
+    this.quotationService.getPaymentMethods().subscribe(res => {
+      this.paymentMethods = res;
+    }, err => {
+      console.log('err: ', err);
+    });
+  }
+
+  public getQuotations(): void {
     this.loading = true;
+
     this.quotationService.getQuotations()
-    .subscribe(res => {
-      this.quotations = res.data;
-      this.loading = false;
+    .subscribe(({ data }) => {
+      this.quotations = data;
       for (const quotation of this.quotations) {
-        this.fidelities[quotation.id] = [];
-        this.getProviderFidelities(quotation.programs) //gambi why return subscribe don't wait the function over
-            .then(() => {
-              for (const program of quotation.programs) {
-                this.fidelities[quotation.id][program.program_id] = {
-                  id: program.program_id,
-                  number: ['JJ', 'TRB'].includes(program.program_code) ?
-                      this.authService.getDataUser().cpf :
-                      this.detailsFidelities[(program.program_id - 1)].card_number,
-                  price: program.price,
-                  value: program.value,
-                  files: []
-                };
-              }
-            });
+        this.isSelling[quotation.id] = false;
+        this.showForm[quotation.id] = {};
+        // Adds the quotation group
+        this.programsForm.addControl(`quot-group-${quotation.id}`, this.fb.group({}));
+        const { status_orders } = quotation;
+        this.programs[quotation.id] = Object.entries(quotation.programs);
+
+        this.programs[quotation.id].forEach(([code, program], i) => {
+          let miles = Object.values(program).find(programInfo => programInfo.value);
+          miles = miles ? miles.value : 0;
+  
+          let price: string | number = '';
+          // Verifies if there's a status order to display on screen
+          if (status_orders) {
+            const orderPrice = status_orders.find(ord => ord.program.toLowerCase() === code.toLowerCase());
+            price = orderPrice ? orderPrice.price : price;
+          }
+
+          const cpfPattern = ['JJ', 'TRB'].includes(code);
+
+          // Adds the program group inside the quotation group
+          const quotGroup = this.programsForm.get(`quot-group-${quotation.id}`) as FormGroup;
+          quotGroup.addControl(`program-form-${program.id}`, this.fb.group({
+            id: [program.id],
+            sellThis: [true],
+            value: [miles],
+            number: ['', [Validators.required, Validators.pattern(cpfPattern ? validateCpf : validateFlyNumber)]],
+            files: [[]],
+            access_password: [''],
+            price: [price],
+            paymentMethod: ['1', [Validators.required, Validators.pattern(validatePaymentMethod)]]
+          }));
+          // Adds a valuechanges changing the validation of the fields
+          this.getForm(program.id, quotation.id)
+              .get('sellThis').valueChanges
+              .subscribe(value => 
+                this.updateValidation(value, program.id, quotation.id, code)
+              );
+          this.showForm[quotation.id][i] = false;
+        });
+        this.getProviderFidelities(quotation);
       }
+      this.loading = false;
     }, err => {
       this.loading = false;
     });
   }
 
-  public getProviderFidelities(programs): any {
+  /**
+   * @description Activates the validation of the fields if the form will be sended
+   * @param {boolean} activate
+   * @param {number} programId
+   * @param {number} quotId
+   */
+  private updateValidation(activate: boolean, programId: number, quotId: number, code: string): void {
+    const group = this.getForm(programId, quotId);
+    const cpfPattern = ['JJ', 'TRB'].includes(code);
+    if (activate) {
+      group.get('paymentMethod').setValidators([Validators.required, Validators.pattern(validatePaymentMethod)]);
+      group.get('number').setValidators([Validators.required, Validators.pattern(cpfPattern ? validateCpf : validateFlyNumber)]);
+      group.get('paymentMethod').updateValueAndValidity();
+      group.get('number').updateValueAndValidity();
+    } else {
+      group.get('paymentMethod').clearValidators();
+      group.get('number').clearValidators();
+      group.get('paymentMethod').updateValueAndValidity();
+      group.get('number').updateValueAndValidity();
+    }
+  }
+
+  private getProviderFidelities(quotation: IQuotation): any {
     return this.quotationService.getProviderFidelities().toPromise().then(
       (fidelities) => {
-        programs.forEach((program) => {
+        this.programs[quotation.id].forEach(([code, value]) => {
           fidelities.forEach((fidelity) => {
-              if (fidelity.program_id === program.program_id) {
-                this.detailsFidelities[(program.program_id - 1)].card_number = fidelity.card_number;
+              if (fidelity.program_id === value.id) {
+                if (['JJ', 'TRB'].includes(code)) {
+                  this.getForm(value.id, quotation.id)
+                      .get('number')
+                      .setValue(this.authService.getDataUser().cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'));
+                } else {
+                  this.getForm(value.id, quotation.id).get('number').setValue(fidelity.card_number);
+                  this.getForm(value.id, quotation.id).get('number').clearValidators();
+                }
               }
             });
         });
@@ -95,52 +185,172 @@ export class QuotationsComponent implements OnInit {
     );
   }
 
-  public sellQuotation(id) {
-    this.visibleForms.push(this.quotations.filter(quotation => quotation.id === id)[0]);
+  /**
+   * @description Shows all forms
+   * @param {number} quotId
+   */
+  public sellQuotation(quotId: number): void {
+    this.isSelling[quotId] = true;
+    Object.keys(this.showForm[quotId]).forEach(key => this.showForm[quotId][key] = true);
   }
 
-  public unsellQuotation(id) {
-    this.visibleForms = this.visibleForms.filter(quotation => quotation.id !== id);
+  /**
+   * @description Hides all forms
+   * @param {number} quotId
+   */
+  public unsellQuotation(quotId: number): void {
+    this.isSelling[quotId] = false;
+    Object.keys(this.showForm[quotId]).forEach(key => this.showForm[quotId][key] = false);
   }
 
-  public isVisibleForm(id) {
-    return this.visibleForms.filter(quotation => quotation.id === id).length > 0;
+  /**
+   * @description Verify if the form will be selled or not
+   * @param {number} programId
+   */
+  public deactivateForm(programId: number, quotId: number): boolean {
+    return this.isSelling[quotId] && !this.getForm(programId, quotId).get('sellThis').value;
   }
 
-  public saveFidelities(id) {
+  public getMiles(program: IPaymentInfo, quotation: IQuotation): number {
+    const paymentMethodInfo = Object.values(program).find((method) => method.value);
+    if (typeof paymentMethodInfo === 'number') {
+      return 0;
+    } else {
+      return paymentMethodInfo.value;
+    }
+  }
+
+  public saveFidelities(quotId: number): void {
+    const quotGroup = this.programsForm.get(`quot-group-${quotId}`) as FormGroup;
+    if (quotGroup.invalid) {
+      this.notify.show('error', 'Alguns campos estão com erro, por favor os verifique.');
+      Object.values(quotGroup.controls).forEach((group: FormGroup) => {
+        Object.values(group.controls).forEach((control: FormControl) => {
+          control.markAsTouched();
+        });
+      });
+      return;
+    }
+
     this.loading = true;
 
+    const fidelities = {};
+
+    Object.values(quotGroup.controls).forEach((group: FormGroup) => {
+      if (group.get('sellThis').value) {
+        const id = group.get('id').value;
+        fidelities[id] = {
+          id,
+          number: group.get('number').value.replace(/\D/g),
+          payment_form_id: group.get('paymentMethod').value,
+          value: group.get('value').value,
+          price: group.get('price').value,
+          files: []
+        };
+        if (group.get('access_password').value) {
+          fidelities[id].access_password = group.get('access_password').value;
+        }
+        if (group.get('files').value.length >= 1) {
+          fidelities[id].files = group.get('files').value;
+        }
+      }
+    });
+
     const data = {
-      quotation_id: id,
-      orders_programs: this.fidelities[id].filter(f => f)
+      quotation_id: quotId,
+      orders_programs: fidelities,
     };
 
     this.quotationService.createOrder(data)
-      .subscribe(res => {
+      .subscribe(_ => {
         this.notify.show('success', 'Dados enviados com sucesso!');
         this.getQuotations();
-        this.unsellQuotation(id);
+        this.unsellQuotation(quotId);
         this.loading = false;
-      }, err => {
+      }, ({ message }) => {
         this.loading = false;
-        this.notify.show('error', 'Ocorreu um erro ao tentar enviar seus dados!');
+        this.notify.show('error', message ? message : 'Ocorreu um erro ao tentar enviar seus dados!');
       });
   }
 
-  public uploadFile(event, quotation_id, program_id) {
-    const reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      reader.readAsDataURL(file);
+  // public uploadFile(event, program_id: number, quotId: number): void {
+  //   const reader = new FileReader();
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     const file = event.target.files[0];
+  //     reader.readAsDataURL(file);
 
-      reader.onload = () => {
-        this.fidelities[quotation_id][program_id].files.push({
-          filename: file.name,
-          filetype: file.type,
-          value: reader.result.split(',')[1]
-        });
-      };
+  //     const result = reader.result as string;
+
+  //     reader.onload = () => {
+  //       const filesControl = this.getForm(program_id, quotId).get('files');
+  //       filesControl.setValue([...filesControl.value, {
+  //         filename: file.name,
+  //         filetype: file.type,
+  //         value: result.split(',')[1]
+  //       }]);
+  //     };
+  //   }
+  // }
+
+  public paymentMethodChange(event: any, index: number, programId: number, quotId: number): void {
+    const { target: { value } } = event;
+    const programMethods = this.programs[quotId][index][1];
+    const method = this.paymentMethods.find(met => met.id == value).title;
+    const methodInfo = Object.values(programMethods).find(info => info && info.payment_form == method);
+    const group = this.getForm(programId, quotId);
+    if (methodInfo) {
+      group.get('price').setValue(methodInfo.price);
+    } else {
+      group.get('price').setValue('');
     }
+  }
+
+  public getTotalValue(quotation: IQuotation): number | string {
+    let total = 0;
+    const programGroup = this.programsForm.get(`quot-group-${quotation.id}`) as FormGroup;
+    Object.values(programGroup.controls).forEach((group: FormGroup) => {
+      if (group.get('sellThis').value) {
+        const onlyNum = group.get('price').value ? Number(group.get('price').value) : 0;
+        total += onlyNum;
+      }
+    });
+    return total;
+  }
+
+
+  public manageFormVisibility(index: number, quotId: number): void {
+    if (this.isSelling[quotId]) {
+      this.showForm[quotId][index] = !this.showForm[quotId][index];
+    }
+  }
+
+  public havePaymentMethod(method: IPaymentMethods, program): boolean {
+    return Object.keys(program).some(programId => Number(programId) === method.id) || method.id === 1;
+  }
+
+  public sellUnsellProgram(program, quotation): void {
+    const sellThisControl = this.getForm(program.id, quotation.id).get('sellThis');
+    sellThisControl.setValue(!sellThisControl.value);
+  }
+
+  public emptyPrice(quotation: IQuotation): string {
+    if (quotation.status_orders)
+      return '-';
+    else
+      return 'A definir'
+  }
+
+  /**
+   * @description Gets a form of a program of a quotation
+   * @param programId 
+   * @param quotId 
+   */
+  public getForm(programId: number, quotId: number): AbstractControl {
+    return this.programsForm.get(`quot-group-${quotId}`).get(`program-form-${programId}`);
+  }
+
+  public getStatusOrders(quotation, programCode: string) {
+    return quotation.status_orders.find(ord => ord.program == programCode);
   }
 
 }

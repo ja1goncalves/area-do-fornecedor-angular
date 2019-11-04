@@ -22,4 +22,8 @@ export class QuotationService {
     return this.http.get(`${environment.API_URL}/api/provider/fidelities`);
   }
 
+  public getPaymentMethods(): Observable<any> {
+    return this.http.get(`${environment.API_URL}/api/provider/payment-forms`);
+  }
+
 }
