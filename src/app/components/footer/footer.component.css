@@ -16,6 +16,22 @@
   padding-right: 1.2em;
 }
 
+.parag{
+  font-size: 14px;
+}
+.aba{
+  margin: 9%;
+}
+
+.vivo{
+  margin: .5em 0;
+}
+
+.title-footer{
+  font-weight: 300;
+   font-size: 20px;
+}
+
 .menu-extorno-footer li {
   display: block;
   margin: .5em 0;
@@ -52,4 +68,52 @@
   margin-top: .8em;
   text-align: center;
   font-size: .9em;
+}
+
+
+@media screen and (min-width: 88px) and (max-width:760px){
+  .col-xs-12.col-sm-4.col-md-4.col-lg-4{
+    display: none !important;
+  }
+  .col-xs-12.col-sm-2.col-md-4.col-lg-2.hidden-md-down{
+    display: none !important;
+  }
+  .col-xs-12.col-md-6.col-lg-5{
+    text-align: center !important;
+    display: none !important;
+  }
+  .parag{
+    text-align: center !important;
+    
+  }
+  .title-footer{
+    text-align: center;
+  }
+  .parag{
+    text-align: center;
+    margin-left: 60!important;
+  }
+  .nav{
+    text-align: center;
+  }
+  .nav.nav-inline{
+    text-align: center;
+  }
+  .nav-item{
+    margin: 0 14px!important;
+  }
+  .vivo{
+    margin: 0 14px!important;
+  }
+  li a{
+    text-align: center;
+  }
+ 
+}
+
+@media screen and (min-width: 768px) and (max-width:1080px){
+  
+  .col-xs-12.col-sm-4.col-md-4.col-lg-4{
+    display: none !important;
+  }
 }
