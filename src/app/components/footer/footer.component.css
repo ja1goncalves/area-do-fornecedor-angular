@@ -16,6 +16,28 @@
   padding-right: 1.2em;
 }
 
+.parag{
+  font-size: 14px;
+}
+.aba{
+  margin: 9%;
+}
+
+.rodape{
+font-style: italic;
+  font-size: 12px;
+}
+
+
+.vivo{
+  margin: .5em 0;
+}
+
+.title-footer{
+  font-weight: 300;
+   font-size: 20px;
+}
+
 .menu-extorno-footer li {
   display: block;
   margin: .5em 0;
@@ -52,4 +74,59 @@
   margin-top: .8em;
   text-align: center;
   font-size: .9em;
+}
+
+
+@media screen and (min-width: 88px) and (max-width:760px){
+  .col-xs-12.col-sm-4.col-md-4.col-lg-4{
+    display: none !important;
+  }
+  .col-xs-12.col-sm-2.col-md-4.col-lg-2.hidden-md-down{
+    display: none !important;
+  }
+  .col-xs-12.col-md-6.col-lg-5{
+    text-align: center !important;
+    display: none !important;
+    font-style: italic;
+  }
+  .parag{
+    text-align: center !important;
+    font-style: italic;
+  }
+  .title-footer{
+    text-align: center;
+    font-style: italic;
+  }
+  .parag{
+    text-align: center;
+    font-style: italic;
+  }
+  .nav{
+    text-align: center;
+    font-style: italic;
+  }
+  .nav.nav-inline{
+    text-align: center;
+    font-style: italic;
+  }
+  .nav-item{
+    margin: 0 14px!important;
+    font-style: italic;
+  }
+  .vivo{
+    margin: 0 14px!important;
+    font-style: italic;
+  }
+  li a{
+    text-align: center;
+    font-style: italic;
+  }
+ 
+}
+
+@media screen and (min-width: 768px) and (max-width:1080px){
+  
+  .col-xs-12.col-sm-4.col-md-4.col-lg-4{
+    display: none !important;
+  }
 }
