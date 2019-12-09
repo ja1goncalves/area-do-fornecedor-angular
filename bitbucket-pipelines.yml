@@ -12,6 +12,7 @@ pipelines:
             - node
             - npm
           script:
+            - cp src/config.ts.prod src/config.ts
             - npm install
             - npm run build
           artifacts:
