@@ -5,6 +5,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { AccessData, Address, Personal, RequestData, FidelitiesData, Bank } from 'src/app/models/register-data';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 import { Router } from '@angular/router';
+import { MatStepper } from '@angular/material';
+import { defaultReqErrMessage } from 'src/app/app.utils';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +16,7 @@ import { Router } from '@angular/router';
 export class RegisterComponent implements OnInit {
 
   public RequestData: RequestData = {} as RequestData;
+  showFidelityCheckbox = true;
 
   // Form
   public accessDataForm: FormGroup;
@@ -41,7 +44,7 @@ export class RegisterComponent implements OnInit {
 
   public isValidToken: boolean;
   public banks: any;
-  public userInfo: any = { name: '', cpf: '' };
+  public userInfo: any = { name: '', cpf: '', cellphone: '' };
   public fidelities: any = [];
   public programs: any[] = [];
 
@@ -52,19 +55,19 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private _formBuilder: FormBuilder) {}
 
-  public accessDataReceiver($event, stepper): void {
+  public accessDataReceiver($event, stepper: MatStepper): void {
     this.accessData = $event.accessData;
     this.createRegister(stepper, $event.fromQuotation);
   }
 
-  public personalDataReceiver($event, stepper): void {
+  public personalDataReceiver($event, stepper: MatStepper): void {
     this.addressPersonalData = $event;
     this.RequestData.personal = this.addressPersonalData.personalData;
     this.RequestData.address = this.addressPersonalData.addressData;
     stepper.next();
   }
 
-  public fidelitiesDataReceiver($event, stepper): void {
+  public fidelitiesDataReceiver($event, stepper: MatStepper): void {
     this.fidelitiesData = $event;
     const fidelities = [];
 
@@ -91,30 +94,34 @@ export class RegisterComponent implements OnInit {
     this.updateRegister();
   }
 
-  public createRegister(stepper: any, fromQuotation: boolean): void {
+  public createRegister(stepper: MatStepper, fromQuotation: boolean): void {
     this.loading = true;
     this.register.createRegister(this.accessData, fromQuotation).subscribe(
-      (createdUser: any) => {
+      (_) => {
         // this.notify.show('success', 'Por favor, verifique seu email');
         this.accessDataForm.controls['hiddenCtrl'].setValue('Check');
         return this.checkConfirm(stepper);
         // stepper.next();
      },
-     (err) => {
-       this.notify.show('error', err.message);
+     ({ message }) => {
+       this.notify.show('error', message ? message : defaultReqErrMessage);
+       this.loading = false;
      }
     );
   }
 
-  public checkConfirm(stepper: any): void {
+  public checkConfirm(stepper: MatStepper): void {
     this.login.loginUser(this.accessData.email, this.accessData.password).subscribe(
-      (tokenData: any) => {
+      (_) => {
         this.getUserAuthenticated();
         this.confirmForm.controls['confirmCtrl'].setValue('Check');
         this.loading = false;
         stepper.next();
       },
-      (err) => { }
+      ({ message }) => {
+        this.notify.show('error', message ? message : defaultReqErrMessage);
+        this.loading = false;
+       }
     );
   }
 
@@ -130,25 +137,28 @@ export class RegisterComponent implements OnInit {
   }
 
   public setUserInfo(request: object): void {
+    this.userInfo = {};
     this.userInfo.name = request['name'];
     this.userInfo.cpf = request['cpf'].replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
     this.userInfo.cellphone = request['cellphone'].replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
+    this.userInfo.phone = request['cellphone'].replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
   }
 
-  public nextStep(stepper: any): void {
+  public nextStep(stepper: MatStepper): void {
     stepper.next();
   }
 
   public updateRegister(): void {
     this.loading = true;
     this.register.updateRegister(this.RequestData).subscribe(
-      (updatedData: any) => {
+      (_) => {
         this.notify.show('success', 'Cadastro finalizado com sucesso');
         this.router.navigate(['/minhas-cotacoes']);
         this.loading = false;
       },
-      (err) => {
-        this.notify.show('error', err.message);
+      ({ message }) => {
+        this.notify.show('error', message ? message : defaultReqErrMessage);
+        this.loading = false;
       }
     );
   }

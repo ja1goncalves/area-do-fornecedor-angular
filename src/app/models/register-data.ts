@@ -1,3 +1,4 @@
+import { IFidelity } from 'src/app/components/pages/profile/interfaces';
 
 export interface AccessData {
   email: string;
@@ -63,3 +64,40 @@ export type Bank = {
   account_digit: string,
   operation: number
 };
+
+
+export interface IBankWithId extends Bank {
+  id: string | number;
+}
+
+export interface IAddressWithId extends Address {
+  id: string | number;
+}
+
+interface IFidelityRes extends IFidelity {
+  code: string;
+}
+
+export interface IProgramData {
+  address: IAddressWithId | null;
+  bank: {
+      account: string | number;
+      account_digit: string | number;
+      agency: string | number;
+      agency_digit: string | number;
+      bank_id: string | number;
+      created: string;
+      created_by: string | null;
+      deleted: string | null;
+      id: number;
+      main: number;
+      modified: string;
+      modified_by: string | null;
+      operation: string | null;
+      provider_id: number | null;
+      segment_id: string;
+      type: 'CC' | 'PP';
+  } | null;
+  fidelities: IFidelityRes[];
+  personal: Personal;
+}

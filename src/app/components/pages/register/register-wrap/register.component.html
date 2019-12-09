@@ -40,7 +40,7 @@
     <mat-step [stepControl]="fidelitiesForm" >
       <ng-template matStepLabel>Programas de Fidelidade</ng-template>
       <app-register-fidelity-programs (submitData)="fidelitiesDataReceiver($event, stepper)" [fidelityDataForm]="fidelitiesForm"
-        [programs]="programs">
+        [programs]="programs" [showCheckbox]="showFidelityCheckbox">
       </app-register-fidelity-programs>
     </mat-step>
 

@@ -1,11 +1,13 @@
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-<div class="container-order">
-
-  <div *ngFor="let quotation of quotations; let i = index">
+<form [formGroup]="programsForm">
+  <form 
+    *ngFor="let quotation of quotations; let j = index"
+    (ngSubmit)="saveFidelities(quotation.id)" 
+    class="container-order">
     <ul class="cotation-list-table">
       <li class="head clearfix">
         <div class="col-row clearfix" style="background: #444; color: #fff; font-size: 14px;padding: 8px;">
-          <div class="col col-2"></div>
+          <div class="col col-2">Cotação</div>
           <div class="col col-8">
             <div class="col col-4 text-center">Milhas</div>
             <div class="col col-4"> Programa de Fidelidade</div>
@@ -14,12 +16,11 @@
           <div *ngIf="quotation.status_orders" class="col col-2 text-center">Status</div>
         </div>
       </li>
-
+  
       <li class="body clearfix">
         <div class="col col-2" style="background: #0275d8; color: #fff">
           <div class="cotation-box-title">
             <span class="id">
-              <small>Cotação</small>
               {{quotation.id}}
             </span>
             <span class="date">
@@ -27,111 +28,171 @@
             </span>
           </div>
         </div>
-
+  
         <div class="col col-8">
-          <div *ngFor="let program of quotation.programs">
-            <div class="col-row clearfix border-bottom" style="background: #fff;">
-              <div class="col col-4 col-valores text-center">
+          <form [formGroup]="getForm(program[1].id, quotation.id)" *ngFor="let program of programs[quotation.id]; let i = index">
+            <div 
+              (click)="manageFormVisibility(i, quotation.id)" 
+              class="col-row clearfix border-bottom" 
+              style="background-color: #edf0f2;"
+              [ngStyle]="{ 
+                'cursor': isSelling[quotation.id] ? 'pointer' : 'default'
+                }">
+              <!-- /.col-milhas -->
+              <div class="col col-4 col-valores text-center" 
+                [ngStyle]="{
+                  'opacity': deactivateForm(program[1].id, quotation.id) ? '.6' : '1'
+                }">
                 <span class="title">
-                  {{program.value}} mil
+                  {{ getMiles(program[1], quotation) }} mil
                 </span>
-              </div><!-- /.col-milhas -->
-              <div class="col col-4 col-programa">
+              </div>
+              <div class="col col-4 col-programa" 
+                
+              
+                >
                 <span class="programa-fidelidade">
                   <span class="logo">
-                    <img [alt]="program.program_title" [src]="'assets/imgs/cias/'+program.program_code.toLowerCase()+'.png'" style="width: 42px"/>
-                    ({{detailsFidelities[program.program_id-1].title}})
+                    <img [alt]="program[1].title" [src]="'assets/imgs/cias/'+program[0].toLowerCase()+'.png'" style="width: 42px"/>
+                    ({{ program[1].title }})
                   </span>
                 </span>
-              </div><!-- /.col-programa -->
-              <div class="col col-valores col-4 text-center">
+              </div>
+              <!-- /.col-programa -->
+              <div class="col col-valores col-4 text-center" 
+                [ngStyle]="{
+                  'opacity': deactivateForm(program[1].id, quotation.id) ? '.6' : '1'
+                }">
                 <span class="valor">
-                  {{program.price | currency:'R$'}}
+                    <!-- | currency:'R$' -->
+                  {{ getForm(program[1].id, quotation.id).get('price').value ?
+                    (getForm(program[1].id, quotation.id).get('price').value | currency:'R$') :
+                    emptyPrice(quotation)
+                  }}
                 </span>
               </div>
             </div><!-- /.col-row -->
-
-            <div class="col-row clearfix border-bottom" *ngIf="isVisibleForm(quotation.id)">
-
-              <div class="col col-6">
-                <div class="form-group">
-                  <label *ngIf="['JJ', 'TRB'].includes(program.program_code)" for="tamCartao">
-                    CPF
-                  </label>
-                  <label *ngIf="['AD', 'AV', 'G3', 'G3D'].includes(program.program_code)" for="tamCartao">
-                    Nº do cartão {{detailsFidelities[program.program_id-1].title}}
-                  </label>
-                  <div class="input text">
-                    <input type="text" class="form-control" readonly="{{detailsFidelities[(program.program_id - 1)].card_number ? 'readonly' : ''}}"
-                           [(ngModel)]="fidelities[quotation.id][program.program_id].number" maxlength="20">
-                  </div>
-                </div>
-              </div>
-              <div class="col col-6">
-                <div class="form-group">
-                  <label for="tamSenha">Senha de Acesso {{detailsFidelities[program.program_id-1].password_type}}</label>
-                  <div class="input text">
-                    <input type="password" class="form-control" [(ngModel)]="fidelities[quotation.id][program.program_id].access_password">
-                  </div>
-                </div>
-              </div>
-
+  
+            <div class="col-row clearfix border-bottom pt-2 white-background" *ngIf="showForm[quotation.id][i]">
               <div class="col-row">
-                <div class="col col-6">
-                    <a style="cursor: pointer"
-                      onclick="window.open('https://www.techtudo.com.br/dicas-e-tutoriais/noticia/2013/09/como-tirar-screenshots-no-windows-e-salvar-capturas-de-tela-no-computador.html')"> Não sabe capturar tela? Aprenda a "printar"...</a> 
+                <div class="col col-3">
                   <div class="form-group">
-                      <label for="{{program.program_title.toLowerCase()}}Print-0" class="btn btn-primary">Inicial&hellip;</label>
-                      <span class="upload mr-2">
-                        <input name="inicial-{{program.program_code}}-{{quotation.id}}" id="{{program.program_title.toLowerCase()}}Print-0"
-                        type="file" style="display: none" (change)="uploadFile($event, quotation.id, program.program_id)">
-                      </span>
-                    <label for="{{program.program_title.toLowerCase()}}Print-1" class="btn btn-primary">Extrato&hellip;</label>
-                      <span class="upload">
-                          <input name="extract-{{program.program_code}}-{{quotation.id}}" id="{{program.program_title.toLowerCase()}}Print-1"
-                          type="file" style="display: none" (change)="uploadFile($event, quotation.id, program.program_id)">
-                      </span>
+                    <label *ngIf="['JJ', 'TRB'].includes(program[0])" for="tamCartao">
+                      CPF
+                    </label>
+                    <label 
+                      *ngIf="['AD', 'AV', 'G3', 'G3D'].includes(program[0])" 
+                      for="tamCartao"
+                      title="Nº do cartão {{ detailsFidelities[program[1].id-1].title }}">
+                      Nº do cartão {{ detailsFidelities[program[1].id-1].title }}
+                    </label>
+                    <div class="input text">
+                      <input 
+                        *ngIf="['JJ', 'TRB'].includes(program[0])"
+                        type="text" 
+                        class="form-control" 
+                        readonly="{{ detailsFidelities[(program[1].id - 1)].card_number ? 'readonly' : '' }}"
+                        formControlName="number"
+                        [ngClass]="{'input-invalid': 
+                          getForm(program[1].id, quotation.id).get('number').touched && 
+                          getForm(program[1].id, quotation.id).get('number').invalid }"
+                        maxlength="14">
+                      <input
+                        *ngIf="['AD', 'AV', 'G3', 'G3D'].includes(program[0])"
+                        type="text" 
+                        class="form-control" 
+                        readonly="{{ detailsFidelities[(program[1].id - 1)].card_number ? 'readonly' : '' }}"
+                        formControlName="number"
+                        [ngClass]="{'input-invalid': 
+                          getForm(program[1].id, quotation.id).get('number').touched && 
+                          getForm(program[1].id, quotation.id).get('number').invalid }"
+                        maxlength="40">
                     </div>
-                </div>
-                <div class="col col-6"> Dados cadastrais
-                  <div class="form-group">
-                      <label for="{{program.program_title.toLowerCase()}}Print-2" class="btn btn-primary">Celular&hellip;</label>
-                        <span class="upload mr-2">
-                          <input name="cellphone-{{program.program_code}}-{{quotation.id}}" id="{{program.program_title.toLowerCase()}}Print-2"
-                          type="file" style="display: none" (change)="uploadFile($event, quotation.id, program.program_id)">
-                        </span>
-                      <label for="{{program.program_title.toLowerCase()}}Print-3" class="btn btn-primary">Endereço&hellip;</label>
-                        <span class="upload">
-                            <input name="address-{{program.program_code}}-{{quotation.id}}" id="{{program.program_title.toLowerCase()}}Print-3"
-                            type="file" style="display: none" (change)="uploadFile($event, quotation.id, program.program_id)">
-                        </span>
                   </div>
                 </div>
+                <div class="col col-4">
+                  <div class="form-group">
+                    <app-lock-input 
+                      [id]="i"
+                      [label]="'Senha de Acesso ' + detailsFidelities[program[1].id-1].password_type"
+                      [addMarqueeOnLabel]="['G3D', 'TRB'].includes(program[0])"
+                      formControlName="access_password"
+                    ></app-lock-input>
+                  </div>
+                </div>
+                <div class="col col-4">
+                  <div class="form-group">
+                    <label 
+                      for="payment-select-{{ i }}"
+                      title="Forma de pagamento"
+                      >Forma de pagamento</label>
+                    <select 
+                      id="payment-select-{{ i }}"
+                      class="form-control cursor-pointer" 
+                      placeholder="Selecione uma form de pagamento"
+                      formControlName="paymentMethod"
+                      [ngClass]="{'input-invalid': 
+                        getForm(program[1].id, quotation.id).get('paymentMethod').touched && 
+                        getForm(program[1].id, quotation.id).get('paymentMethod').invalid }"
+                      (change)="paymentMethodChange($event, i, program[1].id, quotation.id)">
+                      <ng-container *ngFor="let method of paymentMethods">
+                        <option
+                          *ngIf="havePaymentMethod(method, program[1])"
+                          [value]="method.id">{{ method.title }}</option>
+                      </ng-container>
+                    </select>
+                  </div>
+                </div>
+                <div class="col col-1 mile-box">
+                  <label 
+                    for="active-{{ i }}"
+                    class="cursor-pointer mb-2 text-body"
+                    title="Vender estas milhas">Vender</label>
+                  <button
+                    id="active-{{ i }}"
+                    type="button"
+                    (click)="sellUnsellProgram(program[1], quotation)"
+                    [ngClass]="{
+                      'btn-danger': !getForm(program[1].id, quotation.id).get('sellThis').value,
+                      'btn-primary': getForm(program[1].id, quotation.id).get('sellThis').value
+                    }"
+                    class="cursor-pointer btn sell-button btn-circle"
+                    title="Vender estas milhas">
+                    <i *ngIf="!getForm(program[1].id, quotation.id).get('sellThis').value" class="fa fa-times"></i>
+                    <i *ngIf="getForm(program[1].id, quotation.id).get('sellThis').value" class="fa fa-check"></i>
+                  </button>
+                </div>
               </div>
-
+  
             </div>
-          </div>
+          </form>
           <div class="col-row-valor clearfix">
             <div class="col text-center" style="font-size: 15px;">
-              <span class="title">Valor Total: <strong>{{quotation.total | currency:'R$'}}</strong></span>
+              <span class="title">Valor Total: <strong>{{ getTotalValue(quotation) | currency:'R$' }}</strong></span>
             </div>
           </div>
         </div>
-
+  
         <div class="col col-2 clearfix" style="background: #0275d8; color: #fff">
-          <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isVisibleForm(quotation.id) && !quotation.status_orders && i == 0">Vender</button>
-          <button class="button button-select" (click)="saveFidelities(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.status_orders">Confirmar</button>
-          <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isVisibleForm(quotation.id) && !quotation.status_orders">Cancelar</button>
-          <span *ngIf="quotation.status_orders" >
-            <p *ngFor="let status of quotation.status_orders;" style="margin-bottom: 0rem">
-               <img style="width: 42px" [alt]="status.program" [src]="'assets/imgs/cias/'+status.program.toLowerCase()+'.png'" style="width: 30%"/> {{status.status.toUpperCase()}}
-            </p>
+          <ng-container *ngIf="!quotation.status_orders">
+            <button class="button button-select" (click)="sellQuotation(quotation.id)" *ngIf="!isSelling[quotation.id]">Vender</button>
+            <button class="button button-select" type="submit" *ngIf="isSelling[quotation.id]">Confirmar</button>
+            <button class="button button-select" (click)="unsellQuotation(quotation.id)" *ngIf="isSelling[quotation.id]">Cancelar</button>
+          </ng-container>
+          <span *ngIf="quotation.status_orders" class="status-orders-box">
+            <span *ngFor="let program of programs[quotation.id]" class="status-orders">
+              {{ 
+                getStatusOrders(quotation, program[0]) ? 
+                getStatusOrders(quotation, program[0]).status.toUpperCase() :
+                'NÃO VENDIDO' 
+              }}
+            </span>
           </span>
         </div>
       </li>
     </ul>
-  </div>
-</div>
+  </form>
+</form>
 
 <section class="wrapper" *ngIf="loading || (!loading && quotations.length == 0)">
   <div class="container-fornecedor">

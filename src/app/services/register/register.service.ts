@@ -3,6 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { IProgramData } from 'src/app/models/register-data';
+
+interface IAddressFromCep {
+  city: string;
+  district: string;
+  street: string;
+  street_view: string;
+  uf: string;
+  zip_code: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -153,12 +164,20 @@ export class RegisterService {
   /**
    * @returns {Observable<any>}
    */
-  public getProviderData(): Observable<any> {
-
+  public getProviderData(): Observable<IProgramData> {
     return new Observable((observer) => {
       this.http.get(`${environment.API_URL}/api/provider/data`).subscribe(
         (response: any) => { observer.next(response.data); },
         (error) => { observer.error(error.error); }
+      );
+    });
+  }
+
+  public getAddressData(cep: string): Observable<IAddressFromCep> {
+    return new Observable((observer) => {
+      this.http.get(`https://gateway.buscaaereo.com.br/vision/cep/${cep}`).subscribe(
+          (response: IAddressFromCep) => { observer.next(response); },
+          (error) => { observer.error(error); }
       );
     });
   }

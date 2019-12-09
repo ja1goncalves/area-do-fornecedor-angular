@@ -59,14 +59,15 @@
 .cotation-list-table .body .col-1{color: #fff;}
 
 .cotation-list-table .body .col-2{background: #fff;}
-.cotation-list-table .body .col-6{background: #fff;}
+/* .cotation-list-table .body .col-6{background: #fff;}
+.cotation-list-table .body .col-4{background: #fff;} */
 .cotation-list-table .body .col-row-valor{padding: 12px 8px;background: #dee4ec;color: #2c528c;font-size: 16px;}
 .cotation-list-table .body .col-row-valor .col-valor-total{margin-right: 5px;text-align: right;width: 268px;text-transform: uppercase;font-size: 12px}
 .cotation-list-table .body .col-row-valor .col-valor-total-total {font-weight: 700;color: #2c528c;}
 .cotation-list-table .body .col-milhas,
 .cotation-list-table .body .col-valores{padding-top: 10px;padding-bottom: 5px;}
 .cotation-list-table .body .col-5{padding-top: 25px;}
-.cotation-list-table .button-select{text-align: center;display: block;background: #e3ad27;border: 1px solid #e3ad27;text-transform: uppercase;font-weight: 800;font-size: 11px; padding: 5px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px; margin: 15px 0 0 19px}
+.cotation-list-table .button-select{text-align: center;display: block;background: #e3ad27;border: 1px solid #e3ad27;text-transform: uppercase;font-weight: 800;font-size: 11px; padding: 5px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px; margin: 15px 0 0 19px; cursor: pointer;}
 .cotation-list-table .button-select:hover, .cotation-list-table .button-select:active, .cotation-list-table .button-select:focus{color: #e3ad27;background: #2c528c;border-color: #e3ad27;text-decoration: none}
 .cotation-list-table .sell{display: none;}
 .cotation-list-table .col-row:not(.col-row-fields){}
@@ -97,3 +98,114 @@
 .cotation-list-table .cotation-box-title .id{display: block;font-weight:700;font-size:18px;line-height: 1em;}
 .cotation-list-table .cotation-box-title .id small{display: block;font-size: 11px;font-weight: 400;text-transform: uppercase}
 .cotation-list-table .cotation-box-title .date{font-size: 11px;}
+
+.form-group {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+}
+
+.form-group label {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.register-box {
+    display: flex;
+    justify-content: flex-start;
+    text-align: start;
+}
+
+.label-height {
+    height: 60px;
+    margin-bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 10px;
+}
+
+.white-background {
+    background-color: #fff;
+}
+
+.button-box {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+}
+
+.password-box {
+    position: relative;
+}
+
+.password-box .password-lock-component {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+}
+
+.mile-box {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.mile-box input[type="checkbox"] {
+    width: 20px;
+}
+
+.mile-box div label {
+    margin: 0 0 0 10px;
+}
+
+.col {
+    overflow: hidden;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.sell-button {
+    width: 50px;
+}
+
+.custom-pr-40 {
+    padding-right: 40px;
+}
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    border-radius: 35px;
+    font-size: 24px;
+    line-height: 1.33;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+
+.status-orders-box {
+    display: flex;
+    flex-flow: column nowrap;
+    flex: 1;
+}
+
+.status-orders-box .status-orders {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: thin solid #b5b5b5;
+    width: 100%;
+    height: 43px;
+    font-size: .8rem;
+}

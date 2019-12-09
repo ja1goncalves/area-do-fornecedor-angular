@@ -7,3 +7,12 @@
 .input-invalid {
     border-color: #ff0000;
 }
+
+.birthday-input {
+    border: 1px solid #ced4da;
+    padding: 0.375rem 0.75rem;
+}
+
+.birthday-input.input-invalid {
+    border-color: #ff0000;
+}
