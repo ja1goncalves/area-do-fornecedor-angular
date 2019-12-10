@@ -31,7 +31,7 @@ pipelines:
                 AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY_PRODUCTION
                 AWS_DEFAULT_REGION: $AWS_REGION_PRODUCTION
                 S3_BUCKET: $BUCKET_NAME_PRODUCTION
-                LOCAL_PATH: "dist"
+                LOCAL_PATH: "dist/areadofornecedor-angular"
       - step:
           name: Clear Cloudfront Cache
           services:
