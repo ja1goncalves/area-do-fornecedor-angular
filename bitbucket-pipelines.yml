@@ -13,8 +13,9 @@ pipelines:
             - npm
           script:
             - cp src/config.ts.prod src/config.ts
+            - npm install -g @angular/cli
             - npm install
-            - npm run build
+            - npm run build --prod
           artifacts:
             - dist/**
       - step:
