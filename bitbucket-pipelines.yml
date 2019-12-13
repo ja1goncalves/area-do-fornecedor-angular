@@ -47,15 +47,15 @@ pipelines:
                 AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY_PRODUCTION
                 AWS_DEFAULT_REGION: $AWS_REGION_PRODUCTION
                 DISTRIBUTION_ID: $DISTRIBUTION_ID_PRODUCTION
-#      - step:
-#          name: Clear Cloudflare Cache
-#          script:
-#            - >-
-#              curl -X DELETE https://api.cloudflare.com/client/v4/zones/b720b670c23f5a4efed93d19641bb3c4/purge_cache
-#              -H 'Content-Type: application/json'
-#              -H 'X-Auth-Email: ${CLOUDFLARE_AUTH_EMAIL}'
-#              -H 'X-Auth-Key: ${CLOUDFLARE_AUTH_KEY}'
-#              -d '{"purge_everything": true}'
+      - step:
+          name: Clear Cloudflare Cache
+          script:
+            - >-
+              curl -X DELETE https://api.cloudflare.com/client/v4/zones/b720b670c23f5a4efed93d19641bb3c4/purge_cache
+              -H 'Content-Type: application/json'
+              -H 'X-Auth-Email: ${CLOUDFLARE_AUTH_EMAIL}'
+              -H 'X-Auth-Key: ${CLOUDFLARE_AUTH_KEY}'
+              -d '{"purge_everything": true}'
 definitions:
   caches:
     npm: $HOME/.npm
