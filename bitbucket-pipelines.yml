@@ -49,8 +49,6 @@ pipelines:
                 DISTRIBUTION_ID: $DISTRIBUTION_ID_PRODUCTION
       - step:
           name: Clear Cloudflare Cache
-#          curl -X POST "http://api.creativehandles.com/api/savePipelineBranch" -H "Content-Type:application/x-www-form-urlencoded" -H "cache-control:no-cache" -H "content-type:multipart/form-data;" -F branch=${BRANCH} -F repository_slug=$BITBUCKET_REPO_SLUG
-#          curl -X DELETE "https://api.cloudflare.com/client/v4/zones/b720b670c23f5a4efed93d19641bb3c4/purge_cache -H 'Content-Type: application/json' -H 'X-Auth-Email: patricio@elomilhas.com.br' -H 'X-Auth-Key: 0c29acde701586b191964e80aa865f14f432c' -d '{"purge_everything": true}'"
           script:
             - curl -X DELETE "https://api.cloudflare.com/client/v4/zones/b720b670c23f5a4efed93d19641bb3c4/purge_cache" -H "Content-Type:application/json" -H "X-Auth-Email:${CLOUDFLARE_AUTH_EMAIL}" -H "X-Auth-Key:${CLOUDFLARE_AUTH_KEY}" -d '{"purge_everything":true}'
 definitions:
