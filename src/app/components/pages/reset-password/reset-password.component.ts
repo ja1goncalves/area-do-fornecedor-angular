@@ -44,7 +44,7 @@ export class ResetPasswordComponent implements OnInit {
             this.notify.show('warning', 'Verifique o e-mail e tente novamente');
             this.loading = false;
           } else {
-            this.notify.show('success', 'Um link para redifinir a senha foi enviando para o seu e-mail');
+            this.notify.show('success', 'Um link para redefinir a senha foi enviando para o seu e-mail');
             this.router.navigate(['/login']);
           }
         }, (error) => {
