@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import { RegisterService } from 'src/app/services/register/register.service';
+import { validateCpf } from 'src/app/app.utils';
 
 export const MY_FORMATS = {
   parse: {
@@ -77,7 +78,7 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   private initFormControls(): void {
     this.personalDataForm = this.formBuilder.group({
       personal_name:            [{value: '', disabled: true}, [Validators.required]],
-      personal_cpf:             [{value: '', disabled: true}, [Validators.required, Validators.minLength(11)]],
+      personal_cpf:             [{value: '', disabled: true}, [Validators.required, Validators.minLength(11), Validators.pattern(validateCpf)]],
       personal_birthday:        ['', [Validators.required, Validators.minLength(8)]],
       personal_gender:          ['', [Validators.required]],
       personal_phone:           ['', [Validators.minLength(8)]],
