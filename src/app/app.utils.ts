@@ -51,4 +51,4 @@ export function cleanCookie(): void {
 
 export const defaultReqErrMessage = 'Aconteceu um erro no servidor. Por favor, tente mais tarde.';
 
-export const validateCpf = /\d{3}\.?\d{3}\.?\d{3}-?\d{2}/;
+export const validateCpf = /^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/;
