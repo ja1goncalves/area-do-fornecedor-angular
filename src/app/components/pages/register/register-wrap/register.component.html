@@ -53,4 +53,7 @@
 
   </mat-vertical-stepper>
 
+  <app-register-personal-data [personalDataForm]="personalDataForm" (submitData)="personalDataReceiver($event, stepper)"
+        [userInfo]="userInfo"></app-register-personal-data>
+
 </div>

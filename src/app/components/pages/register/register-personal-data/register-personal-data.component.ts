@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import { RegisterService } from 'src/app/services/register/register.service';
-import { validateCpf } from 'src/app/app.utils';
+import { validateCpf, datePickerOpts } from 'src/app/app.utils';
 
 export const MY_FORMATS = {
   parse: {
@@ -45,10 +45,10 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   public ufs: any[] = UFS;
   public occupations: any[] = OCCUPATIONS;
   public submitted: boolean;
-  public startDate = new Date(1990, 0, 1);
-  public maxDate = new Date();
-  public minDate = new Date(this.maxDate.getFullYear() - 150, this.maxDate.getMonth());
   public loadingCepData: boolean;
+
+  datePickerOpts = datePickerOpts;
+  startMonth = '01/1990';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -110,7 +110,7 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
 
   private getPersonalData(): any {
     const formControls = this.personalDataForm.controls;
-    const birthday = moment(this.personalDataForm.controls.personal_birthday.value, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const birthday = moment(this.personalDataForm.controls.personal_birthday.value.formatted, 'DD/MM/YYYY').format('YYYY-MM-DD');
 
     return {
       birthday: birthday,

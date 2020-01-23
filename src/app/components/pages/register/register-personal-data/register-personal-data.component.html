@@ -13,13 +13,15 @@
             <input type="text" formControlName='personal_cpf' class="form-control" name="cpf" [value]="userInfo.cpf" [dropSpecialCharacters]="false" mask="000.000.000-00">
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-3">
-            <div class="row form-group">
+            <div class="col-12">
                 <label>Data de Nascimento</label>
-                <input type="text" [min]="minDate" [max]="maxDate"
-                       class="birthday-input form-control col-12 col-sm-8 col-md-8 col-lg-8 mb-3" matInput
-                       [matDatepicker]="picker" formControlName="personal_birthday" [ngClass]="{'input-invalid': f.personal_birthday.touched && f.personal_birthday.invalid}">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
+                <my-date-picker
+                    name="birthdate"
+                    [options]="datePickerOpts"
+                    [defaultMonth]="startMonth"
+                    formControlName="personal_birthday"
+                    required
+                    ></my-date-picker>
                 <div *ngIf="submitted && f.personal_birthday.errors" class="form-validator-error">
                     <div *ngIf="f.personal_birthday.errors.required">A data de nascimento é obrigatória</div>
                     <div *ngIf="f.personal_birthday.errors.minlength">Informe uma data válida</div>
