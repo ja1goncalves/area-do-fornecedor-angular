@@ -42,9 +42,13 @@ export class RegisterAccessDataComponent implements OnInit {
       cpf: ['', [Validators.required, Validators.minLength(11), GenericValidator.isValidCpf()]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]],
-      phone: ['', [Validators.minLength(8)]],
-      cellphone: ['', [Validators.required]],
+      phone: ['', [Validators.pattern(/^\(?\d{2}\)? ?\d{4}-?\d{4}$/)]],
+      cellphone: ['', [Validators.required, , Validators.pattern(/^\(?\d{2}\)? ?\d{5}-?\d{4}$/)]],
     }, { validator: PasswordValidation.MatchPassword });
+
+    this.accessDataForm.get('phone').valueChanges.subscribe(value => {
+      console.log('valor: ', this.accessDataForm.get('phone').errors);
+    })
 
     if (this.fromQuotation) {
       this.activatedRoute.params.subscribe(
@@ -68,6 +72,11 @@ export class RegisterAccessDataComponent implements OnInit {
   public accessDataSubmit(): void {
 
     this.submitted = true;
+
+    const controls = Object.values(this.accessDataForm.controls);
+    controls.forEach(control => {
+      control.markAsTouched();
+    });
 
     if (this.accessDataForm.valid) {
       this.accessData = {
