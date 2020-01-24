@@ -27,6 +27,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
   @Input() programs: IProgram[];
   @Input() hasSteps = true;
   @Input() showCheckbox: boolean;
+  @Input() loading: boolean;
 
   public fidelitiesData: FidelitiesNumbers;
 

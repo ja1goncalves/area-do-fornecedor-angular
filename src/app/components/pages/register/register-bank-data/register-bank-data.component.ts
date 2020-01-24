@@ -17,6 +17,7 @@ export class RegisterBankDataComponent implements OnInit, OnChanges {
   @Input() banks: any;
   @Input() hasSteps = true;
   @Input() segments: any;
+  @Input() loading: boolean;
 
   public bankData: Bank;
   public submitted: boolean;

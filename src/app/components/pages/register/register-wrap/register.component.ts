@@ -74,8 +74,9 @@ export class RegisterComponent implements OnInit {
     this.addressPersonalData = $event;
     this.RequestData.personal = this.addressPersonalData.personalData;
     this.RequestData.address = this.addressPersonalData.addressData;
-    await this.updateRegister();
+    await this.updateRegister(2);
     stepper.next();
+    document.getElementById('scroll-to-stepper').scrollIntoView();
 
   }
 
@@ -98,16 +99,19 @@ export class RegisterComponent implements OnInit {
     });
 
     this.RequestData.fidelities = fidelities;
-    await this.updateRegister();
+    await this.updateRegister(3);
     stepper.next();
+    document.getElementById('scroll-to-stepper').scrollIntoView();
+
   }
 
   bankDataReceiver($event): void {
 
     this.bankData = $event;
     this.RequestData.bank = this.bankData;
-    this.updateRegister()
+    this.updateRegister(4)
       .then(() => {
+        localStorage.removeItem('fromMock');
         this.notify.show('success', 'Cadastro finalizado com sucesso');
         this.router.navigate(['/minhas-cotacoes']);
       });
@@ -138,11 +142,14 @@ export class RegisterComponent implements OnInit {
   checkConfirm(stepper: MatStepper): void {
     this.login.loginUser(this.accessData.email, this.accessData.password).subscribe(
       (_) => {
+
         this.getUserAuthenticated();
         this.confirmForm.controls['confirmCtrl'].setValue('Check');
         this.loading = false;
         localStorage.setItem('fromMock', 'true');
         stepper.next();
+        document.getElementById('scroll-to-stepper').scrollIntoView();
+
       },
       ({ message }) => {
         this.notify.show('error', message ? message : defaultReqErrMessage);
@@ -174,31 +181,35 @@ export class RegisterComponent implements OnInit {
     stepper.next();
   }
 
-  async updateRegister(): Promise<any> {
+  private async updateRegister(step = 2): Promise<any> {
+
+    const handleStep = {
+      2: () => ({
+        personal: this.RequestData.personal,
+        address: this.RequestData.address,
+        fidelities: [],
+        bank: null,
+      }),
+      3: () => ({
+        personal: this.RequestData.personal,
+        address: [],
+        fidelities: this.RequestData.fidelities,
+        bank: null,
+      }),
+      4: () => ({
+        personal: this.RequestData.personal,
+        address: [],
+        fidelities: [],
+        bank: this.RequestData.bank,
+      }),
+    }
+
+    const body = handleStep[step]();
 
     this.loading = true;
     return new Promise((resolve, reject) => {
-      this.register.updateRegister(this.RequestData).subscribe(
-        ({ data: { address, fidelities } }) => {
-          console.log('data: ', address);
-          console.log('fidelities: ', fidelities);
-          if (address) {
-            this.RequestData.address = address;
-          }
-          if (fidelities) {
-
-            this.RequestData.fidelities = {
-              ...this.RequestData.fidelities,
-              ...fidelities.map(fideliy => ({
-                id: fideliy.id,
-                program_id: fideliy.program_id,
-                card_number: fideliy.card_number,
-                access_password: fideliy.access_password,
-              }))
-            }
-
-          }
-
+      this.register.updateRegister(body).subscribe(
+        () => {
           this.loading = false;
           resolve();
         },

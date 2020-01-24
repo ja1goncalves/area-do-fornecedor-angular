@@ -38,6 +38,7 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   @Input() personalDataForm: FormGroup;
   @Input() userInfo: any;
   @Input() hasSteps = true;
+  @Input() loading: boolean;
 
   public addressData: Address;
   public personalData: Personal;

@@ -16,6 +16,7 @@ export class RegisterAccessDataComponent implements OnInit {
 
   @Output() submitData: EventEmitter<any> = new EventEmitter<any>();
   @Input() accessDataForm: FormGroup;
+  @Input() loading: boolean;
 
   public accessData: AccessData;
   public fromQuotation: boolean;

@@ -131,7 +131,11 @@
                 placeholder="Telefone da Empresa" [dropSpecialCharacters]="false" mask="(00) 00000-0000" />
         </div>
         <div class="col-12 col-sm-12 col-md-7 col-lg-7" *ngIf="hasSteps">
-            <button class="btn btn-primary btn-block" type="submit">Continuar</button>
+                <load-fb-success-button
+                  [loading]="loading"
+                  type="submit"
+                  text="Continuar"
+                  ></load-fb-success-button>
         </div>
     </div>
 </form>
