@@ -20,5 +20,6 @@
 .success-custom-button.loading-button {
     min-width: 70px;
     width: 70px;
-    cursor: not-allowed;
+    pointer-events: none;
+    opacity: .7;
 }
