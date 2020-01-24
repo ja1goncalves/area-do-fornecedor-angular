@@ -112,7 +112,7 @@ export class AuthService {
 
         const timeExpire = moment(parseInt(token.timeLogin, 10)).add(parseInt(token.token.expires_in, 10), 'seconds');
         const isTokenExpired = timeExpire.isBefore(moment());
-        result = token.token.access_token != null && !isTokenExpired;
+        result = token.token.access_token != null && !isTokenExpired && !localStorage.getItem('fromMock');
       }
 
     } catch (error) {
@@ -172,6 +172,7 @@ export class AuthService {
               this.share.sendLoginState(true);
               const user = JSON.stringify(data);
               this.createUserData(user);
+              localStorage.removeItem('fromMock');
               observer.next();
             }, (error: any) => {
               this.logout();

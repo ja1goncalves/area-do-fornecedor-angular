@@ -32,6 +32,7 @@ export class RegisterComponent implements OnInit {
   loading: boolean;
 
   ngOnInit() {
+
     this.accessDataForm = this._formBuilder.group({
       hiddenCtrl: ['', Validators.required]
     });
@@ -39,6 +40,7 @@ export class RegisterComponent implements OnInit {
     this.confirmForm = this._formBuilder.group({
       confirmCtrl: ['', Validators.required]
     });
+
   }
 
   // Data
@@ -61,23 +63,28 @@ export class RegisterComponent implements OnInit {
     private _formBuilder: FormBuilder) {}
 
   accessDataReceiver($event, stepper: MatStepper): void {
+
     this.accessData = $event.accessData;
     this.createRegister(stepper, $event.fromQuotation);
+
   }
 
   async personalDataReceiver($event, stepper: MatStepper): Promise<void> {
+
     this.addressPersonalData = $event;
     this.RequestData.personal = this.addressPersonalData.personalData;
     this.RequestData.address = this.addressPersonalData.addressData;
     await this.updateRegister();
     stepper.next();
+
   }
 
   async fidelitiesDataReceiver($event, stepper: MatStepper): Promise<void> {
+
     this.fidelitiesData = $event;
     const fidelities = [];
 
-    this.programs.forEach((program, index) => {
+    this.programs.forEach((program) => {
       if (this.fidelitiesData[`card_number_${program.code}`]) {
         fidelities.push(
           {
@@ -96,6 +103,7 @@ export class RegisterComponent implements OnInit {
   }
 
   bankDataReceiver($event): void {
+
     this.bankData = $event;
     this.RequestData.bank = this.bankData;
     this.updateRegister()
@@ -133,6 +141,7 @@ export class RegisterComponent implements OnInit {
         this.getUserAuthenticated();
         this.confirmForm.controls['confirmCtrl'].setValue('Check');
         this.loading = false;
+        localStorage.setItem('fromMock', 'true');
         stepper.next();
       },
       ({ message }) => {
@@ -170,7 +179,26 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     return new Promise((resolve, reject) => {
       this.register.updateRegister(this.RequestData).subscribe(
-        () => {
+        ({ data: { address, fidelities } }) => {
+          console.log('data: ', address);
+          console.log('fidelities: ', fidelities);
+          if (address) {
+            this.RequestData.address = address;
+          }
+          if (fidelities) {
+
+            this.RequestData.fidelities = {
+              ...this.RequestData.fidelities,
+              ...fidelities.map(fideliy => ({
+                id: fideliy.id,
+                program_id: fideliy.program_id,
+                card_number: fideliy.card_number,
+                access_password: fideliy.access_password,
+              }))
+            }
+
+          }
+
           this.loading = false;
           resolve();
         },

@@ -2,7 +2,7 @@
   <h3 class="fieldset-title">Dados de Acesso</h3>
   <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
-      <label>E-mail*</label><br>
+      <label><span class="text-danger">*</span> E-mail</label><br>
       <input type="email" class="form-control" [ngClass]="{'input-invalid': f.email.touched && f.email.errors}" name="email" placeholder="E-mail" formControlName="email">
       <div *ngIf="f.email.touched && f.email.errors" class="form-validator-error">
         <div *ngIf="f.email.errors.required">O email é obrigatório</div>
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
-      <label>Nome*</label><br>
+      <label><span class="text-danger">*</span> Nome</label><br>
       <input type="text" class="form-control" [ngClass]="{'input-invalid': f.name.touched && f.name.errors}" name="name" placeholder="Nome Completo" formControlName="name" maxlength="50">
       <div *ngIf="f.name.touched && f.name.errors" class="form-validator-error">
         <div *ngIf="f.name.errors.required">O nome é obrigatório</div>
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
-      <label>CPF*</label><br>
+      <label><span class="text-danger">*</span> CPF</label><br>
       <input type="text" class="form-control" [ngClass]="{'input-invalid': f.cpf.touched && f.cpf.errors}" name="cpf" placeholder="CPF" formControlName="cpf" [dropSpecialCharacters]="false" mask="000.000.000-00">
       <div *ngIf="f.cpf.touched && f.cpf.errors" class="form-validator-error">
         <div *ngIf="f.cpf.errors.required">O CPF é obrigatório</div>
@@ -36,7 +36,7 @@
     
     </div>
     <div class="col-12 col-sm-4 col-md-6 col-lg-6 mb-3">
-      <label>Celular*</label>
+      <label><span class="text-danger">*</span> Celular</label>
       <input type="text" formControlName="cellphone" class="form-control" [ngClass]="{'input-invalid': f.cellphone.touched && f.cellphone.errors}" placeholder="Celular" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
       <div *ngIf="f.cellphone.touched && f.cellphone.errors" class="form-validator-error">
         <div *ngIf="f.cellphone.errors.required">O celular é obrigatório</div>

@@ -30,6 +30,7 @@ export type FidelitiesNumbers = {
 };
 export type FidelitiesData = fidelityObject[];
 type fidelityObject = {
+  id?: number;
   access_password: string,
   card_number: string,
   program_id: number,
@@ -46,6 +47,7 @@ export type Personal = {
   company_phone: string
 };
 export type Address = {
+  id?: string | number;
   zip_code: string,
   address: string,
   number: string,

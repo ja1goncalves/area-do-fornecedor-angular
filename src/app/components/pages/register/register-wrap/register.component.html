@@ -1,5 +1,7 @@
 <div class="container-fornecedor">
 
+  <p>Precisamos que você preencha até o último passo para lhe registrar</p>
+
   <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
   <mat-vertical-stepper linear=true #stepper>
 
@@ -44,16 +46,11 @@
       </app-register-fidelity-programs>
     </mat-step>
 
-
     <mat-step [stepControl]="bankDataForm">
       <ng-template matStepLabel>Dados Bancários</ng-template>
       <app-register-bank-data [bankDataForm]="bankDataForm" (submitData)="bankDataReceiver($event)" [banks]="banks"></app-register-bank-data>
     </mat-step>
 
-
   </mat-vertical-stepper>
-
-  <app-register-personal-data [personalDataForm]="personalDataForm" (submitData)="personalDataReceiver($event, stepper)"
-  [userInfo]="userInfo"></app-register-personal-data>
 
 </div>

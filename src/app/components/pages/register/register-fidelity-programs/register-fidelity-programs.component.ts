@@ -78,7 +78,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
         card_number_AV: formControls.card_number_AV.value,
         access_password_AV: formControls.access_password_AV.value,
       };
-
+      
       this.submitData.emit(this.fidelitiesData);
 
     }

@@ -6,7 +6,8 @@ import * as moment from 'moment';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import { RegisterService } from 'src/app/services/register/register.service';
-import { validateCpf, datePickerOpts } from 'src/app/app.utils';
+import { validateCpf, datePickerOpts, hasRequiredField, invalidFormMessage } from 'src/app/form.utils';
+import { NotifyService } from 'src/app/services/notify/notify.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -50,10 +51,14 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   datePickerOpts = datePickerOpts;
   startMonth = '01/1990';
 
+
+  hasRequiredField = hasRequiredField;
+
   constructor(
     private formBuilder: FormBuilder,
     private _adapter: DateAdapter<any>,
     private registerService: RegisterService,
+    private notify: NotifyService,
   ) { }
 
   ngOnInit() {
@@ -141,10 +146,14 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   }
 
   public personalDataSubmit(): void {
+
     this.submitted = true;
     Object.values(this.personalDataForm.controls).forEach((control: FormControl) => {
       control.markAsTouched();
-    })
+    });
+
+    if (this.personalDataForm.invalid)
+      return this.notify.show('error', invalidFormMessage);
 
     if (this.personalDataForm.valid) {
 
@@ -154,8 +163,10 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
       };
 
       this.submitData.emit(completePersonalData);
-
-    }
+      
+    } else
+      this.submitData.emit();
+  
   }
 
   public getAddress() {

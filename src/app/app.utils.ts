@@ -1,5 +1,4 @@
 import * as moment from 'moment';
-import { IMyDpOptions } from "mydatepicker";
 
 export function eraseCookie(...name): any {
   name.forEach(e => {
@@ -50,41 +49,3 @@ export function cleanCookie(): void {
 }
 
 export const defaultReqErrMessage = 'Aconteceu um erro no servidor. Por favor, tente mais tarde.';
-
-export const validateCpf = /^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/;
-
-export const datePickerOpts: IMyDpOptions = {
-  minYear: moment().year() - 150,
-  maxYear: moment().year(),
-  showTodayBtn: false,
-  markCurrentDay: false,
-  openSelectorOnInputClick: true,
-  inline: false,
-  editableDateField: false,
-  dayLabels: {
-    su: "Dom",
-    mo: "Seg",
-    tu: "Ter",
-    we: "Qua",
-    th: "Qui",
-    fr: "Sex",
-    sa: "Sáb"
-  },
-  monthLabels: {
-    1: "Jan",
-    2: "Fev",
-    3: "Mar",
-    4: "Abr",
-    5: "Mai",
-    6: "Jun",
-    7: "Jul",
-    8: "Ago",
-    9: "Set",
-    10: "Out",
-    11: "Nov",
-    12: "Dez"
-  },
-  dateFormat: "dd/mm/yyyy",
-  todayBtnTxt: "Hoje",
-  sunHighlight: false
-};
