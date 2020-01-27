@@ -2,6 +2,10 @@
 @import '~angular-notifier/styles.css';
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+html {
+    scroll-behavior: smooth;
+}
+
 .container-fornecedor {
     max-width: 800px;
     width: 100%;
@@ -25,4 +29,13 @@
 
 .input-invalid {
     border-color: #ff0000 !important;
+}
+
+.btn-light {
+    border: thin solid #8c8c8c !important;
+    color: #8c8c8c !important;
+}
+
+.btn {
+    max-width: 200px !important;
 }

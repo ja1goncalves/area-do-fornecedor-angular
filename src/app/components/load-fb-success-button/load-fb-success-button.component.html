@@ -1,0 +1,11 @@
+<button 
+  class="btn btn-primary btn-clock d-flex justify-content-center align-items-center success-custom-button"
+  [type]="type"
+  [ngClass]="{ 'loading-button': loading }">
+    <ng-container *ngIf="!loading">
+      {{ text }}
+    </ng-container>
+    <i *ngIf="loading" class="material-icons rotate-icon">
+      cached
+    </i>
+</button>

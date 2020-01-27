@@ -27,6 +27,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
   @Input() programs: IProgram[];
   @Input() hasSteps = true;
   @Input() showCheckbox: boolean;
+  @Input() loading: boolean;
 
   public fidelitiesData: FidelitiesNumbers;
 
@@ -78,7 +79,7 @@ export class RegisterFidelityProgramsComponent implements OnChanges, OnInit {
         card_number_AV: formControls.card_number_AV.value,
         access_password_AV: formControls.access_password_AV.value,
       };
-
+      
       this.submitData.emit(this.fidelitiesData);
 
     }

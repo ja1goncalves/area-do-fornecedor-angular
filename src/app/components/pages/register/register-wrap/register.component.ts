@@ -15,18 +15,24 @@ import { defaultReqErrMessage } from 'src/app/app.utils';
 })
 export class RegisterComponent implements OnInit {
 
-  public RequestData: RequestData = {} as RequestData;
+  RequestData: RequestData = {
+    personal: null,
+    address: null,
+    fidelities: null,
+    bank: null,
+  } as RequestData;
   showFidelityCheckbox = true;
 
   // Form
-  public accessDataForm: FormGroup;
-  public confirmForm: FormGroup;
-  public bankDataForm: FormGroup;
-  public fidelitiesForm: FormGroup;
-  public personalDataForm: FormGroup;
-  public loading: boolean;
+  accessDataForm: FormGroup;
+  confirmForm: FormGroup;
+  bankDataForm: FormGroup;
+  fidelitiesForm: FormGroup;
+  personalDataForm: FormGroup;
+  loading: boolean;
 
   ngOnInit() {
+
     this.accessDataForm = this._formBuilder.group({
       hiddenCtrl: ['', Validators.required]
     });
@@ -34,19 +40,20 @@ export class RegisterComponent implements OnInit {
     this.confirmForm = this._formBuilder.group({
       confirmCtrl: ['', Validators.required]
     });
+
   }
 
   // Data
-  public accessData: AccessData;
-  public addressPersonalData: {personalData: Personal, addressData: Address};
-  public fidelitiesData: FidelitiesData;
-  public bankData: Bank;
+  accessData: AccessData;
+  addressPersonalData: {personalData: Personal, addressData: Address};
+  fidelitiesData: FidelitiesData;
+  bankData: Bank;
 
-  public isValidToken: boolean;
-  public banks: any;
-  public userInfo: any = { name: '', cpf: '', cellphone: '' };
-  public fidelities: any = [];
-  public programs: any[] = [];
+  isValidToken: boolean;
+  banks: any;
+  userInfo: any = { name: '', cpf: '', cellphone: '' };
+  fidelities: any = [];
+  programs: any[] = [];
 
   constructor(
     private register: RegisterService,
@@ -55,23 +62,30 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private _formBuilder: FormBuilder) {}
 
-  public accessDataReceiver($event, stepper: MatStepper): void {
+  accessDataReceiver($event, stepper: MatStepper): void {
+
     this.accessData = $event.accessData;
     this.createRegister(stepper, $event.fromQuotation);
+
   }
 
-  public personalDataReceiver($event, stepper: MatStepper): void {
+  async personalDataReceiver($event, stepper: MatStepper): Promise<void> {
+
     this.addressPersonalData = $event;
     this.RequestData.personal = this.addressPersonalData.personalData;
     this.RequestData.address = this.addressPersonalData.addressData;
+    await this.updateRegister(2);
     stepper.next();
+    document.getElementById('scroll-to-stepper').scrollIntoView();
+
   }
 
-  public fidelitiesDataReceiver($event, stepper: MatStepper): void {
+  async fidelitiesDataReceiver($event, stepper: MatStepper): Promise<void> {
+
     this.fidelitiesData = $event;
     const fidelities = [];
 
-    this.programs.forEach((program, index) => {
+    this.programs.forEach((program) => {
       if (this.fidelitiesData[`card_number_${program.code}`]) {
         fidelities.push(
           {
@@ -85,16 +99,26 @@ export class RegisterComponent implements OnInit {
     });
 
     this.RequestData.fidelities = fidelities;
+    await this.updateRegister(3);
     stepper.next();
+    document.getElementById('scroll-to-stepper').scrollIntoView();
+
   }
 
-  public bankDataReceiver($event): void {
+  bankDataReceiver($event): void {
+
     this.bankData = $event;
     this.RequestData.bank = this.bankData;
-    this.updateRegister();
+    this.updateRegister(4)
+      .then(() => {
+        localStorage.removeItem('fromMock');
+        this.notify.show('success', 'Cadastro finalizado com sucesso');
+        this.router.navigate(['/minhas-cotacoes']);
+      });
   }
 
-  public createRegister(stepper: MatStepper, fromQuotation: boolean): void {
+  private createRegister(stepper: MatStepper, fromQuotation: boolean): void {
+
     this.loading = true;
     this.register.createRegister(this.accessData, fromQuotation).subscribe(
       (_) => {
@@ -103,20 +127,29 @@ export class RegisterComponent implements OnInit {
         return this.checkConfirm(stepper);
         // stepper.next();
      },
-     ({ message }) => {
-       this.notify.show('error', message ? message : defaultReqErrMessage);
+     ({ data, message }) => {
+       let feedbackMessage = message;
+       if (!message) {
+        feedbackMessage = data.includes('email') ? 'e-mail já cadastrado' : '';
+       }
+       this.notify.show('error', feedbackMessage ? feedbackMessage : defaultReqErrMessage);
        this.loading = false;
      }
     );
+
   }
 
-  public checkConfirm(stepper: MatStepper): void {
+  checkConfirm(stepper: MatStepper): void {
     this.login.loginUser(this.accessData.email, this.accessData.password).subscribe(
       (_) => {
+
         this.getUserAuthenticated();
         this.confirmForm.controls['confirmCtrl'].setValue('Check');
         this.loading = false;
+        localStorage.setItem('fromMock', 'true');
         stepper.next();
+        document.getElementById('scroll-to-stepper').scrollIntoView();
+
       },
       ({ message }) => {
         this.notify.show('error', message ? message : defaultReqErrMessage);
@@ -125,7 +158,7 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  public getUserAuthenticated(): void {
+  getUserAuthenticated(): void {
     this.login.getUserAuthenticated().subscribe(
       (userAuthenticated: any) => {
         this.setUserInfo(userAuthenticated);
@@ -136,34 +169,61 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  public setUserInfo(request: object): void {
+  setUserInfo(request: object): void {
     this.userInfo = {};
     this.userInfo.name = request['name'];
     this.userInfo.cpf = request['cpf'].replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
     this.userInfo.cellphone = request['cellphone'].replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
-    this.userInfo.phone = request['cellphone'].replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    this.userInfo.phone = request['phone'].replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
   }
 
-  public nextStep(stepper: MatStepper): void {
+  nextStep(stepper: MatStepper): void {
     stepper.next();
   }
 
-  public updateRegister(): void {
+  private async updateRegister(step = 2): Promise<any> {
+
+    const handleStep = {
+      2: () => ({
+        personal: this.RequestData.personal,
+        address: this.RequestData.address,
+        fidelities: [],
+        bank: null,
+      }),
+      3: () => ({
+        personal: this.RequestData.personal,
+        address: [],
+        fidelities: this.RequestData.fidelities,
+        bank: null,
+      }),
+      4: () => ({
+        personal: this.RequestData.personal,
+        address: [],
+        fidelities: [],
+        bank: this.RequestData.bank,
+      }),
+    }
+
+    const body = handleStep[step]();
+
     this.loading = true;
-    this.register.updateRegister(this.RequestData).subscribe(
-      (_) => {
-        this.notify.show('success', 'Cadastro finalizado com sucesso');
-        this.router.navigate(['/minhas-cotacoes']);
-        this.loading = false;
-      },
-      ({ message }) => {
-        this.notify.show('error', message ? message : defaultReqErrMessage);
-        this.loading = false;
-      }
-    );
+    return new Promise((resolve, reject) => {
+      this.register.updateRegister(body).subscribe(
+        () => {
+          this.loading = false;
+          resolve();
+        },
+        (error) => {
+          this.notify.show('error', error.message ? error.message : defaultReqErrMessage);
+          this.loading = false;
+          reject(error);
+        }
+      );
+    })
+
   }
 
-  public getBanks(): void {
+  getBanks(): void {
     this.register.getBanks().subscribe(
       (banks: any) => {
         this.banks = banks;
@@ -172,7 +232,7 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  public getPrograms(): void {
+  getPrograms(): void {
     this.register.getPrograms().subscribe(
       (programs: any[]) => {
         this.programs = programs.filter(program => !['TRB', 'G3D'].includes(program.code));
