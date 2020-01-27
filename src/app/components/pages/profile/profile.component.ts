@@ -180,7 +180,16 @@ export class ProfileComponent implements OnInit, AfterViewInit {
           this.personalForm.get('residential_state').setValue(address.state);
         }
         if (personal) {
-          this.personalForm.get('personal_birthday').setValue(personal.birthday);
+          const birthdayMoment = moment(personal.birthday, 'YYYY-MM-DD');
+          const birthday = {
+            date: {
+              year: birthdayMoment.year(),
+              month: birthdayMoment.month() + 1,
+              day: birthdayMoment.date(),
+            }
+          };
+
+          this.personalForm.get('personal_birthday').setValue(birthday);
           this.personalForm.get('personal_gender').setValue(personal.gender);
           this.personalForm.get('personal_occupation_id').setValue(personal.provider_occupation_id);
           this.personalForm.get('personal_occupation').setValue(personal.occupation);
@@ -238,8 +247,11 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       operation: this.bankForm.get('bank_operation').value,
     };
 
+    const birthday = this.personalForm.get('personal_birthday').value.formatted
+    const formatedBirth = moment(birthday, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
     requestData.personal = {
-      birthday: this.personalForm.get('personal_birthday').value,
+      birthday: formatedBirth,
       gender: this.personalForm.get('personal_gender').value,
       phone: this.personalForm.get('personal_phone').value,
       cellphone: this.personalForm.get('personal_cellphone').value,
