@@ -6,7 +6,8 @@ import * as moment from 'moment';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import { RegisterService } from 'src/app/services/register/register.service';
-import { validateCpf } from 'src/app/app.utils';
+import { validateCpf, datePickerOpts, hasRequiredField, invalidFormMessage } from 'src/app/form.utils';
+import { NotifyService } from 'src/app/services/notify/notify.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -37,6 +38,7 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   @Input() personalDataForm: FormGroup;
   @Input() userInfo: any;
   @Input() hasSteps = true;
+  @Input() loading: boolean;
 
   public addressData: Address;
   public personalData: Personal;
@@ -45,15 +47,19 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   public ufs: any[] = UFS;
   public occupations: any[] = OCCUPATIONS;
   public submitted: boolean;
-  public startDate = new Date(1990, 0, 1);
-  public maxDate = new Date();
-  public minDate = new Date(this.maxDate.getFullYear() - 150, this.maxDate.getMonth());
   public loadingCepData: boolean;
+
+  datePickerOpts = datePickerOpts;
+  startMonth = '01/1990';
+
+
+  hasRequiredField = hasRequiredField;
 
   constructor(
     private formBuilder: FormBuilder,
     private _adapter: DateAdapter<any>,
     private registerService: RegisterService,
+    private notify: NotifyService,
   ) { }
 
   ngOnInit() {
@@ -110,7 +116,7 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
 
   private getPersonalData(): any {
     const formControls = this.personalDataForm.controls;
-    const birthday = moment(this.personalDataForm.controls.personal_birthday.value, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const birthday = moment(this.personalDataForm.controls.personal_birthday.value.formatted, 'DD/MM/YYYY').format('YYYY-MM-DD');
 
     return {
       birthday: birthday,
@@ -141,10 +147,14 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
   }
 
   public personalDataSubmit(): void {
+
     this.submitted = true;
     Object.values(this.personalDataForm.controls).forEach((control: FormControl) => {
       control.markAsTouched();
-    })
+    });
+
+    if (this.personalDataForm.invalid)
+      return this.notify.show('error', invalidFormMessage);
 
     if (this.personalDataForm.valid) {
 
@@ -154,8 +164,10 @@ export class RegisterPersonalDataComponent implements OnInit, OnChanges {
       };
 
       this.submitData.emit(completePersonalData);
-
-    }
+      
+    } else
+      this.submitData.emit();
+  
   }
 
   public getAddress() {

@@ -2,6 +2,8 @@ import { Component, OnInit, Output, Input, EventEmitter, OnChanges, SimpleChange
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Bank } from 'src/app/models/register-data';
 import { RegisterService } from 'src/app/services/register/register.service';
+import { NotifyService } from 'src/app/services/notify/notify.service';
+import { invalidFormMessage, hasRequiredField } from 'src/app/form.utils';
 
 @Component({
   selector: 'app-register-bank-data',
@@ -15,11 +17,18 @@ export class RegisterBankDataComponent implements OnInit, OnChanges {
   @Input() banks: any;
   @Input() hasSteps = true;
   @Input() segments: any;
+  @Input() loading: boolean;
 
   public bankData: Bank;
   public submitted: boolean;
 
-  constructor(private formBuilder: FormBuilder, private register: RegisterService) { }
+  hasRequiredField = hasRequiredField;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private register: RegisterService,
+    private notify: NotifyService,
+  ) { }
 
   ngOnInit() {
     this.bankDataForm = this.formBuilder.group({
@@ -78,10 +87,14 @@ export class RegisterBankDataComponent implements OnInit, OnChanges {
   get f() { return this.bankDataForm.controls; }
 
   bankDataSubmit(): void {
+
     this.submitted = true;
     Object.values(this.bankDataForm.controls).forEach((control: FormControl) => {
       control.markAsTouched();
-    })
+    });
+
+    if (this.bankDataForm.invalid)
+      return this.notify.show('error', invalidFormMessage);
 
     if (this.bankDataForm.valid) {
 

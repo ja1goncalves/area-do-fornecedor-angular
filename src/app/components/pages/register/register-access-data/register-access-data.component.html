@@ -2,26 +2,26 @@
   <h3 class="fieldset-title">Dados de Acesso</h3>
   <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
-      <label>E-mail:</label><br>
-      <input type="email" class="form-control" [ngClass]="{'input-invalid': submitted && f.email.errors}" name="email" placeholder="E-mail" formControlName="email">
-      <div *ngIf="submitted && f.email.errors" class="form-validator-error">
+      <label><span class="text-danger">*</span> E-mail</label><br>
+      <input type="email" class="form-control" [ngClass]="{'input-invalid': f.email.touched && f.email.errors}" name="email" placeholder="E-mail" formControlName="email">
+      <div *ngIf="f.email.touched && f.email.errors" class="form-validator-error">
         <div *ngIf="f.email.errors.required">O email é obrigatório</div>
         <div *ngIf="f.email.errors.email">Informe um email válido</div>
       </div>
     </div>
     <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
-      <label>Nome</label><br>
-      <input type="text" class="form-control" [ngClass]="{'input-invalid': submitted && f.name.errors}" name="name" placeholder="Nome Completo" formControlName="name" maxlength="50">
-      <div *ngIf="submitted && f.name.errors" class="form-validator-error">
+      <label><span class="text-danger">*</span> Nome</label><br>
+      <input type="text" class="form-control" [ngClass]="{'input-invalid': f.name.touched && f.name.errors}" name="name" placeholder="Nome Completo" formControlName="name" maxlength="50">
+      <div *ngIf="f.name.touched && f.name.errors" class="form-validator-error">
         <div *ngIf="f.name.errors.required">O nome é obrigatório</div>
         <div *ngIf="f.name.errors.minlength">O nome é pequeno demais</div>
         <div *ngIf="f.name.errors.pattern">O nome não deve possuir caracteres especiais</div>
       </div>
     </div>
     <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
-      <label>CPF</label><br>
-      <input type="text" class="form-control" [ngClass]="{'input-invalid': submitted && f.cpf.errors}" name="cpf" placeholder="CPF" formControlName="cpf" [dropSpecialCharacters]="false" mask="000.000.000-00">
-      <div *ngIf="submitted && f.cpf.errors" class="form-validator-error">
+      <label><span class="text-danger">*</span> CPF</label><br>
+      <input type="text" class="form-control" [ngClass]="{'input-invalid': f.cpf.touched && f.cpf.errors}" name="cpf" placeholder="CPF" formControlName="cpf" [dropSpecialCharacters]="false" mask="000.000.000-00">
+      <div *ngIf="f.cpf.touched && f.cpf.errors" class="form-validator-error">
         <div *ngIf="f.cpf.errors.required">O CPF é obrigatório</div>
         <div *ngIf="f.cpf.errors.minlength">Informe um cpf válido</div>
         <div *ngIf="accessDataForm.get('cpf').getError('cpfNotValid')">O CPF é inválido!</div>
@@ -30,34 +30,42 @@
     <div class="col-12 col-sm-4 col-md-6 col-lg-6 mb-3">
       <label>Telefone fixo</label>
       <input type="text" formControlName="phone" class="form-control" placeholder="Telefone Fixo (opcional)" [dropSpecialCharacters]="false" mask="(00) 0000-0000">
+      <div *ngIf="f.phone.touched && f.phone.errors" class="form-validator-error">
+          <div *ngIf="f.phone.errors.pattern">Adicione um número no formato (99) 9999-9999</div>
+      </div>
+    
     </div>
     <div class="col-12 col-sm-4 col-md-6 col-lg-6 mb-3">
-      <label>Celular</label>
-      <input type="text" formControlName="cellphone" class="form-control" [ngClass]="{'input-invalid': submitted && f.cellphone.errors}" placeholder="Celular" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
-      <div *ngIf="submitted && f.cellphone.errors" class="form-validator-error">
+      <label><span class="text-danger">*</span> Celular</label>
+      <input type="text" formControlName="cellphone" class="form-control" [ngClass]="{'input-invalid': f.cellphone.touched && f.cellphone.errors}" placeholder="Celular" [dropSpecialCharacters]="false" mask="(00) 00000-0000">
+      <div *ngIf="f.cellphone.touched && f.cellphone.errors" class="form-validator-error">
         <div *ngIf="f.cellphone.errors.required">O celular é obrigatório</div>
-        <div *ngIf="f.cellphone.errors.minlength">Informe um número válido</div>
+        <div *ngIf="f.cellphone.errors.pattern">Adicione um número no formato (99) 99999-9999</div>
       </div>
     </div>
     <div class="col-12">
       <p><strong>Para continuar, crie uma senha de acesso:</strong></p>
     </div>
     <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
-      <input type="password" class="form-control" [ngClass]="{'input-invalid': submitted && f.password.errors}" name="password" placeholder="Senha (min. 8 digitos)" formControlName="password">
-      <div *ngIf="submitted && f.password.errors" class="form-validator-error">
+      <input type="password" class="form-control" [ngClass]="{'input-invalid': f.password.touched && f.password.errors}" name="password" placeholder="Senha (min. 8 digitos)" formControlName="password">
+      <div *ngIf="f.password.touched && f.password.errors" class="form-validator-error">
         <div *ngIf="f.password.errors.required">A senha é obrigatória</div>
         <div *ngIf="f.password.errors.minlength">A senha deve ter, no mínimo, 8 caracteres</div>
       </div>
     </div>
     <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
-      <input type="password" class="form-control" [ngClass]="{'input-invalid': submitted && f.confirmPassword.errors}" name="confirmPassword" placeholder="Confirmação Senha" formControlName="confirmPassword">
-      <div *ngIf="submitted && f.confirmPassword.errors" class="form-validator-error">
+      <input type="password" class="form-control" [ngClass]="{'input-invalid': f.confirmPassword.touched && f.confirmPassword.errors}" name="confirmPassword" placeholder="Confirmação Senha" formControlName="confirmPassword">
+      <div *ngIf="f.confirmPassword.touched && f.confirmPassword.errors" class="form-validator-error">
         <div *ngIf="f.confirmPassword.errors.required">A confirmação de senha é obrigatória</div>
         <div *ngIf="f.confirmPassword.errors.MatchPassword">As senhas devem ser iguais</div>
       </div>
     </div>
     <div class="col-12 col-sm-12 col-md-3 col-lg-3">
-      <button class="btn btn-primary btn-block" type="submit">Continuar</button>
+      <load-fb-success-button
+        [loading]="loading"
+        type="submit"
+        text="Continuar"
+        ></load-fb-success-button>
     </div>
   </div>
 </form>

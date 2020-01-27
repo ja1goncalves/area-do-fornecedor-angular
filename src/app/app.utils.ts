@@ -1,6 +1,5 @@
 import * as moment from 'moment';
 
-
 export function eraseCookie(...name): any {
   name.forEach(e => {
     document.cookie = `${e}=123;max-age=0;`;
@@ -50,5 +49,3 @@ export function cleanCookie(): void {
 }
 
 export const defaultReqErrMessage = 'Aconteceu um erro no servidor. Por favor, tente mais tarde.';
-
-export const validateCpf = /^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/;

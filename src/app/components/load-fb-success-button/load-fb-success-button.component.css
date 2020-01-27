@@ -1,0 +1,25 @@
+@keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+}
+
+.rotate-icon {
+    font-size: 1.7rem;
+    animation: rotate 1.5s linear infinite;
+}
+
+.success-custom-button {
+    min-width: 100px;
+    transition: .4s;
+}
+
+.success-custom-button.loading-button {
+    min-width: 70px;
+    width: 70px;
+    pointer-events: none;
+    opacity: .7;
+}

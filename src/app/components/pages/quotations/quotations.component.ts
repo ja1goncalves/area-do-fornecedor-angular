@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { IPaymentInfo, IPaymentMethods, IStatus, IQuotation } from './interfaces';
-import { validateCpf } from 'src/app/app.utils';
+import { validateCpf } from 'src/app/form.utils';
 
 const validatePaymentMethod = /^[^1]$/;
 const validateFlyNumber = /^\d{1,20}$/;

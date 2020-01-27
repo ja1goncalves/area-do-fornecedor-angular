@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
 import { NgxMaskModule } from 'ngx-mask';
+import { MyDatePickerModule } from "mydatepicker";
 
 // SIMPLE COMPONENTS
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -40,6 +41,7 @@ import { RegisterBankDataComponent } from './components/pages/register/register-
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { LoadingComponent } from './components/loading/loading.component';
 import { LockInputComponent } from './components/lock-input/lock-input.component';
+import { LoadFbSuccessButtonComponent } from './components/load-fb-success-button/load-fb-success-button.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,7 @@ import { LockInputComponent } from './components/lock-input/lock-input.component
     RegisterBankDataComponent,
     LoadingComponent,
     LockInputComponent,
+    LoadFbSuccessButtonComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,6 +80,7 @@ import { LockInputComponent } from './components/lock-input/lock-input.component
     MatDatepickerModule,
     MatNativeDateModule,
     MatProgressBarModule,
+    MyDatePickerModule,
   ],
   providers: [
     AuthGuardService,
