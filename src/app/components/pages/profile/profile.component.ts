@@ -248,7 +248,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     };
 
     const birthday = this.personalForm.get('personal_birthday').value.date;
-    const formattedBirth = moment(`${birthday.day}/${birthday.month}/${birthday.year}`, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const formattedBirth = moment(Object.values(birthday).join('/'), 'YYYY/MM/DD').format('YYYY-MM-DD');
 
     requestData.personal = {
       birthday: formattedBirth,
