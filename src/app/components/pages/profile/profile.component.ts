@@ -247,8 +247,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       operation: this.bankForm.get('bank_operation').value,
     };
 
-    const birthday = this.personalForm.get('personal_birthday').value.formatted
-    const formatedBirth = moment(birthday, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const birthday = this.personalForm.get('personal_birthday').value.date;
+    const formatedBirth = moment(`${birthday.day}/${birthday.month}/${birthday.year}`, 'DD/MM/YYYY').format('YYYY-MM-DD');
 
     requestData.personal = {
       birthday: formatedBirth,
@@ -299,8 +299,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       Object.values(this.updateForm.controls).forEach((group: FormGroup) => {
         Object.values(group.controls).forEach((control: FormControl) => {
           control.markAsTouched();
-        })
-      })
+        });
+      });
       this.notify.show('error', 'Existem campos inválidos. Por favor verifique os com borda em vermelho.');
       return;
     }
