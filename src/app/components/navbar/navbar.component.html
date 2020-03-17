@@ -27,6 +27,7 @@
     <div *ngIf="width > 991" class="navbar-menu" id="menu-desktop">
       <a href="https://elomilhas.com.br" target="_blank" title="Site Elomilhas">Site EloMilhas</a>
       <a *ngIf="auth.isLoggedIn()" [routerLink]="['/minhas-cotacoes']" title="Minhas Cotações">Minhas Cotações</a>
+      <a *ngIf="auth.isLoggedIn()" [routerLink]="['/minhas-emissoes']" title="Minhas Emissões">Minhas Emissões</a>
       <a *ngIf="auth.isLoggedIn()" [routerLink]="['/editar']" title="Meus Dados">Meus Dados</a>
       <a href="https://elomilhas.com.br/faq/" target="_blank" title="Dúvidas">Dúvidas?</a>
     </div>
@@ -35,6 +36,7 @@
       (click)="toggleMenu($event)">
       <a href="https://elomilhas.com.br" target="_blank" title="Site Elomilhas">Site EloMilhas</a>
       <a *ngIf="auth.isLoggedIn()" [routerLink]="['/minhas-cotacoes']" title="Minhas Cotações">Minhas Cotações</a>
+      <a *ngIf="auth.isLoggedIn()" [routerLink]="['/minhas-emissoes']" title="Minhas Emissões">Minhas Emissões</a>
       <a *ngIf="auth.isLoggedIn()" [routerLink]="['/editar']" title="Meus Dados">Meus Dados</a>
       <a href="https://elomilhas.com.br/faq/" target="_blank" title="Dúvidas">Dúvidas?</a>
     </div>
