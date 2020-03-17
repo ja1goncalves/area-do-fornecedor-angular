@@ -14,6 +14,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/pages/login/login.component';
 import { ProfileComponent } from './components/pages/profile/profile.component';
 import { QuotationsComponent } from './components/pages/quotations/quotations.component';
+import { EmissionsComponent } from './components/pages/emissions/emissions.component';
 
 // SERVICES
 import {NotifierModule} from 'angular-notifier';
@@ -51,6 +52,7 @@ import { LoadFbSuccessButtonComponent } from './components/load-fb-success-butto
     FooterComponent,
     ProfileComponent,
     QuotationsComponent,
+    EmissionsComponent,    
     ResetPasswordComponent,
     ConfirmResetPasswordComponent,
     RegisterComponent,
