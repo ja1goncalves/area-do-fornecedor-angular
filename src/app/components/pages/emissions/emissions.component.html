@@ -4,12 +4,10 @@
     <ul class="emission-list-table">
       <li class="head clearfix">
         <div class="col-row clearfix" style="background: #444; color: #fff; font-size: 14px;padding: 8px;">
-          <div class="col col-2">#</div>
-          <div class="col col-2">Nome do Passageiro</div>
-          <div class="col col-2">Email do Passageiro</div>
-          <div class="col col-2">Telefone do Passageiro</div>
-          <div class="col col-2">Data de Venda</div>
-          <div class="col col-2">Data de Embarque</div>
+          <div class="col col-3">Nº do Ticket</div>
+          <div class="col col-3">Nome do Passageiro</div>
+          <div class="col col-3">Data de Emissão</div>
+          <div class="col col-3">Data de Embarque</div>
         </div>
       </li>
 
@@ -17,36 +15,24 @@
         <form>
           <div class="col-row clearfix border-bottom" style="background-color: #edf0f2;"
             *ngFor="let emission of emissions; let j = index">
-            <div class="col col-2">
+            <div class="col col-3">
               <span class="title">
-                {{emission.id}}
+                {{emission.e_ticket}}
               </span>
             </div>
 
-            <div class="col col-2">
+            <div class="col col-3">
               <span>
                 {{emission.name_passenger}}
               </span>
             </div>
 
-            <div class="col col-2">
+            <div class="col col-3">
               <span>
-                {{emission.email_passenger}}
+                {{emission.created_at}}
               </span>
             </div>
-
-            <div class="col col-2">
-              <span>
-                {{emission.phone_messenger}}
-              </span>
-            </div>
-
-            <div class="col col-2">
-              <span>
-                {{emission.sale_date}}
-              </span>
-            </div>
-            <div class="col col-2">
+            <div class="col col-3">
               <span>
                 {{emission.date_boarding}}
               </span>
