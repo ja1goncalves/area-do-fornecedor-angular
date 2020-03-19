@@ -16,6 +16,30 @@
     margin-left: auto;
 }
 
+.container-order > table > tbody{
+    border: 1px #0275d8;
+}
+
+.container-order > table > thead th{
+    background-color: #444;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.container-order > table > tbody td{
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .container-order > table{
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: -ms-autohiding-scrollbar;    
+    }     
+}
+
 .emission-list-table .body{
     background: #0275d8;
     border: 1px solid #0275d8;
