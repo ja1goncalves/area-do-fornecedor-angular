@@ -13,9 +13,9 @@
       <tbody>
         <tr className="text-center" *ngFor="let emission of emissions; let j = index">
           <td><b>{{emission.e_ticket}}</b></td>
-          <td>{{emission.name_passenger}}</td>
-          <td>{{emission.created_at}}</td>
-          <td>{{emission.date_boarding}}</td>
+          <td>{{emission.passenger.fullname}}</td>
+          <td>{{ formatDate(emission.created_at) }}</td>
+          <td>{{ formatDate(emission.flight.date_boarding) }}</td>
         </tr>
 
         <tr className="text-center" *ngIf="loading || (!loading && emissions.length == 0)">

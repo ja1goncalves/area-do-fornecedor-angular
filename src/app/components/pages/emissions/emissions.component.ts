@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { EmissionService } from 'src/app/services/emission/emission.service';
 import { NotifyService } from 'src/app/services/notify/notify.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import {  IEmission } from './interfaces';
+import { IEmission } from './interfaces';
+import { AuthService } from '../../../services/auth/auth.service'
+import {formatdate} from '../../../app.utils'
 
 @Component({
   selector: 'app-emissions',
@@ -12,6 +14,10 @@ import {  IEmission } from './interfaces';
 export class EmissionsComponent implements OnInit {
   emissions: IEmission[] = [];
   loading: any = true;
+  formatDate: any = undefined;
+  // format: useref formatdate;
+
+  // form: (e) => formatdate(e);
 
   /**
    * @description Formulário pai de todos
@@ -25,6 +31,7 @@ export class EmissionsComponent implements OnInit {
   programsForm: FormGroup;
 
   constructor(
+    private authService: AuthService,
     private emissionService: EmissionService,
     private notify: NotifyService,
     private fb: FormBuilder) { }
@@ -32,21 +39,23 @@ export class EmissionsComponent implements OnInit {
   ngOnInit() {
     this.programsForm = this.fb.group({});
     this.getEmissions();
+    this.formatDate = formatdate;
   }
 
   public getEmissions(): void {
     this.loading = true;
 
-    this.emissionService.getEmissions()
-    .subscribe(({ data }) => {
-      this.emissions = data;
-      for (const emission of this.emissions) {
-        this.programsForm.addControl(`emis-group-${emission.id}`, this.fb.group({}));
-      }
-      this.loading = false;
-    }, err => {
-      this.loading = false;
-    });
+    this.emissionService.getEmissions(this.authService.getDataUser().cpf)
+      .subscribe(({ data }) => {
+        this.emissions = data;
+        for (const emission of this.emissions) {
+          this.programsForm.addControl(`emis-group-${emission.id}`, this.fb.group({}));
+        }
+        this.loading = false;
+      }, err => {
+        this.loading = false;
+      })
+      ;
   }
 
   public saveFidelities(emisId: number): void {
@@ -61,6 +70,6 @@ export class EmissionsComponent implements OnInit {
       return;
     }
 
-    this.loading = true;  
+    this.loading = true;
   }
 }
