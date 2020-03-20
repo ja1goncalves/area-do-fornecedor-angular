@@ -1,8 +1,7 @@
 export interface IEmission {
-    id: number;
+    id: number,
+    e_ticket: string,
     name_passenger: string,
-    email_passenger: string,
-    phone_passenger: string,
-    sale_date: string,
+    created_at: string,
     date_boarding: string,
 }

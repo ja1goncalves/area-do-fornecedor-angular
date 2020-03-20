@@ -10,7 +10,7 @@ export class EmissionService {
 
   constructor(private http: HttpClient) { }
 
-  public getEmissions(): Observable<any> {
-    return this.http.get(`${environment.API_URL}/api/provider/emissions`);
+  public getEmissions(cpf:number): Observable<any> {
+    return this.http.get(`${environment.API_URL}/api/provider/emissions?cpf=${cpf}&limit=100&page=1`);
   }
 }
