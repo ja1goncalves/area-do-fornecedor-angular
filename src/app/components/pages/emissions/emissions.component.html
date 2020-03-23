@@ -1,0 +1,30 @@
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+<form [formGroup]="programsForm">
+  <form class="container-order">
+    <table class="table table-hover table-sm table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Nº do Ticket</th>
+          <th scope="col">Nome do Passageiro</th>
+          <th scope="col">Data de Emissão</th>
+          <th scope="col">Data de Embarque</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="text-center" *ngFor="let emission of emissions; let j = index">
+          <td><b>{{emission.e_ticket}}</b></td>
+          <td>{{emission.passenger.fullname}}</td>
+          <td>{{ formatDate(emission.created_at) }}</td>
+          <td>{{ formatDate(emission.flight.date_boarding) }}</td>
+        </tr>
+
+        <tr className="text-center" *ngIf="loading || (!loading && emissions.length == 0)">
+          <td colspan="4">
+            <h3 *ngIf="loading"> Carregando...</h3>
+            <h3 *ngIf="!loading && emissions.length == 0">Nenhuma emissão recente</h3>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</form>
